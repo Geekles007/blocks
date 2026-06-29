@@ -1,0 +1,23 @@
+{
+  "name": "blocks-registry",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Builds the blocks registry: scans items/ and emits the static registry JSON under public/r.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsx build.ts",
+    "dev": "tsx watch build.ts",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "blocks-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

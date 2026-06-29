@@ -1,0 +1,42 @@
+{
+  "name": "blocks-core",
+  "version": "0.0.0",
+  "description": "Registry schema, content hashing, and shared helpers for blocks.",
+  "license": "MIT",
+  "author": "Geekles007",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geekles007/blocks.git",
+    "directory": "packages/core"
+  },
+  "keywords": ["blocks", "registry", "shadcn", "react"],
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}
