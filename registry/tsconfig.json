@@ -1,8 +1,17 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node"],
+    "jsx": "react-jsx",
+    "paths": {
+      "@/components/button": ["./.primitives/components/button.tsx"],
+      "@/components/badge": ["./.primitives/components/badge.tsx"],
+      "@/components/avatar": ["./.primitives/components/avatar.tsx"],
+      "@/components/skeleton": ["./.primitives/components/skeleton.tsx"],
+      "@/lib/block-motion": ["./.primitives/lib/block-motion.tsx"]
+    }
   },
-  "include": ["build.ts", "items"],
-  "exclude": ["node_modules", "public"]
+  "include": ["build.ts", "items/**/files/**/*.ts", "items/**/files/**/*.tsx"],
+  "exclude": ["node_modules", "public", ".primitives"]
 }

@@ -1,0 +1,43 @@
+{
+  "name": "hero",
+  "type": "block",
+  "version": "1.1.1",
+  "description": "A centred landing hero: eyebrow pill, headline, subtitle, up to two CTAs and optional social proof over a layered gradient backdrop. Content reveals in a staggered upward motion on mount, responsive from mobile up, and the animation collapses to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Renders a single h1 for the headline so the page has one clear top-level heading, and labels the section landmark via aria-labelledby",
+      "The gradient backdrop and CTA icons are decorative (aria-hidden) and do not affect contrast of the text above them",
+      "CTAs render as real links when given an href, otherwise as buttons, so each is keyboard- and screen-reader-accessible",
+      "Social proof is built on the ibirdui avatar primitive: each avatar is exposed as a labelled image, announcing the person whether the photo loads or falls back to initials",
+      "The entrance animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a landing page hero section with a headline and call-to-action",
+      "an animated marketing header built on ibirdui",
+      "centred hero with eyebrow, title, subtitle and two buttons"
+    ],
+    "examples": [
+      "<Hero title=\"Ship accessible UI, fast\" subtitle=\"Designed, animated blocks built on ibirdui.\" primaryAction={{ label: 'Get started', href: '/docs' }} secondaryAction={{ label: 'GitHub', href: 'https://github.com' }} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/avatar.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/hero.tsx",
+      "path": "components/blocks/hero.tsx",
+      "type": "component"
+    }
+  ]
+}

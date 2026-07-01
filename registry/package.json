@@ -2,20 +2,32 @@
   "name": "blocks-registry",
   "version": "0.0.0",
   "private": true,
-  "description": "Builds the blocks registry: scans items/ and emits the static registry JSON under public/r.",
+  "description": "Builds the blocks registry: scans items/ and emits the static registry JSON under public/r. Also runs the a11y tests that ship inside each block.",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "tsx build.ts",
     "dev": "tsx watch build.ts",
-    "test": "vitest run --passWithNoTests",
+    "pretest": "node ../scripts/fetch-primitives.mjs .primitives",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "pretypecheck": "node ../scripts/fetch-primitives.mjs .primitives",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "blocks-core": "workspace:*"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "axe-core": "^4.10.2",
+    "framer-motion": "^11.15.0",
+    "jsdom": "^25.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^2.1.8"

@@ -9,6 +9,10 @@ out/
 **/public/r/
 *.tsbuildinfo
 
+# fetched ibirdui primitive sources (scripts/fetch-primitives.mjs) — generated
+**/.primitives/
+**/registry-preview/
+
 # test
 coverage/
 

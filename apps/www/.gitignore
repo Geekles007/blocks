@@ -1,0 +1,3 @@
+# Real block + primitive sources, flattened in by scripts/copy-blocks.mjs before
+# dev/build so live previews mount the actual components. Generated.
+/registry-preview/
