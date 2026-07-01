@@ -31,6 +31,19 @@ async function readJson(path) {
   return JSON.parse(await readFile(path, 'utf8'));
 }
 
+// Fetched primitive sources are an external dependency (their canonical home +
+// CI is the ibirdui repo). We resolve them for imports and run them in tests /
+// previews, but we don't type-check their internals here — otherwise a typing
+// quirk in a published primitive would redden this repo's CI. `@ts-nocheck`
+// suppresses errors inside the file while still exporting its (inferred) types
+// to consumers, so blocks that compose it stay fully type-checked.
+const TS_NOCHECK =
+  '// @ts-nocheck — fetched external primitive source (ui.ibird.dev); not type-checked in this repo\n';
+
+function markExternal(path, content) {
+  return /\.tsx?$/.test(path) ? `${TS_NOCHECK}${content}` : content;
+}
+
 /** Every `registryDependencies` ref declared by the blocks in `registry/items`. */
 async function rootDeps() {
   const deps = new Set();
@@ -81,7 +94,7 @@ export async function fetchPrimitivesInto(outDir, { base = DEFAULT_BASE, roots, 
     for (const file of item.files ?? []) {
       const dest = join(outDir, file.path);
       await mkdir(dirname(dest), { recursive: true });
-      await writeFile(dest, file.content ?? '');
+      await writeFile(dest, markExternal(file.path, file.content ?? ''));
       written += 1;
     }
   }
