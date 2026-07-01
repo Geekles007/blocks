@@ -2,7 +2,7 @@
  * Design-handoff tokens. The site chrome is hand-styled inline from this token
  * object (light/dark + a single accent), mirroring `Ibirdui Blocks.dc.html`.
  */
-export const ACCENT = '#6366f1';
+export const ACCENT = '#84cc16';
 
 export function tok(theme: 'dark' | 'light', accent: string = ACCENT) {
   const a = accent || ACCENT;
@@ -24,7 +24,7 @@ export function tok(theme: 'dark' | 'light', accent: string = ACCENT) {
       accentSoft: soft,
       accentSoft2: soft2,
       accentRing: ring,
-      accentFg: '#fff',
+      accentFg: '#1a2e05',
       shadow: '0 1px 2px rgba(9,9,11,.06),0 16px 40px rgba(9,9,11,.10)',
       shadowSm: '0 1px 2px rgba(9,9,11,.06)',
       skelBase: '#e8e8ec',

@@ -239,9 +239,9 @@ body {
   --muted-foreground: 240 5% 65%;
   --border: 240 6% 16%;
   --input: 240 6% 16%;
-  --ring: 243 75% 59%;
-  --primary: 243 75% 59%;
-  --primary-foreground: 0 0% 100%;
+  --ring: 83 100% 59%;
+  --primary: 83 100% 59%;
+  --primary-foreground: 80 60% 8%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
   --radius: 0.6rem;
@@ -253,9 +253,9 @@ body {
   --muted-foreground: 240 4% 40%;
   --border: 240 6% 90%;
   --input: 240 6% 90%;
-  --ring: 243 75% 59%;
-  --primary: 243 75% 59%;
-  --primary-foreground: 0 0% 100%;
+  --ring: 83 68% 40%;
+  --primary: 83 68% 40%;
+  --primary-foreground: 80 60% 8%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
   --radius: 0.6rem;
