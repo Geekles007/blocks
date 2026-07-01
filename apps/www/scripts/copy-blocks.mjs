@@ -24,10 +24,27 @@ import { fetchPrimitivesInto } from '../../../scripts/fetch-primitives.mjs';
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, '..', '..', '..');
 const BLOCK_ITEMS = join(repoRoot, 'registry', 'items');
+const PRIMITIVES_DATA = join(here, '..', 'lib', 'primitives-data.ts');
 const OUT = join(here, '..', 'registry-preview');
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, 'utf8'));
+}
+
+/**
+ * The primitive names the /primitives catalogue mounts live. Derived from the
+ * top-level `key:` entries in primitives-data.ts (4-space indent — design keys
+ * are nested deeper) so the fetch set stays in sync as primitives are added.
+ * These aren't block dependencies, so they must be fetched explicitly.
+ */
+async function cataloguePrimitives() {
+  let src;
+  try {
+    src = await readFile(PRIMITIVES_DATA, 'utf8');
+  } catch {
+    return [];
+  }
+  return [...src.matchAll(/^ {4}key: '([a-z0-9-]+)',$/gm)].map((m) => m[1]);
 }
 
 /** Load the local block items: name -> { dir, files }. */
@@ -53,10 +70,12 @@ async function main() {
   await mkdir(OUT, { recursive: true });
 
   // 1) ibirdui primitives (+ their transitive deps) — fetched from ui.ibird.dev.
-  //    `theme` isn't a block dependency but the site needs its Tailwind preset +
-  //    token CSS to render previews exactly as a consumer's app would.
+  //    Roots = the blocks' registryDependencies (derived) PLUS every primitive
+  //    the /primitives catalogue mounts live, PLUS `theme` (the site needs its
+  //    Tailwind preset + token CSS to render previews as a consumer's app would).
+  const catalogue = await cataloguePrimitives();
   const { written: primitiveFiles, names: primitiveNames } = await fetchPrimitivesInto(OUT, {
-    extra: ['theme'],
+    extra: [...catalogue, 'theme'],
   });
 
   // 2) local block sources — copied straight from this repo's registry.

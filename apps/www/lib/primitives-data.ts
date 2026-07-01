@@ -130,6 +130,220 @@ export const PRIMITIVES: Primitive[] = [
       },
     ],
   },
+  {
+    key: 'input',
+    name: 'Input',
+    category: 'Foundation',
+    icon: 'file',
+    description:
+      'Le champ texte : anneau de focus visible, état invalide destructif, et préfixe/suffixe icône.',
+    designs: [
+      {
+        key: 'field',
+        name: 'États',
+        description:
+          'Default, invalide (aria-invalid → bordure destructive) et désactivé, avec placeholder.',
+      },
+      {
+        key: 'affix',
+        name: 'Préfixe / suffixe',
+        description: 'Icône en tête (recherche) ou en pied (validation), composée autour du champ.',
+      },
+    ],
+  },
+  {
+    key: 'textarea',
+    name: 'Textarea',
+    category: 'Foundation',
+    icon: 'file',
+    description: 'La zone de texte multi-lignes, mêmes états et anneau de focus que l’input.',
+    designs: [
+      {
+        key: 'field',
+        name: 'États',
+        description: 'Default, invalide et désactivé — bordure et anneau destructifs en erreur.',
+      },
+    ],
+  },
+  {
+    key: 'checkbox',
+    name: 'Checkbox',
+    category: 'Foundation',
+    icon: 'check',
+    description:
+      'Case native : dans l’ordre de tabulation, bascule à l’espace, état indéterminé exposé.',
+    designs: [
+      {
+        key: 'states',
+        name: 'États',
+        description: 'Non coché, coché, indéterminé et désactivé — teinte accent, anneau au focus.',
+      },
+    ],
+  },
+  {
+    key: 'switch',
+    name: 'Switch',
+    category: 'Foundation',
+    icon: 'bell',
+    description:
+      'Interrupteur role=switch : bascule immédiate, contrôlé ou non, contrepartie de l’async-toggle.',
+    designs: [
+      {
+        key: 'states',
+        name: 'États',
+        description:
+          'Désactivée, activée et verrouillée (disabled) — piste teintée + thumb qui glisse.',
+      },
+    ],
+  },
+  {
+    key: 'radio-group',
+    name: 'Radio group',
+    category: 'Foundation',
+    icon: 'grid',
+    description:
+      'Choix unique parmi plusieurs options, radios natifs partageant un name, role=radiogroup.',
+    designs: [
+      {
+        key: 'vertical',
+        name: 'Vertical',
+        description: 'Options empilées — le layout par défaut, une sélection par défaut.',
+      },
+      {
+        key: 'horizontal',
+        name: 'Horizontal',
+        description: 'Mêmes options en ligne (flex-wrap) pour les jeux de choix courts.',
+      },
+    ],
+  },
+  {
+    key: 'select',
+    name: 'Select',
+    category: 'Foundation',
+    icon: 'chev',
+    description:
+      'Select natif thémé + chevron décoratif — liste OS, tactile et lecteur d’écran gratis.',
+    designs: [
+      {
+        key: 'states',
+        name: 'États',
+        description: 'Default, invalide (aria-invalid) et désactivé — options passées en enfants.',
+      },
+    ],
+  },
+  {
+    key: 'alert',
+    name: 'Alert',
+    category: 'Foundation',
+    icon: 'help',
+    description: 'Encart de message avec titre + description ; ton neutre ou destructif.',
+    designs: [
+      {
+        key: 'default',
+        name: 'Default',
+        description: 'Information neutre — bordure et fond de surface, titre + description.',
+      },
+      {
+        key: 'destructive',
+        name: 'Destructive',
+        description: 'Erreur ou action à risque — teinte destructive sur tout l’encart.',
+      },
+    ],
+  },
+  {
+    key: 'progress',
+    name: 'Progress',
+    category: 'Foundation',
+    icon: 'gauge',
+    description: 'Barre de progression ARIA (role=progressbar) : déterminée ou indéterminée.',
+    designs: [
+      {
+        key: 'determinate',
+        name: 'Déterminé',
+        description: 'Valeur connue (0/25/50/100 %) — aria-valuenow reflète l’avancement.',
+      },
+      {
+        key: 'indeterminate',
+        name: 'Indéterminé',
+        description: 'Valeur inconnue — barre animée, pas de aria-valuenow.',
+      },
+    ],
+  },
+  {
+    key: 'slider',
+    name: 'Slider',
+    category: 'Foundation',
+    icon: 'gauge',
+    description:
+      'Curseur sur input range natif : role=slider, clavier et drag gratis, piste teintée.',
+    designs: [
+      {
+        key: 'states',
+        name: 'États',
+        description: 'Default et désactivé — thumb sur piste remplie, anneau de focus visible.',
+      },
+    ],
+  },
+  {
+    key: 'separator',
+    name: 'Separator',
+    category: 'Foundation',
+    icon: 'layers',
+    description: 'Filet de séparation, décoratif par défaut (masqué aux lecteurs d’écran).',
+    designs: [
+      {
+        key: 'horizontal',
+        name: 'Horizontal',
+        description: 'Trait pleine largeur entre deux blocs de contenu.',
+      },
+      {
+        key: 'vertical',
+        name: 'Vertical',
+        description:
+          'Trait vertical pleine hauteur — séparer des éléments en ligne (barres d’outils).',
+      },
+    ],
+  },
+  {
+    key: 'skeleton',
+    name: 'Skeleton',
+    category: 'Foundation',
+    icon: 'layers',
+    description:
+      'Placeholders de chargement (aria-hidden) : formes libres + texte multi-lignes, shimmer.',
+    designs: [
+      {
+        key: 'shapes',
+        name: 'Formes',
+        description: 'Cercle (avatar) + lignes — un en-tête de carte média en cours de chargement.',
+      },
+      {
+        key: 'text',
+        name: 'Texte',
+        description: 'SkeletonText : n lignes, la dernière plus courte, animation shimmer.',
+      },
+    ],
+  },
+  {
+    key: 'card',
+    name: 'Card',
+    category: 'Foundation',
+    icon: 'card',
+    description:
+      'Conteneur de surface et ses parties (header/title/description/content/footer) — pure mise en page.',
+    designs: [
+      {
+        key: 'neutral',
+        name: 'Neutre',
+        description: 'Carte complète : en-tête, contenu et pied avec actions.',
+      },
+      {
+        key: 'stat',
+        name: 'Stat',
+        description: 'Tuile de statistique : label, valeur et variation.',
+      },
+    ],
+  },
 ];
 
 /** Look up a primitive by its URL/data key. */
