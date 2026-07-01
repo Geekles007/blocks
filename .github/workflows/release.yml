@@ -1,9 +1,10 @@
 name: Release
 
 # Opens a "Version Packages" PR when changesets are pending, and publishes
-# blocks + blocks-core to npm once that PR is merged. Requires an NPM_TOKEN
-# repository secret (an npm automation token); until that's set the publish
-# step is inert and nothing is released.
+# blocks + blocks-core to npm once that PR is merged. The publish is gated on an
+# NPM_TOKEN repository secret (an npm automation token): until that secret is
+# set, the whole step is skipped and the job is a green no-op — nothing is
+# released. Set NPM_TOKEN to arm publishing.
 
 on:
   push:
@@ -18,6 +19,10 @@ concurrency: release
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Job-level env can read secrets; the step below keys off this so the job
+    # succeeds (skips) when no npm token is configured.
+    env:
+      HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -28,6 +33,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: pnpm install --frozen-lockfile
       - name: Create release PR or publish
+        if: env.HAS_NPM_TOKEN == 'true'
         uses: changesets/action@v1
         with:
           version: pnpm version-packages
@@ -37,3 +43,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publishing disabled (no NPM_TOKEN)
+        if: env.HAS_NPM_TOKEN != 'true'
+        run: echo "NPM_TOKEN is not set — skipping release. Set the NPM_TOKEN secret to enable publishing."
