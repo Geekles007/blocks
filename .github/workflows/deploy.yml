@@ -11,10 +11,12 @@ name: Deploy site + registry
 #                                on the host, with a trailing slash
 #                                (e.g. /public_html/ or /domains/ibird.dev/blocks/).
 #
-# The deploy is incremental: the action keeps a .ftp-deploy-sync-state.json on
-# the server and only transfers changed files, so it won't touch unrelated
-# files already on the host. BASE_PATH is intentionally left unset so the site
-# is served from the domain root (not a /<repo> subpath like on GitHub Pages).
+# The deploy is incremental: lftp mirror compares local vs remote and only
+# uploads changed files. It does NOT pass --delete, so it never removes
+# unrelated files already on the host (add --delete to the mirror if you want
+# the target dir to exactly match the build output). BASE_PATH is intentionally
+# left unset so the site is served from the domain root (not a /<repo> subpath
+# like on GitHub Pages).
 
 on:
   push:
@@ -53,14 +55,27 @@ jobs:
           case "$DIR" in */) ;; *) DIR="$DIR/" ;; esac
           echo "::add-mask::$DIR"
           echo "FTP_DIR=$DIR" >> "$GITHUB_ENV"
-      - name: Deploy to web hosting over FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          # FTPS (encrypted) by default; switch to "ftp" only if your host
-          # doesn't support FTP over TLS.
-          protocol: ftps
-          local-dir: apps/www/out/
-          server-dir: ${{ env.FTP_DIR }}
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+      - name: Deploy to web hosting over FTPS (lftp)
+        # Uses lftp instead of the basic-ftp-based action: that library can't
+        # resume the control channel's TLS session on the data connection, and
+        # this host requires it — so it reset the data socket ("ECONNRESET (data
+        # socket)") on the first transfer. lftp does proper TLS session reuse.
+        # `ssl:verify-certificate no` tolerates the shared host's FTP cert not
+        # matching the FTP hostname (control login already proved credentials).
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          lftp -c "
+            set cmd:fail-exit true;
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate no;
+            set net:max-retries 3;
+            set net:timeout 20;
+            open -u '$FTP_USERNAME','$FTP_PASSWORD' '$FTP_SERVER';
+            mirror --reverse --verbose --parallel=1 apps/www/out/ '$FTP_DIR';
+          "
