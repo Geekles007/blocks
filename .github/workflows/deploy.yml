@@ -1,0 +1,66 @@
+name: Deploy site + registry
+
+# Builds the static site (Next export, which bundles the registry under /r)
+# and deploys it over FTP to the web hosting that serves https://blocks.ibird.dev.
+#
+# Required repository configuration (Settings → Secrets and variables → Actions):
+#   Secrets:    FTP_SERVER     – FTP(S) host, e.g. ftp.ibird.dev
+#               FTP_USERNAME   – FTP account user
+#               FTP_PASSWORD   – FTP account password
+#               FTP_SERVER_DIR – absolute path to the blocks.ibird.dev document root
+#                                on the host, with a trailing slash
+#                                (e.g. /public_html/ or /domains/ibird.dev/blocks/).
+#
+# The deploy is incremental: the action keeps a .ftp-deploy-sync-state.json on
+# the server and only transfers changed files, so it won't touch unrelated
+# files already on the host. BASE_PATH is intentionally left unset so the site
+# is served from the domain root (not a /<repo> subpath like on GitHub Pages).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm registry:build
+      - name: Build static site (+ registry under /r)
+        run: pnpm --filter blocks-www build
+      - name: Normalize FTP server dir
+        # The action requires server-dir to end with "/". Read the secret via an
+        # env var (not string-interpolated into the script) and append the slash
+        # if it's missing, re-masking the result.
+        env:
+          RAW_DIR: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          DIR="$RAW_DIR"
+          case "$DIR" in */) ;; *) DIR="$DIR/" ;; esac
+          echo "::add-mask::$DIR"
+          echo "FTP_DIR=$DIR" >> "$GITHUB_ENV"
+      - name: Deploy to web hosting over FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # FTPS (encrypted) by default; switch to "ftp" only if your host
+          # doesn't support FTP over TLS.
+          protocol: ftps
+          local-dir: apps/www/out/
+          server-dir: ${{ env.FTP_DIR }}
