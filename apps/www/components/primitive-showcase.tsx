@@ -39,7 +39,11 @@ function buttonDesign(designKey: string) {
     h(Button, { variant, size: 'lg' }, 'Large'),
     h(Button, { variant, size: 'md' }, withIcon('arrow', 'Avec icône')),
     h(Button, { variant, size: 'md', disabled: true }, 'Désactivé'),
-    h(Button, { variant, size: 'icon', 'aria-label': 'Ajouter' }, h(Icon, { name: 'plus', size: 16 })),
+    h(
+      Button,
+      { variant, size: 'icon', 'aria-label': 'Ajouter' },
+      h(Icon, { name: 'plus', size: 16 }),
+    ),
   );
 }
 
@@ -78,7 +82,11 @@ export const SHOWCASES: Record<string, PrimitiveShowcase> = {
         { justifyContent: 'center' },
         h(Button, { variant: 'default', size: 'md' }, 'Button'),
         h(Button, { variant: 'outline', size: 'md' }, 'Outline'),
-        h(Button, { variant: 'ghost', size: 'icon', 'aria-label': 'Plus' }, h(Icon, { name: 'plus', size: 16 })),
+        h(
+          Button,
+          { variant: 'ghost', size: 'icon', 'aria-label': 'Plus' },
+          h(Icon, { name: 'plus', size: 16 }),
+        ),
       ),
     renderDesign: buttonDesign,
   },
@@ -97,7 +105,12 @@ export const SHOWCASES: Record<string, PrimitiveShowcase> = {
       h(
         'div',
         { className: '-space-x-2.5 flex items-center' },
-        h(Avatar, { src: PHOTO, name: 'Ada Lovelace', size: 40, className: 'ring-2 ring-background' }),
+        h(Avatar, {
+          src: PHOTO,
+          name: 'Ada Lovelace',
+          size: 40,
+          className: 'ring-2 ring-background',
+        }),
         h(Avatar, { name: 'Grace Hopper', size: 40, className: 'ring-2 ring-background' }),
         h(Avatar, { size: 40, className: 'ring-2 ring-background' }),
       ),

@@ -2,11 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import { h } from '~/lib/h';
-import { getPrimitive, type Primitive, PRIMITIVES } from '~/lib/primitives-data';
+import { PRIMITIVES, type Primitive, getPrimitive } from '~/lib/primitives-data';
 import { ROUTES } from '~/lib/routes';
 import { useUI } from '~/lib/ui-context';
-import { Badge, Button, Icon, SectionLabel } from '../primitives';
 import { renderPrimitiveDesign } from '../primitive-showcase';
+import { Badge, Button, Icon, SectionLabel } from '../primitives';
 
 export function PrimitiveDetail({ primitiveKey }: { primitiveKey: string }) {
   const { t, reduced, copy } = useUI();

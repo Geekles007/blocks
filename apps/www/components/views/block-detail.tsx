@@ -2,12 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { type Block, BLOCKS, getBlock, siblingsOf } from '~/lib/blocks-data';
+import { BLOCKS, type Block, getBlock, siblingsOf } from '~/lib/blocks-data';
 import { h } from '~/lib/h';
 import { ROUTES } from '~/lib/routes';
 import { useUI } from '~/lib/ui-context';
-import { Badge, Button, Icon, PrimPill, SectionLabel } from '../primitives';
 import { renderPreview } from '../previews';
+import { Badge, Button, Icon, PrimPill, SectionLabel } from '../primitives';
 import { SpecGrid } from '../spec-grid';
 
 const { useState } = React;

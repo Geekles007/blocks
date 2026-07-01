@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import type * as React from 'react';
 import { type Block, SPECS } from '~/lib/blocks-data';
 import { type CSS, h } from '~/lib/h';
 import type { Tok } from '~/lib/tokens';

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import * as React from 'react';
+import type * as React from 'react';
 import { h } from '~/lib/h';
 import { ROUTES } from '~/lib/routes';
 import type { Tok } from '~/lib/tokens';
@@ -58,11 +58,7 @@ function NavLink({ item, t, pathname }: { item: NavItem; t: Tok; pathname: strin
   }
   if (!item.href) {
     // Announced-but-unrouted entry (e.g. Docs / Primitives): inert for now.
-    return h(
-      'span',
-      { style: { ...baseStyle, color: t.muted, cursor: 'default' } },
-      item.label,
-    );
+    return h('span', { style: { ...baseStyle, color: t.muted, cursor: 'default' } }, item.label);
   }
   const active = isActive(item, pathname);
   return h(
@@ -147,7 +143,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
           },
         },
         h(Icon, { name: 'search', size: 15 }),
-        h('span', { className: 'ib-search-label', style: { flex: 1, textAlign: 'left' } }, 'Rechercher…'),
+        h(
+          'span',
+          { className: 'ib-search-label', style: { flex: 1, textAlign: 'left' } },
+          'Rechercher…',
+        ),
         h(
           'span',
           { className: 'ib-search-kbd', style: { display: 'flex', gap: '3px' } },

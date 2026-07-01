@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { PrimitiveDetail } from '~/components/views/primitive-detail';
-import { getPrimitive, PRIMITIVES } from '~/lib/primitives-data';
+import { PRIMITIVES, getPrimitive } from '~/lib/primitives-data';
 
 // Static export: pre-render one page per primitive, 404 on anything else.
 export const dynamicParams = false;

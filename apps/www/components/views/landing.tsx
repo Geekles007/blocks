@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
+import type * as React from 'react';
 import { BLOCKS } from '~/lib/blocks-data';
 import { h } from '~/lib/h';
 import { Reveal } from '~/lib/motion';

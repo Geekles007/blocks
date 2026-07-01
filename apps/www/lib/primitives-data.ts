@@ -44,7 +44,8 @@ export const PRIMITIVES: Primitive[] = [
       {
         key: 'default',
         name: 'Solid',
-        description: 'Action principale, fond accent plein. Variants : tailles sm/md/lg, icône, désactivé.',
+        description:
+          'Action principale, fond accent plein. Variants : tailles sm/md/lg, icône, désactivé.',
       },
       {
         key: 'secondary',
@@ -69,7 +70,8 @@ export const PRIMITIVES: Primitive[] = [
       {
         key: 'link',
         name: 'Link',
-        description: 'Bouton qui ressemble à un lien, souligné au survol — actions inline dans du texte.',
+        description:
+          'Bouton qui ressemble à un lien, souligné au survol — actions inline dans du texte.',
       },
     ],
   },
@@ -118,7 +120,8 @@ export const PRIMITIVES: Primitive[] = [
       {
         key: 'initials',
         name: 'Initiales',
-        description: 'Repli sur les initiales quand il n’y a pas de photo — exposé en image labellisée.',
+        description:
+          'Repli sur les initiales quand il n’y a pas de photo — exposé en image labellisée.',
       },
       {
         key: 'fallback',

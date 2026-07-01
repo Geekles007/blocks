@@ -54,12 +54,22 @@ export function NotFoundView() {
     ),
     h(
       'p',
-      { style: { margin: 0, color: t.muted, fontSize: '15px', lineHeight: 1.55, maxWidth: '40ch' } },
+      {
+        style: { margin: 0, color: t.muted, fontSize: '15px', lineHeight: 1.55, maxWidth: '40ch' },
+      },
       'Cette page n’existe pas ou a été déplacée. Reviens au catalogue pour explorer les blocks et les primitives.',
     ),
     h(
       'div',
-      { style: { display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '6px' } },
+      {
+        style: {
+          display: 'flex',
+          gap: '10px',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          marginTop: '6px',
+        },
+      },
       h(
         Link,
         {

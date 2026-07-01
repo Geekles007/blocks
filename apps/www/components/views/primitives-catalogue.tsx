@@ -4,15 +4,11 @@ import Link from 'next/link';
 import * as React from 'react';
 import { h } from '~/lib/h';
 import { Reveal } from '~/lib/motion';
-import {
-  countInPrimitiveCat,
-  PRIMITIVES,
-  primitiveCategories,
-} from '~/lib/primitives-data';
+import { PRIMITIVES, countInPrimitiveCat, primitiveCategories } from '~/lib/primitives-data';
 import { ROUTES } from '~/lib/routes';
 import { useUI } from '~/lib/ui-context';
-import { Badge, Icon, SectionLabel } from '../primitives';
 import { renderPrimitiveCard } from '../primitive-showcase';
+import { Badge, Icon, SectionLabel } from '../primitives';
 
 const { useState } = React;
 
