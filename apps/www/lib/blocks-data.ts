@@ -17,9 +17,8 @@ export interface Block {
 // land (Application, Auth, …) add their category here and an entry to BLOCKS.
 export const CATS = ['Marketing', 'Pricing'];
 
-// Catalogue = blocks that actually exist in the registry. `hero` is the only
-// shipped block today; the rest of the design handoff is intentionally not
-// listed until each block is built for real.
+// Catalogue = blocks that actually exist in the registry. Marketing ships the
+// full hero family; Pricing lists only `pricing-toggle` for now.
 export const BLOCKS: Block[] = [
   {
     cat: 'Marketing',
@@ -59,38 +58,11 @@ export const BLOCKS: Block[] = [
   },
   {
     cat: 'Pricing',
-    key: 'pricing',
-    name: 'Pricing',
-    preview: 'pricing',
-    icon: 'card',
-    prims: ['Badge', 'Button'],
-    variants: ['default'],
-  },
-  {
-    cat: 'Pricing',
     key: 'pricing-toggle',
     name: 'Pricing Toggle',
     preview: 'pricing-toggle',
     icon: 'gauge',
     prims: ['Switch', 'Button'],
-    variants: ['default'],
-  },
-  {
-    cat: 'Pricing',
-    key: 'pricing-single',
-    name: 'Pricing Single',
-    preview: 'pricing-single',
-    icon: 'star',
-    prims: ['Badge', 'Button'],
-    variants: ['default'],
-  },
-  {
-    cat: 'Pricing',
-    key: 'pricing-compare',
-    name: 'Pricing Compare',
-    preview: 'pricing-compare',
-    icon: 'table',
-    prims: ['Button'],
     variants: ['default'],
   },
 ];

@@ -7,6 +7,7 @@ import { h } from '~/lib/h';
 import { ROUTES } from '~/lib/routes';
 import type { Tok } from '~/lib/tokens';
 import { useUI } from '~/lib/ui-context';
+import { BlocksLockup } from './logo';
 import { Badge, Icon, Kbd } from './primitives';
 
 // Primary nav. `href` drives navigation; `soon` renders a disabled item with a
@@ -98,21 +99,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
         Link,
         {
           href: ROUTES.home,
+          'aria-label': 'ibirdui blocks — accueil',
           style: {
             display: 'flex',
-            alignItems: 'baseline',
-            gap: '6px',
+            alignItems: 'center',
             textDecoration: 'none',
           },
         },
-        h(
-          'span',
-          {
-            style: { font: "700 15px 'Geist',sans-serif", letterSpacing: '-.02em', color: t.text },
-          },
-          'ibirdui',
-        ),
-        h('span', { style: { font: "600 15px 'Geist',sans-serif", color: t.accent } }, 'blocks'),
+        h(BlocksLockup, { t, size: 30 }),
       ),
       h(
         'nav',
@@ -238,12 +232,7 @@ function Footer() {
     h(
       'div',
       { style: { maxWidth: '260px' } },
-      h(
-        'div',
-        { style: { display: 'flex', alignItems: 'baseline', gap: '5px', marginBottom: '10px' } },
-        h('span', { style: { font: "700 15px 'Geist',sans-serif", color: t.text } }, 'ibirdui'),
-        h('span', { style: { font: "600 15px 'Geist',sans-serif", color: t.accent } }, 'blocks'),
-      ),
+      h('div', { style: { marginBottom: '12px' } }, h(BlocksLockup, { t, size: 28 })),
       h(
         'p',
         { style: { margin: 0, color: t.faint, fontSize: '13px', lineHeight: 1.55 } },
