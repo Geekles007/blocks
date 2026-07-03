@@ -7,6 +7,12 @@ export const metadata = {
   title: 'ibirdui blocks — copie une commande, c’est à toi',
   description:
     'Un catalogue de blocks UI complets, animés au morphing et accessibles, construits sur les primitives ibirdui. Installe-les en une commande, garde le code.',
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
