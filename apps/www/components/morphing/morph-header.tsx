@@ -1,4 +1,4 @@
-import { MORPH_PRIMITIVES } from '~/lib/morphing-data';
+import { MORPH_COMPONENTS } from '~/lib/morphing-data';
 
 function FeatureChip({ swatch, label }: { swatch: React.ReactNode; label: string }) {
   return (
@@ -53,16 +53,16 @@ export function MorphHeader() {
 
       <div className="mt-7 border-t border-border pt-6">
         <div className="mb-3.5 font-mono text-[10.5px] uppercase tracking-[0.1em] text-muted-foreground">
-          Morph techniques — each component is tagged with the ones it uses
+          ibirdui primitives — each morph is tagged with the components it’s built from
         </div>
         <div className="flex flex-wrap gap-x-7 gap-y-2.5">
-          {MORPH_PRIMITIVES.map((p) => (
-            <div key={p.id} className="flex items-center gap-2">
-              <span className={`h-[9px] w-[9px] flex-none rounded-[3px] ${p.dot}`} />
+          {MORPH_COMPONENTS.map((c) => (
+            <div key={c.id} className="flex items-center gap-2">
+              <span className={`h-[9px] w-[9px] flex-none rounded-[3px] ${c.dot}`} />
               <span className="font-mono font-semibold text-[12.5px] text-foreground">
-                {p.name}
+                {c.name}
               </span>
-              <span className="text-[12.5px] text-muted-foreground">{p.blurb}</span>
+              <span className="text-[12.5px] text-muted-foreground">{c.blurb}</span>
             </div>
           ))}
         </div>

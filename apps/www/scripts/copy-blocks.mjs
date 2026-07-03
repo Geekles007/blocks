@@ -75,7 +75,10 @@ async function main() {
   //    Tailwind preset + token CSS to render previews as a consumer's app would).
   const catalogue = await cataloguePrimitives();
   const { written: primitiveFiles, names: primitiveNames } = await fetchPrimitivesInto(OUT, {
-    extra: [...catalogue, 'theme'],
+    // Primitives the /morphing demos mount directly (not via a block dependency),
+    // so they must be fetched explicitly alongside `theme`. `data-list` pulls in
+    // `state-boundary` + `async-state` transitively.
+    extra: [...catalogue, 'card', 'input', 'data-list', 'badge', 'separator', 'theme'],
   });
 
   // 2) local block sources — copied straight from this repo's registry.

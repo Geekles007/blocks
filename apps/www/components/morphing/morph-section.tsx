@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 import type { MorphEntry } from '~/lib/morphing-data';
+import { ComponentTag } from './component-tag';
 import type { MorphDemoProps } from './demos';
 import { MorphStage } from './morph-stage';
-import { PrimitiveTag } from './primitive-tag';
 
 /**
  * One collection row: a fixed meta column (number, title, tags, "what morphs",
@@ -39,11 +39,13 @@ export function MorphSection({
           {entry.description}
         </p>
 
-        <div className="mt-4 flex flex-wrap gap-1.5">
-          {entry.tags.map((t) => (
-            <PrimitiveTag key={t} id={t} />
-          ))}
-        </div>
+        {entry.tags.length > 0 ? (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {entry.tags.map((t) => (
+              <ComponentTag key={t} id={t} />
+            ))}
+          </div>
+        ) : null}
 
         {entry.whatMorphs ? (
           <div className="mt-[18px] rounded-2xl border border-border bg-card p-4">
