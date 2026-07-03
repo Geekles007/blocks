@@ -1,0 +1,41 @@
+{
+  "name": "pricing-toggle",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A pricing grid with a monthly/annual Switch that flips every price at once; the figure swaps in a vertical fade so the toggle reads clearly without shifting the layout. One plan carries the accent. The toggle is a labelled group and the grid collapses from one column on mobile to one per plan on desktop. The price transition falls back to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The billing toggle is a role=group labelled via aria-labelledby and the Switch carries an explicit aria-label",
+      "The section title is an h2 that labels the section landmark; each plan name is an h3",
+      "Each plan's features are a real ul list",
+      "CTAs render as real links when given an href, otherwise as buttons",
+      "The price swap animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a pricing section with a monthly/annual billing toggle",
+      "a pricing grid whose prices switch between monthly and yearly"
+    ],
+    "examples": [
+      "<PricingToggle title=\"Payez au mois ou à l'année\" annualHint=\"−20 %\" plans={[{ name: 'Pro', monthlyPrice: '29 €', annualPrice: '24 €', featured: true, features: ['Projets illimités'], action: { label: 'Choisir Pro', href: '/signup' } }]} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/switch.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/pricing-toggle.tsx",
+      "path": "components/blocks/pricing-toggle.tsx",
+      "type": "component"
+    }
+  ]
+}

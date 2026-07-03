@@ -15,7 +15,7 @@ export interface Block {
 
 // Only categories with at least one shipped block are listed. As real blocks
 // land (Application, Auth, …) add their category here and an entry to BLOCKS.
-export const CATS = ['Marketing'];
+export const CATS = ['Marketing', 'Pricing'];
 
 // Catalogue = blocks that actually exist in the registry. `hero` is the only
 // shipped block today; the rest of the design handoff is intentionally not
@@ -29,6 +29,69 @@ export const BLOCKS: Block[] = [
     icon: 'sparkles',
     prims: ['Badge', 'Button', 'Avatar'],
     variants: ['hero'],
+  },
+  {
+    cat: 'Marketing',
+    key: 'hero-terminal',
+    name: 'Hero Terminal',
+    preview: 'hero-terminal',
+    icon: 'command',
+    prims: ['Badge', 'Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Marketing',
+    key: 'hero-fintech',
+    name: 'Hero Fintech',
+    preview: 'hero-fintech',
+    icon: 'lock',
+    prims: ['Badge', 'Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Marketing',
+    key: 'hero-agency',
+    name: 'Hero Agency',
+    preview: 'hero-agency',
+    icon: 'zap',
+    prims: ['Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Pricing',
+    key: 'pricing',
+    name: 'Pricing',
+    preview: 'pricing',
+    icon: 'card',
+    prims: ['Badge', 'Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Pricing',
+    key: 'pricing-toggle',
+    name: 'Pricing Toggle',
+    preview: 'pricing-toggle',
+    icon: 'gauge',
+    prims: ['Switch', 'Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Pricing',
+    key: 'pricing-single',
+    name: 'Pricing Single',
+    preview: 'pricing-single',
+    icon: 'star',
+    prims: ['Badge', 'Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Pricing',
+    key: 'pricing-compare',
+    name: 'Pricing Compare',
+    preview: 'pricing-compare',
+    icon: 'table',
+    prims: ['Button'],
+    variants: ['default'],
   },
 ];
 

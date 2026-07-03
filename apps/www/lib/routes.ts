@@ -3,6 +3,5 @@ export const ROUTES = {
   home: '/',
   catalogue: '/catalogue',
   block: (key: string) => `/blocks/${key}`,
-  primitives: '/primitives',
-  primitive: (key: string) => `/primitives/${key}`,
+  morphing: '/morphing',
 } as const;

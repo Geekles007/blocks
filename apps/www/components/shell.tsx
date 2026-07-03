@@ -20,8 +20,7 @@ interface NavItem {
 }
 const NAV: NavItem[] = [
   { label: 'Catalogue', href: ROUTES.catalogue, match: ['/blocks'] },
-  { label: 'Primitives', href: ROUTES.primitives },
-  { label: 'Docs' },
+  { label: 'Morphing', href: ROUTES.morphing },
   { label: 'Templates', soon: true },
 ];
 
@@ -57,7 +56,7 @@ function NavLink({ item, t, pathname }: { item: NavItem; t: Tok; pathname: strin
     );
   }
   if (!item.href) {
-    // Announced-but-unrouted entry (e.g. Docs / Primitives): inert for now.
+    // Announced-but-unrouted entry: inert for now.
     return h('span', { style: { ...baseStyle, color: t.muted, cursor: 'default' } }, item.label);
   }
   const active = isActive(item, pathname);
@@ -254,7 +253,7 @@ function Footer() {
     h(
       'div',
       { style: { display: 'flex', gap: '48px', flexWrap: 'wrap' } },
-      col('Produit', ['Catalogue', 'Primitives', 'block-motion', 'Changelog']),
+      col('Produit', ['Catalogue', 'Morphing', 'block-motion', 'Changelog']),
       col('Ressources', ['Docs', 'Guide d’install', 'Thèmes']),
       col('Communauté', ['GitHub', 'Discord', 'X']),
     ),

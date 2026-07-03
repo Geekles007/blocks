@@ -1,0 +1,40 @@
+{
+  "name": "hero-fintech",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A trust-forward fintech hero: reassuring copy on the left, a decorative account card with a tabular balance and a strip of encrypted-guarantee figures on the right. The neutrals carry the design; the single accent only underlines security. Content reveals in a staggered upward motion and collapses to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Renders a single h1 for the headline and labels the section landmark via aria-labelledby",
+      "The account card, balance figure and guarantee strip are decorative (aria-hidden) and do not affect contrast of the text",
+      "CTAs render as real links when given an href, otherwise as buttons",
+      "The entrance animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a fintech or banking landing hero with a trust-building account card",
+      "a hero pairing reassuring copy with a card visual and security figures"
+    ],
+    "examples": [
+      "<HeroFintech eyebrow=\"Agréé ACPR\" title=\"La banque qui joue franc jeu\" subtitle=\"Zéro frais caché, dépôts garantis, chiffrement de bout en bout.\" primaryAction={{ label: 'Ouvrir un compte', href: '/signup' }} secondaryAction={{ label: 'Voir les tarifs', href: '/pricing' }} assurance=\"Dépôts garantis jusqu'à 100 000 €\" />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/hero-fintech.tsx",
+      "path": "components/blocks/hero-fintech.tsx",
+      "type": "component"
+    }
+  ]
+}

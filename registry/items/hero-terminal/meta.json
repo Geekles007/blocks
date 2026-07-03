@@ -1,0 +1,40 @@
+{
+  "name": "hero-terminal",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A developer-first two-column hero: copy on the left, a decorative terminal showing an install command on the right. Stacks on mobile. Content reveals in a staggered upward motion and collapses to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Renders a single h1 for the headline and labels the section landmark via aria-labelledby",
+      "The terminal is purely illustrative (aria-hidden) and does not affect contrast of the text",
+      "CTAs render as real links when given an href, otherwise as buttons",
+      "The entrance animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a developer-tool hero with a terminal or code preview",
+      "a CLI product hero showing an install command"
+    ],
+    "examples": [
+      "<HeroTerminal title=\"Your components, one command away\" subtitle=\"Copy-paste blocks you own.\" primaryAction={{ label: 'Read the docs', href: '/docs' }} secondaryAction={{ label: 'GitHub', href: '#' }} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/hero-terminal.tsx",
+      "path": "components/blocks/hero-terminal.tsx",
+      "type": "component"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "hero-agency",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A bold creative-agency hero: an oversized headline that overflows the grid, left-aligned, with a discreet meta rail (services, location, year) that breaks the symmetry. The audacity comes from scale and whitespace, not colour. Content reveals in a staggered upward motion and collapses to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Renders a single h1 for the headline and labels the section landmark via aria-labelledby",
+      "The kicker rule is decorative (aria-hidden) and does not affect contrast of the text",
+      "The CTA renders as a real link when given an href, otherwise as a button",
+      "The entrance animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a creative agency or portfolio landing hero with a giant asymmetric headline",
+      "a bold typographic hero with a meta rail"
+    ],
+    "examples": [
+      "<HeroAgency eyebrow=\"Studio créatif — Est. 2016\" title=\"On donne une voix aux marques qui osent\" subtitle=\"Identité, produits numériques et motion pour les équipes ambitieuses.\" primaryAction={{ label: 'Voir les projets', href: '/work' }} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/hero-agency.tsx",
+      "path": "components/blocks/hero-agency.tsx",
+      "type": "component"
+    }
+  ]
+}

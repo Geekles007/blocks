@@ -1,0 +1,40 @@
+{
+  "name": "pricing-single",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A single centred offer with nothing to prove against other columns: the price dominates, the benefit list unfolds into two columns on wide screens and one on mobile, and a single full-width CTA closes the card. Content reveals in a staggered upward motion and collapses to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The section title is an h2 that labels the section landmark; the plan name is an h3",
+      "The included-features list is a real ul",
+      "The CTA renders as a real link when given an href, otherwise a button, and references the plan name via aria-describedby",
+      "The entrance animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a single-plan pricing section with one price and one CTA",
+      "a lifetime or one-off offer card with a benefit list"
+    ],
+    "examples": [
+      "<PricingSingle eyebrow=\"Offre de lancement\" title=\"Un seul prix, tout compris\" planName=\"Licence à vie\" price=\"199 €\" period=\"paiement unique\" features={['Mises à jour à vie', 'Support par e-mail']} primaryAction={{ label: 'Acheter', href: '/checkout' }} note=\"Garantie 30 jours satisfait ou remboursé\" />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/pricing-single.tsx",
+      "path": "components/blocks/pricing-single.tsx",
+      "type": "component"
+    }
+  ]
+}

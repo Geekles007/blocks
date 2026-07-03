@@ -55,8 +55,7 @@ export interface HeroProps extends Omit<React.HTMLAttributes<HTMLElement>, 'titl
 
 /**
  * A centred landing hero: eyebrow pill, headline, subtitle, up to two CTAs and
- * optional social proof, over a layered gradient backdrop. The content reveals
- * in a gentle upward stagger on mount.
+ * optional social proof. The content reveals in a gentle upward stagger on mount.
  *
  *   <Hero
  *     eyebrow="New · v2.0"
@@ -74,7 +73,7 @@ export interface HeroProps extends Omit<React.HTMLAttributes<HTMLElement>, 'titl
  * (via `buttonClasses`) for the CTAs and `avatar` for the social-proof stack,
  * so each piece ships the same a11y guarantees the design system is tested for.
  * The headline is the page's single `h1` and labels the section landmark; the
- * backdrop and CTA icons are decorative and hidden from assistive tech.
+ * CTA icons are decorative and hidden from assistive tech.
  * Wrapped in `MotionProvider`, the entrance animation collapses to a plain fade
  * under `prefers-reduced-motion`. Fully responsive: CTAs stack on small screens
  * and sit inline from `sm` up.
@@ -95,32 +94,18 @@ export function Hero({
 
   return (
     <MotionProvider>
-      <section
-        aria-labelledby={headingId}
-        className={cn('relative isolate overflow-hidden px-6 py-24 sm:py-32', className)}
-        {...rest}
-      >
-        {/* Decorative gradient backdrop — purely visual, hidden from assistive tech.
-            One accent, layered for depth: a soft top-centre glow behind the
-            headline plus two low-opacity blobs. Restraint over fireworks. */}
-        <div
-          aria-hidden="true"
-          className="-z-10 pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div className="absolute inset-x-0 top-0 h-[440px] bg-[radial-gradient(58%_60%_at_50%_0%,hsl(var(--primary)/0.13),transparent_72%)]" />
-          <div className="-left-28 -top-28 absolute h-80 w-80 rounded-full bg-primary/20 blur-[100px]" />
-          <div className="-right-24 -top-16 absolute h-72 w-72 rounded-full bg-primary/10 blur-[100px]" />
-        </div>
-
+      <section aria-labelledby={headingId} className={cn(className)} {...rest}>
         <motion.div
           variants={reveal}
           initial="hidden"
           animate="visible"
-          className="mx-auto flex max-w-2xl flex-col items-center text-center"
+          className="mx-auto flex max-w-4xl flex-col items-center text-center"
         >
           {eyebrow ? (
             <motion.div variants={revealItem} className="mb-5">
-              <Badge variant="secondary">{eyebrow}</Badge>
+              <Badge variant="secondary" className="border border-primary border-solid py-1">
+                {eyebrow}
+              </Badge>
             </motion.div>
           ) : null}
 

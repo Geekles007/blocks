@@ -235,13 +235,25 @@ body {
 [data-theme="dark"] {
   --background: 240 6% 4%;
   --foreground: 0 0% 98%;
+  --card: 240 6% 7%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 6% 7%;
+  --popover-foreground: 0 0% 98%;
   --muted: 240 4% 16%;
   --muted-foreground: 240 5% 65%;
+  --secondary: 240 4% 16%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 240 4% 16%;
+  --accent-foreground: 0 0% 98%;
   --border: 240 6% 16%;
   --input: 240 6% 16%;
   --ring: 83 100% 59%;
   --primary: 83 100% 59%;
   --primary-foreground: 80 60% 8%;
+  --success: 142 69% 45%;
+  --success-foreground: 144 80% 6%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 48 96% 8%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
   --radius: 0.6rem;
@@ -249,14 +261,49 @@ body {
 [data-theme="light"] {
   --background: 0 0% 100%;
   --foreground: 240 6% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 6% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 6% 10%;
   --muted: 240 5% 96%;
   --muted-foreground: 240 4% 40%;
+  --secondary: 240 5% 96%;
+  --secondary-foreground: 240 6% 10%;
+  --accent: 240 5% 96%;
+  --accent-foreground: 240 6% 10%;
   --border: 240 6% 90%;
   --input: 240 6% 90%;
   --ring: 83 68% 40%;
   --primary: 83 68% 40%;
   --primary-foreground: 80 60% 8%;
+  --success: 142 71% 40%;
+  --success-foreground: 0 0% 98%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 48 96% 8%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
   --radius: 0.6rem;
+}
+
+/* ── /morphing page ─────────────────────────────────────────────────────────
+   The Morphing showcase is built with Tailwind utilities (unlike the rest of
+   the hand-styled chrome). Preflight is off globally, so this scoped reset
+   restores the few resets those utilities assume — border-style, block SVGs and
+   collapsed default margins — plus the Geist type the design uses. Scoped to
+   `.morph-page` so it never touches the surrounding chrome. */
+.morph-page {
+  font-family: Geist, system-ui, -apple-system, sans-serif;
+}
+.morph-page * {
+  border-width: 0;
+  border-style: solid;
+}
+.morph-page svg {
+  display: block;
+}
+.morph-page :where(h1, h2, h3, h4, p, figure) {
+  margin: 0;
+}
+.morph-page .font-mono {
+  font-family: "Geist Mono", monospace;
 }

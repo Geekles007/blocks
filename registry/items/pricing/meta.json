@@ -1,0 +1,40 @@
+{
+  "name": "pricing",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A three-tier pricing grid where only the recommended plan carries the accent — ring, filled CTA and a \"popular\" badge — so the eye lands on one plan. Cards keep full height to align their CTAs, and the grid collapses from one column on mobile to one column per plan on desktop. Content reveals in a staggered upward motion and collapses to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The section title is an h2 that labels the section landmark via aria-labelledby; each plan name is an h3",
+      "Each plan's features are a real ul list",
+      "CTAs render as real links when given an href, otherwise as buttons, and reference their plan name via aria-describedby",
+      "The entrance animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a three-tier pricing section with one highlighted plan",
+      "a pricing grid comparing plans by feature list"
+    ],
+    "examples": [
+      "<Pricing title=\"Un prix simple, sans surprise\" plans={[{ name: 'Starter', price: '0 €', period: '/ mois', features: ['1 projet', '2 membres'], action: { label: 'Commencer', href: '/signup' } }, { name: 'Pro', price: '29 €', period: '/ mois', featured: true, features: ['Projets illimités', 'Support prioritaire'], action: { label: 'Choisir Pro', href: '/signup' } }]} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/pricing.tsx",
+      "path": "components/blocks/pricing.tsx",
+      "type": "component"
+    }
+  ]
+}

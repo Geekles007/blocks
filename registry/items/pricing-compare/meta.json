@@ -1,0 +1,40 @@
+{
+  "name": "pricing-compare",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A semantic comparison table that puts plans in columns and features in rows for a scannable, at-a-glance comparison. The recommended plan's column is accent-tinted; checked cells carry a screen-reader label. Below the available width the table scrolls horizontally inside its frame instead of overflowing the page, with the first column pinned to keep context. Reveals on mount and collapses to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Renders a real table with a caption, column header cells (scope=col) for each plan and row header cells (scope=row) for each feature",
+      "Check / dash cells expose a visually-hidden 'Inclus' / 'Non inclus' label so meaning does not rely on the icon alone",
+      "The section title is an h2 that labels the section landmark",
+      "CTAs render as real links when given an href, otherwise as buttons",
+      "The reveal animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a feature comparison table across pricing plans",
+      "a pricing matrix with checkmarks per plan and feature"
+    ],
+    "examples": [
+      "<PricingCompare title=\"Comparez les offres\" plans={[{ name: 'Starter', price: '0 €', period: '/ mois', action: { label: 'Commencer', href: '/signup' } }, { name: 'Pro', price: '29 €', period: '/ mois', featured: true, action: { label: 'Choisir Pro', href: '/signup' } }]} rows={[{ label: 'Projets', values: ['3', 'Illimité'] }, { label: 'Support prioritaire', values: [false, true] }]} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/pricing-compare.tsx",
+      "path": "components/blocks/pricing-compare.tsx",
+      "type": "component"
+    }
+  ]
+}
