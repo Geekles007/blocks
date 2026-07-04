@@ -183,6 +183,12 @@ export function Icon({ name, size = 18, style }: { name: string; size?: number; 
       h('circle', { cx: 10, cy: 10, r: 7, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7 }),
       P('M8 8a2 2 0 1 1 2.6 1.9c-.4.2-.6.5-.6 1V11M10 14h.01'),
     ],
+    close: [P('M5 5l10 10M15 5L5 15')],
+    minimize: [
+      P(
+        'M8 3H5a2 2 0 0 0-2 2v3M12 3h3a2 2 0 0 1 2 2v3M8 17H5a2 2 0 0 1-2-2v-3M12 17h3a2 2 0 0 0 2-2v-3',
+      ),
+    ],
   };
   return h(
     'svg',

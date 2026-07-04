@@ -6,6 +6,7 @@ import { BLOCKS, type Block, getBlock, siblingsOf } from '~/lib/blocks-data';
 import { h } from '~/lib/h';
 import { ROUTES } from '~/lib/routes';
 import { useUI } from '~/lib/ui-context';
+import { PreviewFrame } from '../preview-frame';
 import { renderPreview } from '../previews';
 import { Badge, Button, Icon, PrimPill, SectionLabel } from '../primitives';
 import { SpecGrid } from '../spec-grid';
@@ -22,6 +23,22 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
   const [variant, setVariant] = useState(0);
   const [bp, setBp] = useState<Bp>('desktop');
   const [tab, setTab] = useState<Tab>('preview');
+  const [fullscreen, setFullscreen] = useState(false);
+
+  // Close the fullscreen overlay on Escape, and lock body scroll while it's open.
+  React.useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFullscreen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [fullscreen, setFullscreen]);
 
   const siblings = siblingsOf(b);
   const width = bp === 'mobile' ? '390px' : bp === 'tablet' ? '768px' : '100%';
@@ -279,6 +296,10 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
           h(
             'button',
             {
+              onClick: () => {
+                setTab('preview');
+                setFullscreen(true);
+              },
               title: 'Plein écran',
               style: {
                 display: 'flex',
@@ -321,17 +342,16 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
                   width,
                   maxWidth: '100%',
                   transition: reduced ? 'none' : 'width .5s cubic-bezier(.22,1,.36,1)',
-                  display: 'flex',
-                  justifyContent: 'center',
                 },
               },
               h(
-                'div',
-                {
-                  key: b.key + variant + bp,
-                  style: { width: '100%', display: 'flex', justifyContent: 'center' },
-                },
-                renderPreview(b.preview, { t, reduced, v: variant }),
+                PreviewFrame,
+                { key: b.preview, theme, reduced, minHeight: 360 },
+                h(
+                  'div',
+                  { key: b.key + variant + bp },
+                  renderPreview(b.preview, { t, reduced, v: variant }),
+                ),
               ),
             ),
           )
@@ -440,5 +460,147 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
       ),
       h(SpecGrid, { t, b }),
     ),
+    fullscreen &&
+      h(
+        'div',
+        {
+          role: 'dialog',
+          'aria-modal': true,
+          'aria-label': `${b.name} — aperçu plein écran`,
+          onClick: () => setFullscreen(false),
+          style: {
+            position: 'fixed',
+            inset: 0,
+            zIndex: 90,
+            display: 'flex',
+            flexDirection: 'column',
+            background: t.bg,
+          },
+        },
+        h(
+          'div',
+          {
+            onClick: (e: React.MouseEvent) => e.stopPropagation(),
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              padding: '10px 16px',
+              borderBottom: `1px solid ${t.border}`,
+              background: t.panel,
+              flexWrap: 'wrap',
+            },
+          },
+          h(
+            'div',
+            { style: { display: 'flex', alignItems: 'center', gap: '10px' } },
+            h('span', { style: { font: "600 14px 'Geist',sans-serif", color: t.text } }, b.name),
+            h(Badge, { t }, b.cat),
+            h(
+              'code',
+              { style: { fontFamily: "'Geist Mono',monospace", fontSize: '12px', color: t.faint } },
+              vid,
+            ),
+          ),
+          h(
+            'div',
+            { style: { display: 'flex', alignItems: 'center', gap: '6px' } },
+            h(
+              'div',
+              {
+                style: {
+                  display: 'flex',
+                  gap: '2px',
+                  background: t.bg2,
+                  borderRadius: '8px',
+                  padding: '2px',
+                },
+              },
+              bpBtn('desktop', 'monitor'),
+              bpBtn('tablet', 'tablet'),
+              bpBtn('mobile', 'phone'),
+            ),
+            h('span', {
+              style: { width: '1px', height: '20px', background: t.border, margin: '0 4px' },
+            }),
+            h(
+              'button',
+              {
+                onClick: toggleTheme,
+                title: 'Thème',
+                style: {
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '7px',
+                  border: `1px solid ${t.border}`,
+                  background: t.bg2,
+                  color: t.muted,
+                  cursor: 'pointer',
+                },
+              },
+              h(Icon, { name: theme === 'dark' ? 'sun' : 'moon', size: 15 }),
+            ),
+            h(
+              'button',
+              {
+                onClick: () => setFullscreen(false),
+                title: 'Quitter le plein écran (Échap)',
+                style: {
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '7px',
+                  border: `1px solid ${t.border}`,
+                  background: t.bg2,
+                  color: t.muted,
+                  cursor: 'pointer',
+                },
+              },
+              h(Icon, { name: 'close', size: 15 }),
+            ),
+          ),
+        ),
+        h(
+          'div',
+          {
+            onClick: (e: React.MouseEvent) => e.stopPropagation(),
+            style: {
+              flex: 1,
+              overflow: 'auto',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              padding: '40px 24px',
+              background: 'radial-gradient(var(--ib-border) 1px,transparent 1px)',
+              backgroundSize: '22px 22px',
+            },
+          },
+          h(
+            'div',
+            {
+              style: {
+                width,
+                maxWidth: '100%',
+                transition: reduced ? 'none' : 'width .5s cubic-bezier(.22,1,.36,1)',
+              },
+            },
+            h(
+              PreviewFrame,
+              { key: `fs-${b.preview}`, theme, reduced, minHeight: 360 },
+              h(
+                'div',
+                { key: b.key + variant + bp },
+                renderPreview(b.preview, { t, reduced, v: variant }),
+              ),
+            ),
+          ),
+        ),
+      ),
   );
 }
