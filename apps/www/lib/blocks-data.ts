@@ -15,11 +15,12 @@ export interface Block {
 
 // Only categories with at least one shipped block are listed. As real blocks
 // land (Application, Auth, …) add their category here and an entry to BLOCKS.
-export const CATS = ['Marketing', 'Pricing', 'Morphing'];
+export const CATS = ['Marketing', 'Pricing'];
 
 // Catalogue = blocks that actually exist in the registry. Marketing ships the
-// full hero family; Pricing lists only `pricing-toggle` for now; Morphing ships
-// the shared-element transitions showcased on /morphing.
+// full hero family; Pricing lists only `pricing-toggle` for now. The Morphing
+// blocks are installable registry items too, but they live in their own
+// showcase (/morphing) and are intentionally NOT listed in the catalogue.
 export const BLOCKS: Block[] = [
   {
     cat: 'Marketing',
@@ -64,24 +65,6 @@ export const BLOCKS: Block[] = [
     preview: 'pricing-toggle',
     icon: 'gauge',
     prims: ['Switch', 'Button'],
-    variants: ['default'],
-  },
-  {
-    cat: 'Morphing',
-    key: 'morph-button-card',
-    name: 'Morph Button → Card',
-    preview: 'morph-button-card',
-    icon: 'sparkles',
-    prims: ['Button', 'Card'],
-    variants: ['default'],
-  },
-  {
-    cat: 'Morphing',
-    key: 'morph-search-panel',
-    name: 'Morph Search Panel',
-    preview: 'morph-search-panel',
-    icon: 'search',
-    prims: ['Button', 'Input', 'DataList', 'Separator', 'Badge'],
     variants: ['default'],
   },
 ];

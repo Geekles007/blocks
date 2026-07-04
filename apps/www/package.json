@@ -6,9 +6,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "predev": "node scripts/copy-blocks.mjs",
+    "predev": "node scripts/copy-blocks.mjs && node scripts/copy-registry.mjs",
     "dev": "next dev --port 3200",
-    "prebuild": "node scripts/copy-blocks.mjs",
+    "prebuild": "node scripts/copy-blocks.mjs && node scripts/copy-registry.mjs",
     "build": "next build",
     "start": "next start --port 3200",
     "pretypecheck": "node scripts/copy-blocks.mjs",
