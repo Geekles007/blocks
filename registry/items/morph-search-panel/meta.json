@@ -1,0 +1,44 @@
+{
+  "name": "morph-search-panel",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A search icon that morphs into a command menu: the surface springs between the icon and a full panel while the Button and the panel swap through AnimatePresence, so both get a real enter and exit. Inside, the ibirdui Input, a DataList of suggestions (first row highlighted), a Separator and a row of Badge filter chips stagger in on open and reverse-stagger out on close. Escape closes it like a real command menu, and the whole morph collapses to a plain crossfade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Collapsed, the block is an icon Button with an explicit aria-label (\"Open search\"), so it is keyboard- and screen-reader-reachable",
+      "On open, focus moves to the labelled search Input; Escape closes the panel",
+      "The selected suggestion and the active filter chip are not distinguished by colour alone — each carries aria-current plus a visually-hidden \"(selected)\" label",
+      "The suggestions render through DataList (a labelled list) and the filters are grouped with an accessible group label; decorative icons are aria-hidden",
+      "The size/stagger morph respects prefers-reduced-motion via MotionConfig, collapsing to a plain crossfade"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a search icon that expands into a command menu or search panel",
+      "a shared-element morph from a search button to a results panel",
+      "an animated command palette trigger built on ibirdui"
+    ],
+    "examples": ["<MorphSearchPanel />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/input.json",
+    "https://ui.ibird.dev/r/data-list.json",
+    "https://ui.ibird.dev/r/separator.json",
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/async-state.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/morph-search-panel.tsx",
+      "path": "components/blocks/morph-search-panel.tsx",
+      "type": "component"
+    }
+  ]
+}

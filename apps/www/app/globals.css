@@ -104,6 +104,26 @@ body {
 .ib-pop {
   animation: ib-pop 0.34s cubic-bezier(0.34, 1.4, 0.5, 1) both;
 }
+/* Mobile nav drawer: a bottom sheet that slides up. The hamburger trigger only
+   shows once the inline nav links collapse (≤920px, see below). */
+@keyframes ib-sheet {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.ib-sheet {
+  animation: ib-sheet 0.34s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+[data-reduced="1"] .ib-sheet {
+  animation: ib-fade 0.26s ease both !important;
+  transform: none !important;
+}
+.ib-menubtn {
+  display: none;
+}
 [data-reduced="1"] .ib-rise,
 [data-reduced="1"] .ib-pop {
   animation: ib-fade 0.26s ease both !important;
@@ -166,6 +186,9 @@ body {
   }
   .ib-navlinks {
     display: none !important;
+  }
+  .ib-menubtn {
+    display: inline-flex !important;
   }
 }
 

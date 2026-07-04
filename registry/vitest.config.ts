@@ -24,7 +24,12 @@ export default defineConfig({
       '@/components/input': primitiveFile('components/input.tsx'),
       '@/components/switch': primitiveFile('components/switch.tsx'),
       '@/components/skeleton': primitiveFile('components/skeleton.tsx'),
+      '@/components/card': primitiveFile('components/card.tsx'),
+      '@/components/separator': primitiveFile('components/separator.tsx'),
+      '@/components/data-list': primitiveFile('components/data-list.tsx'),
+      '@/components/state-boundary': primitiveFile('components/state-boundary.tsx'),
       '@/lib/block-motion': primitiveFile('lib/block-motion.tsx'),
+      '@/lib/async-state': primitiveFile('lib/async-state.ts'),
       // blocks
       '@/components/blocks/hero': blockFile('hero/files/hero.tsx'),
       '@/components/blocks/hero-terminal': blockFile('hero-terminal/files/hero-terminal.tsx'),
@@ -34,6 +39,12 @@ export default defineConfig({
       '@/components/blocks/pricing-toggle': blockFile('pricing-toggle/files/pricing-toggle.tsx'),
       '@/components/blocks/pricing-single': blockFile('pricing-single/files/pricing-single.tsx'),
       '@/components/blocks/pricing-compare': blockFile('pricing-compare/files/pricing-compare.tsx'),
+      '@/components/blocks/morph-button-card': blockFile(
+        'morph-button-card/files/morph-button-card.tsx',
+      ),
+      '@/components/blocks/morph-search-panel': blockFile(
+        'morph-search-panel/files/morph-search-panel.tsx',
+      ),
     },
   },
   esbuild: { jsx: 'automatic' },

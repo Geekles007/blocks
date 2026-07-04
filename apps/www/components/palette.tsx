@@ -9,7 +9,7 @@ import { ROUTES } from '~/lib/routes';
 import { useUI } from '~/lib/ui-context';
 import { Badge, Icon, Kbd } from './primitives';
 
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 /** ⌘K command palette: fuzzy-filter blocks and navigate to their detail page. */
 export function Palette() {
@@ -27,6 +27,32 @@ export function Palette() {
     if (!order.includes(active)) setActive(order[0] ?? '');
   }, [q]);
   const M = useMagic(active, reduced);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  // Focus the field only once the pop-in has settled. Focusing mid-scale places
+  // the caret in the panel's transformed coordinate space, so it reads a few px
+  // off until the animation lands. Reduced motion has no transform → focus now.
+  useEffect(() => {
+    const input = inputRef.current;
+    if (!input) return;
+    if (reduced) {
+      input.focus();
+      return;
+    }
+    const panel = panelRef.current;
+    let done = false;
+    const focus = () => {
+      if (done) return;
+      done = true;
+      input.focus();
+    };
+    panel?.addEventListener('animationend', focus, { once: true });
+    const id = window.setTimeout(focus, 380);
+    return () => {
+      window.clearTimeout(id);
+      panel?.removeEventListener('animationend', focus);
+    };
+  }, [reduced]);
   const openActive = () => {
     if (!active) return;
     closePalette();
@@ -65,6 +91,7 @@ export function Palette() {
     h(
       'div',
       {
+        ref: panelRef,
         onClick: (e: React.MouseEvent) => e.stopPropagation(),
         className: reduced ? 'ib-fade' : 'ib-pop',
         style: {
@@ -90,7 +117,7 @@ export function Palette() {
         },
         h(Icon, { name: 'search', size: 18, style: { color: t.faint } }),
         h('input', {
-          autoFocus: true,
+          ref: inputRef,
           value: q,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => setQ(e.target.value),
           onKeyDown: onKey,

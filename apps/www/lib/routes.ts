@@ -4,4 +4,8 @@ export const ROUTES = {
   catalogue: '/catalogue',
   block: (key: string) => `/blocks/${key}`,
   morphing: '/morphing',
+  gettingStarted: '/getting-started',
+  blockMotion: '/block-motion',
+  changelog: '/changelog',
+  themes: '/themes',
 } as const;
