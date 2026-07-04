@@ -49,6 +49,30 @@ export const morphComponent = (id: MorphComponentId): MorphComponent =>
   // biome-ignore lint/style/noNonNullAssertion: MORPH_COMPONENTS is a non-empty literal.
   MORPH_COMPONENTS.find((c) => c.id === id) ?? MORPH_COMPONENTS[0]!;
 
+/** One copy-paste-able install command, with a short label for the UI. */
+export interface InstallStep {
+  label: string;
+  cmd: string;
+}
+
+/**
+ * The commands that install everything a shipped morph imports: the ibirdui
+ * primitives it's tagged with (pulled from ui.ibird.dev in one `ibirdui add`,
+ * copied into your codebase — you own them), plus framer-motion, which every
+ * shipped morph imports directly. Empty for roadmap entries (no code yet), so
+ * the honesty rule holds: no fabricated install steps for unbuilt morphs.
+ */
+export function installSteps(entry: MorphEntry): InstallStep[] {
+  if (!entry.code) return [];
+  const steps: InstallStep[] = [];
+  if (entry.tags.length > 0) {
+    const items = entry.tags.map((id) => `ui.ibird.dev/r/${id}`).join(' ');
+    steps.push({ label: 'ibirdui primitives', cmd: `npx ibirdui add ${items}` });
+  }
+  steps.push({ label: 'Animation runtime', cmd: 'npm install framer-motion' });
+  return steps;
+}
+
 export interface MorphEntry {
   /** Zero-padded index, e.g. "01". Also the demo registry key. */
   n: string;
