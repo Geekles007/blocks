@@ -4,7 +4,8 @@ import { h } from '~/lib/h';
 import { Reveal } from '~/lib/motion';
 import type { Tok } from '~/lib/tokens';
 import { useUI } from '~/lib/ui-context';
-import { Badge, SectionLabel } from '../primitives';
+import { PageContainer, PageHeader } from '../page';
+import { Badge } from '../primitives';
 
 // Change categories, each with a distinct hue for its chip dot — so the kind of
 // change reads at a glance down the timeline.
@@ -164,29 +165,18 @@ export function Changelog() {
   const { t, reduced } = useUI();
 
   return h(
-    'div',
-    { style: { maxWidth: '820px', margin: '0 auto', width: '100%', padding: '52px 24px 64px' } },
+    PageContainer,
+    { width: 'prose' },
 
     // ── Header ──────────────────────────────────────────────────────────────
-    h(SectionLabel, { t, style: { padding: '0 0 10px' } }, 'Changelog'),
-    h(
-      'h1',
-      {
-        style: {
-          margin: '0 0 14px',
-          font: "700 clamp(30px,5vw,44px) 'Geist',sans-serif",
-          letterSpacing: '-.02em',
-          color: t.text,
-          lineHeight: 1.1,
-        },
-      },
-      'Ce qui a changé',
-    ),
-    h(
-      'p',
-      { style: { margin: 0, color: t.muted, fontSize: '16px', lineHeight: 1.6, maxWidth: '58ch' } },
-      'Chaque livraison de blocks, amélioration et correctif — la plus récente en premier. Les blocks sont versionnés individuellement dans le registry ; cette page suit l’évolution du catalogue.',
-    ),
+    h(PageHeader, {
+      t,
+      reduced,
+      kicker: 'Changelog',
+      title: 'Ce qui a changé',
+      subtitle:
+        'Chaque livraison de blocks, amélioration et correctif — la plus récente en premier. Les blocks sont versionnés individuellement dans le registry ; cette page suit l’évolution du catalogue.',
+    }),
 
     // ── Legend ────────────────────────────────────────────────────────────
     h(

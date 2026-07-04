@@ -8,6 +8,7 @@ import { Reveal } from '~/lib/motion';
 import { ROUTES } from '~/lib/routes';
 import type { Tok } from '~/lib/tokens';
 import { useUI } from '~/lib/ui-context';
+import { InstallCommand, PageContainer, PageHeader } from '../page';
 import { Badge, Button, Icon, SectionLabel } from '../primitives';
 
 const INSTALL_CMD = 'npx ibirdui add ui.ibird.dev/r/block-motion';
@@ -246,92 +247,37 @@ export function BlockMotion() {
       'section',
       { style: { borderBottom: `1px solid ${t.border}`, background: t.bg2 } },
       h(
-        Reveal,
-        {
+        PageContainer,
+        { width: 'prose', pad: '76px 24px 60px' },
+        h(PageHeader, {
+          t,
           reduced,
-          stagger: 80,
-          y: 18,
-          style: { maxWidth: '820px', margin: '0 auto', padding: '76px 24px 60px' },
-        },
-        h(
-          'div',
-          { style: { marginBottom: '18px' } },
-          h(Badge, { t, tone: 'accent', dot: true }, 'Fondation · Motion'),
-        ),
-        h(
-          'h1',
-          {
-            style: {
-              margin: '0 0 16px',
-              font: "700 clamp(32px,6vw,52px)/1.05 'Geist',sans-serif",
-              letterSpacing: '-.03em',
-              color: t.text,
-              maxWidth: '16ch',
-            },
-          },
-          'Une seule grammaire de ',
-          h('span', { style: { color: t.accent } }, 'mouvement'),
-          '.',
-        ),
-        h(
-          'p',
-          {
-            style: {
-              margin: '0 0 26px',
-              color: t.muted,
-              fontSize: 'clamp(15px,2.2vw,18px)',
-              lineHeight: 1.6,
-              maxWidth: '58ch',
-            },
-          },
-          'Tous les blocks partagent block-motion : un jeu de springs cohérents, des reveals en cascade et des morphs shared-layout — et chaque animation respecte automatiquement ',
-          h(
-            'code',
-            { style: { fontFamily: "'Geist Mono',monospace", fontSize: '.9em', color: t.text } },
-            'prefers-reduced-motion',
-          ),
-          '. Rien à accorder à la main : le mouvement est cohérent d’un block à l’autre.',
-        ),
-        h(
-          'button',
-          {
-            onClick: () => copy(INSTALL_CMD, 'Commande copiée'),
-            style: {
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '12px',
-              background: t.panel,
-              border: `1px solid ${t.border}`,
-              borderRadius: '11px',
-              padding: '11px 14px',
-              cursor: 'pointer',
-              fontFamily: "'Geist Mono',monospace",
-              fontSize: '13px',
-              color: t.text,
-            },
-          },
-          h('span', { style: { color: t.faint } }, '$'),
-          h('span', {}, INSTALL_CMD),
-          h(
-            'span',
-            {
-              style: {
-                color: t.faint,
-                display: 'flex',
-                borderLeft: `1px solid ${t.border}`,
-                paddingLeft: '12px',
-              },
-            },
-            h(Icon, { name: 'copy', size: 15 }),
-          ),
-        ),
+          size: 'lg',
+          titleMaxWidth: '16ch',
+          kicker: h(Badge, { t, tone: 'accent', dot: true }, 'Fondation · Motion'),
+          title: [
+            'Une seule grammaire de ',
+            h('span', { style: { color: t.accent } }, 'mouvement'),
+            '.',
+          ],
+          subtitle: [
+            'Tous les blocks partagent block-motion : un jeu de springs cohérents, des reveals en cascade et des morphs shared-layout — et chaque animation respecte automatiquement ',
+            h(
+              'code',
+              { style: { fontFamily: "'Geist Mono',monospace", fontSize: '.9em', color: t.text } },
+              'prefers-reduced-motion',
+            ),
+            '. Rien à accorder à la main : le mouvement est cohérent d’un block à l’autre.',
+          ],
+          actions: h(InstallCommand, { t, cmd: INSTALL_CMD, onCopy: copy }),
+        }),
       ),
     ),
 
     // ── Springs ───────────────────────────────────────────────────────────
     h(
-      'section',
-      { style: { maxWidth: '960px', margin: '0 auto', padding: '64px 24px 8px' } },
+      PageContainer,
+      { as: 'section', width: 'wide', pad: '64px 24px 8px' },
       h(SectionLabel, { t, style: { padding: '0 0 10px' } }, 'Springs'),
       h2('Un vocabulaire de quatre ressorts'),
       lead(
@@ -391,8 +337,8 @@ export function BlockMotion() {
 
     // ── Reveal ────────────────────────────────────────────────────────────
     h(
-      'section',
-      { style: { maxWidth: '960px', margin: '0 auto', padding: '56px 24px 8px' } },
+      PageContainer,
+      { as: 'section', width: 'wide', pad: '56px 24px 8px' },
       h(SectionLabel, { t, style: { padding: '0 0 10px' } }, 'Reveal'),
       h2('Des entrées en cascade'),
       lead(
@@ -429,8 +375,8 @@ export function BlockMotion() {
 
     // ── Shared-layout + reduced-motion ────────────────────────────────────
     h(
-      'section',
-      { style: { maxWidth: '960px', margin: '0 auto', padding: '56px 24px 8px' } },
+      PageContainer,
+      { as: 'section', width: 'wide', pad: '56px 24px 8px' },
       h(
         'div',
         {
@@ -534,8 +480,8 @@ export function BlockMotion() {
 
     // ── Footer note ───────────────────────────────────────────────────────
     h(
-      'section',
-      { style: { maxWidth: '960px', margin: '0 auto', padding: '40px 24px 64px' } },
+      PageContainer,
+      { as: 'section', width: 'wide', pad: '40px 24px 64px' },
       h(
         'div',
         {

@@ -8,6 +8,7 @@ import { Reveal } from '~/lib/motion';
 import { ROUTES } from '~/lib/routes';
 import { useUI } from '~/lib/ui-context';
 import { CardSkeleton } from '../card-skeleton';
+import { InstallCommand, PageContainer, PageHeader } from '../page';
 import { Badge, Button, Icon } from '../primitives';
 
 // Only shipped blocks are featured. Sourced from BLOCKS so the landing can
@@ -59,95 +60,36 @@ export function Landing() {
         }),
       ),
       h(
-        Reveal,
-        {
+        PageContainer,
+        { width: 'prose', pad: '88px 24px 64px', style: { position: 'relative' } },
+        h(PageHeader, {
+          t,
           reduced,
-          stagger: 80,
-          y: 18,
-          style: {
-            position: 'relative',
-            maxWidth: '820px',
-            margin: '0 auto',
-            padding: '88px 24px 64px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            gap: '20px',
-          },
-        },
-        h('div', {}, h(Badge, { t, tone: 'accent', dot: true }, 'Compatible shadcn · MIT')),
-        h(
-          'h1',
-          {
-            style: {
-              margin: 0,
-              font: "700 clamp(34px,7vw,64px)/1.03 'Geist',sans-serif",
-              letterSpacing: '-.04em',
-              color: t.text,
-              maxWidth: '15ch',
-            },
-          },
-          'Copie une commande. ',
-          h('span', { style: { color: t.accent } }, 'C’est à toi.'),
-        ),
-        h(
-          'p',
-          {
-            style: {
-              margin: 0,
-              color: t.muted,
-              fontSize: 'clamp(15px,2.4vw,19px)',
-              lineHeight: 1.55,
-              maxWidth: '56ch',
-            },
-          },
-          'Un catalogue de blocks UI complets, animés au morphing et accessibles — construits sur les primitives ibirdui. Installe-les en une commande, garde le code.',
-        ),
-        h(
-          'div',
-          { style: { display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' } },
-          h(
-            Button,
-            { t, reduced, rightIcon: 'arrow', onClick: () => router.push(ROUTES.catalogue) },
-            'Parcourir le catalogue',
-          ),
-          h(Button, { t, reduced, variant: 'outline', leftIcon: 'github' }, 'Star on GitHub'),
-        ),
-        h(
-          'button',
-          {
-            onClick: () => copy(INSTALL_CMD, 'Commande copiée'),
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              marginTop: '8px',
-              background: t.panel,
-              border: `1px solid ${t.border}`,
-              borderRadius: '11px',
-              padding: '11px 14px',
-              cursor: 'pointer',
-              fontFamily: "'Geist Mono',monospace",
-              fontSize: '13px',
-              color: t.text,
-            },
-          },
-          h('span', { style: { color: t.faint } }, '$'),
-          h('span', {}, INSTALL_CMD),
-          h(
-            'span',
-            {
-              style: {
-                color: t.faint,
-                display: 'flex',
-                borderLeft: `1px solid ${t.border}`,
-                paddingLeft: '12px',
-              },
-            },
-            h(Icon, { name: 'copy', size: 15 }),
-          ),
-        ),
+          align: 'center',
+          size: 'lg',
+          titleMaxWidth: '15ch',
+          kicker: h(Badge, { t, tone: 'accent', dot: true }, 'Compatible shadcn · MIT'),
+          title: [
+            'Copie une commande. ',
+            h('span', { style: { color: t.accent } }, 'C’est à toi.'),
+          ],
+          subtitle:
+            'Un catalogue de blocks UI complets, animés au morphing et accessibles — construits sur les primitives ibirdui. Installe-les en une commande, garde le code.',
+          actions: [
+            h(
+              Button,
+              { t, reduced, rightIcon: 'arrow', onClick: () => router.push(ROUTES.catalogue) },
+              'Parcourir le catalogue',
+            ),
+            h(Button, { t, reduced, variant: 'outline', leftIcon: 'github' }, 'Star on GitHub'),
+          ],
+          children: h(InstallCommand, {
+            t,
+            cmd: INSTALL_CMD,
+            onCopy: copy,
+            style: { marginTop: '8px' },
+          }),
+        }),
       ),
     ),
     h(
