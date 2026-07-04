@@ -11,7 +11,12 @@
       "@/components/input": ["./.primitives/components/input.tsx"],
       "@/components/switch": ["./.primitives/components/switch.tsx"],
       "@/components/skeleton": ["./.primitives/components/skeleton.tsx"],
-      "@/lib/block-motion": ["./.primitives/lib/block-motion.tsx"]
+      "@/components/card": ["./.primitives/components/card.tsx"],
+      "@/components/separator": ["./.primitives/components/separator.tsx"],
+      "@/components/data-list": ["./.primitives/components/data-list.tsx"],
+      "@/components/state-boundary": ["./.primitives/components/state-boundary.tsx"],
+      "@/lib/block-motion": ["./.primitives/lib/block-motion.tsx"],
+      "@/lib/async-state": ["./.primitives/lib/async-state.ts"]
     }
   },
   "include": ["build.ts", "items/**/files/**/*.ts", "items/**/files/**/*.tsx"],

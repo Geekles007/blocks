@@ -77,7 +77,9 @@ export function MorphSection({
             disabled={!hasDemo}
             aria-expanded={hasDemo ? expanded : undefined}
             aria-controls={hasDemo ? stageId : undefined}
-            className="inline-flex items-center gap-1 font-medium text-[12.5px] bg-transparent text-primary hover:underline disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
+            className={
+              'inline-flex items-center gap-1 font-medium text-[12.5px] bg-transparent text-primary hover:underline disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline'
+            }
           >
             {hasDemo ? (
               <>

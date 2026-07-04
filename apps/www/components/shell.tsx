@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type * as React from 'react';
+import { useEffect, useState } from 'react';
 import { h } from '~/lib/h';
 import { ROUTES } from '~/lib/routes';
 import type { Tok } from '~/lib/tokens';
@@ -22,6 +23,7 @@ interface NavItem {
 const NAV: NavItem[] = [
   { label: 'Catalogue', href: ROUTES.catalogue, match: ['/blocks'] },
   { label: 'Morphing', href: ROUTES.morphing },
+  { label: 'Guide', href: ROUTES.gettingStarted },
   { label: 'Templates', soon: true },
 ];
 
@@ -72,8 +74,18 @@ function NavLink({ item, t, pathname }: { item: NavItem; t: Tok; pathname: strin
 }
 
 export function Shell({ children }: { children: React.ReactNode }) {
-  const { t, theme, openPalette, toggleTheme } = useUI();
+  const { t, theme, openPalette, toggleTheme, reduced } = useUI();
   const pathname = usePathname() ?? '/';
+  const [menuOpen, setMenuOpen] = useState(false);
+  // Close the mobile drawer on Escape and whenever the route changes.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menuOpen]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: close the drawer when navigation lands.
+  useEffect(() => setMenuOpen(false), [pathname]);
   return h(
     'div',
     { style: { display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100%' } },
@@ -95,6 +107,39 @@ export function Shell({ children }: { children: React.ReactNode }) {
           backdropFilter: 'blur(10px)',
         },
       },
+      h(
+        'button',
+        {
+          onClick: () => setMenuOpen(true),
+          'aria-label': 'Ouvrir le menu',
+          'aria-expanded': menuOpen,
+          className: 'ib-menubtn',
+          style: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '34px',
+            height: '34px',
+            borderRadius: '9px',
+            background: t.panel2,
+            border: `1px solid ${t.border}`,
+            cursor: 'pointer',
+            color: t.muted,
+          },
+        },
+        h(
+          'svg',
+          {
+            width: 18,
+            height: 18,
+            viewBox: '0 0 24 24',
+            fill: 'none',
+            stroke: 'currentColor',
+            strokeWidth: 2,
+            strokeLinecap: 'round',
+          },
+          h('path', { d: 'M4 7h16M4 12h16M4 17h16' }),
+        ),
+      ),
       h(
         Link,
         {
@@ -170,7 +215,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       h(
         'a',
         {
-          href: 'https://github.com/Geekles007/ibirdui',
+          href: 'https://github.com/Geekles007/blocks',
           style: {
             display: 'flex',
             alignItems: 'center',
@@ -188,12 +233,138 @@ export function Shell({ children }: { children: React.ReactNode }) {
     ),
     h('div', { style: { flex: 1 } }, children),
     h(Footer, null),
+    h(MobileMenu, {
+      open: menuOpen,
+      onClose: () => setMenuOpen(false),
+      pathname,
+      t,
+      reduced,
+    }),
+  );
+}
+
+/**
+ * Mobile navigation drawer — a bottom sheet holding the nav links that the
+ * header hides on narrow screens (≤920px). Backdrop + Escape close it; tapping a
+ * link navigates and closes. Only rendered while open.
+ */
+function MobileMenu({
+  open,
+  onClose,
+  pathname,
+  t,
+  reduced,
+}: {
+  open: boolean;
+  onClose: () => void;
+  pathname: string;
+  t: Tok;
+  reduced: boolean;
+}) {
+  if (!open) return null;
+  const rowBase = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '13px 14px',
+    borderRadius: '12px',
+    font: "500 15px 'Geist',sans-serif",
+    textDecoration: 'none',
+  } as const;
+  const renderRow = (item: NavItem) => {
+    if (item.soon) {
+      return h(
+        'div',
+        { key: item.label, style: { ...rowBase, color: t.faint, cursor: 'default' } },
+        item.label,
+        h(Badge, { t, tone: 'accent' }, 'Bientôt'),
+      );
+    }
+    if (!item.href) {
+      return h(
+        'div',
+        { key: item.label, style: { ...rowBase, color: t.muted, cursor: 'default' } },
+        item.label,
+      );
+    }
+    const active = isActive(item, pathname);
+    return h(
+      Link,
+      {
+        key: item.label,
+        href: item.href,
+        onClick: onClose,
+        style: {
+          ...rowBase,
+          color: active ? t.text : t.muted,
+          background: active ? t.panel2 : 'transparent',
+        },
+      },
+      item.label,
+      active
+        ? h('span', {
+            style: { width: '7px', height: '7px', borderRadius: '999px', background: t.accent },
+          })
+        : null,
+    );
+  };
+  return h(
+    'div',
+    {
+      onClick: onClose,
+      className: 'ib-fade',
+      style: {
+        position: 'fixed',
+        inset: 0,
+        zIndex: 70,
+        background: 'rgba(0,0,0,.5)',
+        backdropFilter: 'blur(3px)',
+        display: 'flex',
+        alignItems: 'flex-end',
+      },
+    },
+    h(
+      'div',
+      {
+        onClick: (e: React.MouseEvent) => e.stopPropagation(),
+        className: reduced ? 'ib-fade' : 'ib-sheet',
+        role: 'dialog',
+        'aria-modal': 'true',
+        'aria-label': 'Menu',
+        style: {
+          width: '100%',
+          background: t.panel,
+          borderTopLeftRadius: '20px',
+          borderTopRightRadius: '20px',
+          borderTop: `1px solid ${t.borderStrong}`,
+          boxShadow: t.shadow,
+          padding: '10px 10px calc(env(safe-area-inset-bottom, 0px) + 16px)',
+        },
+      },
+      h('div', {
+        style: {
+          width: '40px',
+          height: '4px',
+          borderRadius: '999px',
+          background: t.borderStrong,
+          margin: '2px auto 10px',
+        },
+      }),
+      h(
+        'div',
+        { style: { display: 'flex', flexDirection: 'column', gap: '2px' } },
+        ...NAV.map(renderRow),
+      ),
+    ),
   );
 }
 
 function Footer() {
   const { t } = useUI();
-  const col = (title: string, items: string[]) =>
+  // Each item is a label, or a [label, href] tuple for the ones that route
+  // somewhere real. Internal routes use next/link; the rest stay inert (#).
+  const linkStyle = { color: t.faint, fontSize: '13px', textDecoration: 'none' } as const;
+  const col = (title: string, items: Array<string | [string, string]>) =>
     h(
       'div',
       { style: { display: 'flex', flexDirection: 'column', gap: '9px' } },
@@ -202,17 +373,13 @@ function Footer() {
         { style: { font: "600 12px 'Geist',sans-serif", color: t.text, marginBottom: '2px' } },
         title,
       ),
-      ...items.map((i) =>
-        h(
-          'a',
-          {
-            key: i,
-            href: '#',
-            style: { color: t.faint, fontSize: '13px', textDecoration: 'none' },
-          },
-          i,
-        ),
-      ),
+      ...items.map((entry) => {
+        const [label, href] = Array.isArray(entry) ? entry : [entry, undefined];
+        if (href?.startsWith('/')) {
+          return h(Link, { key: label, href, style: linkStyle }, label);
+        }
+        return h('a', { key: label, href: href ?? '#', style: linkStyle }, label);
+      }),
     );
   return h(
     'footer',
@@ -242,9 +409,22 @@ function Footer() {
     h(
       'div',
       { style: { display: 'flex', gap: '48px', flexWrap: 'wrap' } },
-      col('Produit', ['Catalogue', 'Morphing', 'block-motion', 'Changelog']),
-      col('Ressources', ['Docs', 'Guide d’install', 'Thèmes']),
-      col('Communauté', ['GitHub', 'Discord', 'X']),
+      col('Produit', [
+        ['Catalogue', ROUTES.catalogue],
+        ['Morphing', ROUTES.morphing],
+        ['block-motion', ROUTES.blockMotion],
+        ['Changelog', ROUTES.changelog],
+      ]),
+      col('Ressources', [
+        ['Guide d’install', ROUTES.gettingStarted],
+        ['Thèmes', ROUTES.themes],
+        'Docs',
+      ]),
+      col('Communauté', [
+        ['GitHub', 'https://github.com/Geekles007/blocks'],
+        ['Reddit', 'https://www.reddit.com/user/ProfessionalPage7174/'],
+        ['X', 'https://x.com/Leesan30Lee'],
+      ]),
     ),
   );
 }
