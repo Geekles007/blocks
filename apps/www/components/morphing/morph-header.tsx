@@ -1,4 +1,9 @@
+'use client';
+
 import { MORPH_COMPONENTS } from '~/lib/morphing-data';
+import { useUI } from '~/lib/ui-context';
+import { PageHeader } from '../page';
+import { Badge } from '../primitives';
 
 function FeatureChip({ swatch, label }: { swatch: React.ReactNode; label: string }) {
   return (
@@ -9,30 +14,32 @@ function FeatureChip({ swatch, label }: { swatch: React.ReactNode; label: string
   );
 }
 
-/** The collection masthead: logo, title, intro, feature chips and the primitive legend. */
+/**
+ * The collection masthead. It renders the shared `PageHeader` (same kicker/title
+ * type scale as every other route) so /morphing no longer diverges from the rest
+ * of the site — then adds the feature chips and primitive legend beneath it.
+ */
 export function MorphHeader() {
+  const { t, reduced } = useUI();
   return (
     <header className="mx-auto max-w-[1180px] px-6 pt-14 pb-5 sm:px-10">
-      <div className="mb-6 flex items-center gap-2.5">
-        <div className="flex h-[26px] w-[26px] items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/40">
-          <div className="h-[9px] w-[9px] rounded-[3px] bg-primary-foreground" />
-        </div>
-        <span className="font-semibold text-[15px] tracking-tight text-foreground">
-          ibird<span className="text-primary">UI</span>
-        </span>
-      </div>
-
-      <div className="mb-3.5 font-mono text-xs font-medium uppercase tracking-[0.08em] text-primary">
-        Component Collection · work in progress
-      </div>
-      <h1 className="max-w-[720px] font-semibold text-[34px] leading-[1.05] tracking-tight text-foreground sm:text-[40px]">
-        Morphing UI — shared-element transitions
-      </h1>
-      <p className="mt-3.5 max-w-[620px] text-[17px] leading-relaxed text-muted-foreground">
-        Components where one object evolves into another — built on ibirdui primitives and animated
-        with framer-motion. The first is live; the rest are on the way. Every element preserves
-        visual continuity — nothing disappears, everything morphs.
-      </p>
+      <PageHeader
+        t={t}
+        reduced={reduced}
+        size="lg"
+        titleMaxWidth="18ch"
+        kicker={
+          <Badge t={t} tone="accent" dot>
+            Collection · en cours
+          </Badge>
+        }
+        title={
+          <>
+            Un objet qui <span style={{ color: t.accent }}>se transforme</span> en un autre.
+          </>
+        }
+        subtitle="Des composants où un élément évolue vers un autre — construits sur les primitives ibirdui et animés avec framer-motion. Chaque élément préserve la continuité visuelle : rien ne disparaît, tout se transforme."
+      />
 
       <div className="mt-6 flex flex-wrap gap-2.5">
         <FeatureChip

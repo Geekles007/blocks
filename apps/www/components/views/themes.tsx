@@ -3,10 +3,10 @@
 import { useRouter } from 'next/navigation';
 import type * as React from 'react';
 import { h } from '~/lib/h';
-import { Reveal } from '~/lib/motion';
 import { ROUTES } from '~/lib/routes';
 import type { Tok } from '~/lib/tokens';
 import { useUI } from '~/lib/ui-context';
+import { PageContainer, PageHeader } from '../page';
 import { Badge, Button, Icon, SectionLabel } from '../primitives';
 
 // Swatch groups — each key is a real token on `Tok`, so the chips update live
@@ -146,51 +146,25 @@ export function Themes() {
     );
 
   return h(
-    'div',
-    { style: { maxWidth: '900px', margin: '0 auto', width: '100%', padding: '52px 24px 64px' } },
+    PageContainer,
+    { width: 'prose' },
 
     // ── Header ──────────────────────────────────────────────────────────────
-    h(
-      Reveal,
-      { reduced, stagger: 70, y: 16 },
-      h(
-        'div',
-        { style: { marginBottom: '14px' } },
-        h(SectionLabel, { t, style: { padding: 0 } }, 'Thèmes'),
-      ),
-      h(
-        'h1',
-        {
-          style: {
-            margin: '0 0 14px',
-            font: "700 clamp(30px,5vw,46px) 'Geist',sans-serif",
-            letterSpacing: '-.02em',
-            color: t.text,
-            lineHeight: 1.08,
-          },
-        },
+    h(PageHeader, {
+      t,
+      reduced,
+      kicker: 'Thèmes',
+      title: [
         'Un thème, deux modes, ',
         h('span', { style: { color: t.accent } }, 'un accent'),
         '.',
-      ),
-      h(
-        'p',
-        {
-          style: {
-            margin: '0 0 22px',
-            color: t.muted,
-            fontSize: '16px',
-            lineHeight: 1.6,
-            maxWidth: '60ch',
-          },
-        },
+      ],
+      subtitle: [
         'Les blocks ne codent jamais une couleur en dur : ils lisent des tokens sémantiques en HSL. Le même block s’habille de votre charte en clair comme en sombre, et changer ',
         mono('--primary'),
         ' redéfinit tous les accents d’un coup.',
-      ),
-      h(
-        'div',
-        { style: { display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' } },
+      ],
+      actions: [
         h(
           Button,
           {
@@ -204,11 +178,13 @@ export function Themes() {
         ),
         h(
           'span',
-          { style: { color: t.faint, fontSize: '13px' } },
+          {
+            style: { alignSelf: 'center', color: t.faint, fontSize: '13px' },
+          },
           'Basculez et regardez les échantillons ci-dessous se recolorer.',
         ),
-      ),
-    ),
+      ],
+    }),
 
     // ── Surfaces ────────────────────────────────────────────────────────────
     h(

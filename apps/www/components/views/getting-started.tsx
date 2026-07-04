@@ -6,6 +6,7 @@ import { h } from '~/lib/h';
 import { ROUTES } from '~/lib/routes';
 import type { Tok } from '~/lib/tokens';
 import { useUI } from '~/lib/ui-context';
+import { PageContainer, PageHeader } from '../page';
 import { Button, Icon, SectionLabel } from '../primitives';
 
 /** A monospace command row with a copy button — mirrors the block-detail install box. */
@@ -235,36 +236,18 @@ export function GettingStarted() {
     );
 
   return h(
-    'div',
-    {
-      style: {
-        maxWidth: '760px',
-        margin: '0 auto',
-        width: '100%',
-        padding: '48px 24px 40px',
-      },
-    },
+    PageContainer,
+    { width: 'prose' },
 
     // ── Header ────────────────────────────────────────────────────────────
-    h(SectionLabel, { t, style: { padding: '0 0 10px' } }, 'Guide'),
-    h(
-      'h1',
-      {
-        style: {
-          margin: '0 0 14px',
-          font: "700 clamp(30px, 5vw, 42px) 'Geist',sans-serif",
-          letterSpacing: '-.02em',
-          color: t.text,
-          lineHeight: 1.1,
-        },
-      },
-      'Prise en main',
-    ),
-    h(
-      'p',
-      { style: { margin: 0, color: t.muted, fontSize: '16px', lineHeight: 1.6, maxWidth: '58ch' } },
-      'Les blocks ibirdui sont des sections complètes, accessibles et animées, distribuées en registry-as-code : pas de dépendance runtime, vous copiez le code source dans votre projet et il vous appartient.',
-    ),
+    h(PageHeader, {
+      t,
+      reduced,
+      kicker: 'Guide',
+      title: 'Prise en main',
+      subtitle:
+        'Les blocks ibirdui sont des sections complètes, accessibles et animées, distribuées en registry-as-code : pas de dépendance runtime, vous copiez le code source dans votre projet et il vous appartient.',
+    }),
 
     // ── 1. Prérequis ──────────────────────────────────────────────────────
     Section(
