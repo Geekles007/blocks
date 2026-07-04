@@ -7,8 +7,6 @@ import { Hero } from '@/components/blocks/hero';
 import { HeroAgency } from '@/components/blocks/hero-agency';
 import { HeroFintech } from '@/components/blocks/hero-fintech';
 import { HeroTerminal } from '@/components/blocks/hero-terminal';
-import { MorphButtonCard } from '@/components/blocks/morph-button-card';
-import { MorphSearchPanel } from '@/components/blocks/morph-search-panel';
 import { Pricing } from '@/components/blocks/pricing';
 import { PricingCompare } from '@/components/blocks/pricing-compare';
 import { PricingSingle } from '@/components/blocks/pricing-single';
@@ -253,24 +251,6 @@ function PricingCompareReal(_props: PreviewProps) {
   });
 }
 
-// The morph blocks are compact, self-contained widgets (no props). Centre them
-// on the preview surface so the collapsed trigger isn't lost in the corner.
-function MorphCentered(child: React.ReactElement) {
-  return h(
-    'div',
-    { className: 'flex min-h-[420px] w-full items-center justify-center p-10' },
-    child,
-  );
-}
-
-function MorphButtonCardReal(_props: PreviewProps) {
-  return MorphCentered(h(MorphButtonCard, null));
-}
-
-function MorphSearchPanelReal(_props: PreviewProps) {
-  return MorphCentered(h(MorphSearchPanel, null));
-}
-
 const PREVIEWS: Record<string, (p: PreviewProps) => React.ReactElement> = {
   hero: HeroReal,
   'hero-terminal': HeroTerminalReal,
@@ -280,8 +260,6 @@ const PREVIEWS: Record<string, (p: PreviewProps) => React.ReactElement> = {
   'pricing-toggle': PricingToggleReal,
   'pricing-single': PricingSingleReal,
   'pricing-compare': PricingCompareReal,
-  'morph-button-card': MorphButtonCardReal,
-  'morph-search-panel': MorphSearchPanelReal,
 };
 
 /** Render the live preview for a block key, or `null` if none is registered. */

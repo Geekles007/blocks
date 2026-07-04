@@ -27,8 +27,11 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
   const width = bp === 'mobile' ? '390px' : bp === 'tablet' ? '768px' : '100%';
   const vid = b.variants[variant] ?? b.variants[0] ?? '';
   const compName = b.name.replace(/[^A-Za-z]/g, '');
-  const code = `import { ${compName} } from "@/blocks/${vid}"\n\nexport default function Page() {\n  return <${compName} />\n}`;
-  const cmd = `npx ibirdui add blocks.ibird.dev/r/${vid}`;
+  // The install command and import path key off the registry item name (b.key,
+  // e.g. "pricing-toggle") — NOT the variant id (which is usually "default").
+  // The CLI writes the block to components/blocks/<key>.tsx.
+  const code = `import { ${compName} } from "@/components/blocks/${b.key}"\n\nexport default function Page() {\n  return <${compName} />\n}`;
+  const cmd = `npx ibirdui add blocks.ibird.dev/r/${b.key}`;
   const bpBtn = (id: Bp, icon: string) =>
     h(
       'button',
