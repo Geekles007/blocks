@@ -9,6 +9,8 @@
  * roadmap) and render as "à venir" — no fabricated API, timings or code.
  */
 
+import { type AddCommand, addCommands } from './install-command';
+
 /**
  * The real ibirdui primitives a morph is built from. Each id is an actual
  * registry item (ui.ibird.dev/r/<id>.json) you install and compose — not an
@@ -49,33 +51,38 @@ export const morphComponent = (id: MorphComponentId): MorphComponent =>
   // biome-ignore lint/style/noNonNullAssertion: MORPH_COMPONENTS is a non-empty literal.
   MORPH_COMPONENTS.find((c) => c.id === id) ?? MORPH_COMPONENTS[0]!;
 
-/** One copy-paste-able install command, with a short label for the UI. */
-export interface InstallStep {
-  label: string;
-  cmd: string;
+/**
+ * The single command that installs a shipped morph *as a registry block*: the
+ * block file plus every ibirdui primitive it composes (button, card,
+ * block-motion, …) are resolved cross-registry and copied into your project in
+ * one shot — you never list primitives by hand. Returned once per package
+ * manager (npx / pnpm dlx / bunx) so the UI can offer a toggle. Empty for
+ * roadmap entries (no block shipped yet), so the honesty rule holds.
+ */
+export function installVariants(entry: MorphEntry): AddCommand[] {
+  if (!entry.registryKey) return [];
+  return addCommands(`blocks.ibird.dev/r/${entry.registryKey}`);
 }
 
 /**
- * The commands that install everything a shipped morph imports: the ibirdui
- * primitives it's tagged with (pulled from ui.ibird.dev in one `ibirdui add`,
- * copied into your codebase — you own them), plus framer-motion, which every
- * shipped morph imports directly. Empty for roadmap entries (no code yet), so
- * the honesty rule holds: no fabricated install steps for unbuilt morphs.
+ * The one npm package the CLI can't copy for you: it prints framer-motion as a
+ * follow-up rather than installing it, so we surface the same line. Every
+ * shipped morph drives its animation with it. Empty for roadmap entries.
  */
-export function installSteps(entry: MorphEntry): InstallStep[] {
-  if (!entry.code) return [];
-  const steps: InstallStep[] = [];
-  if (entry.tags.length > 0) {
-    const items = entry.tags.map((id) => `ui.ibird.dev/r/${id}`).join(' ');
-    steps.push({ label: 'ibirdui primitives', cmd: `npx ibirdui add ${items}` });
-  }
-  steps.push({ label: 'Animation runtime', cmd: 'npm install framer-motion' });
-  return steps;
+export function runtimeInstall(entry: MorphEntry): string | null {
+  return entry.registryKey ? 'npm install framer-motion' : null;
 }
 
 export interface MorphEntry {
   /** Zero-padded index, e.g. "01". Also the demo registry key. */
   n: string;
+  /**
+   * The registry block this morph ships as — its item name at
+   * blocks.ibird.dev/r/<registryKey>.json. Present only for shipped entries;
+   * `ibirdui add` this to pull the block plus every ibirdui primitive it
+   * composes in one command. Roadmap entries omit it.
+   */
+  registryKey?: string;
   title: string;
   description: string;
   /** The ibirdui primitives this morph is built from — only for shipped entries. */
@@ -91,6 +98,7 @@ export interface MorphEntry {
 export const MORPH_ENTRIES: MorphEntry[] = [
   {
     n: '01',
+    registryKey: 'morph-button-card',
     title: 'Morph Button → Floating Card',
     description: 'A CTA built on the ibirdui Button that expands into a floating plan card.',
     tags: ['button', 'card', 'block-motion'],
@@ -216,6 +224,7 @@ function Check() {
 
   {
     n: '02',
+    registryKey: 'morph-search-panel',
     title: 'Search Icon → Search Panel',
     description:
       'A search icon that expands into a command menu — search field, suggestions and filter chips.',

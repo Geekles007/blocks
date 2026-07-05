@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { type MorphEntry, installSteps } from '~/lib/morphing-data';
+import { type MorphEntry, installVariants, runtimeInstall } from '~/lib/morphing-data';
 
 /**
  * Slide-in code panel, implemented as a modal dialog: `role="dialog"` +
@@ -14,9 +14,15 @@ import { type MorphEntry, installSteps } from '~/lib/morphing-data';
 export function CodeDrawer({ entry, onClose }: { entry: MorphEntry | null; onClose: () => void }) {
   const [copied, setCopied] = React.useState(false);
   const [copiedCmd, setCopiedCmd] = React.useState<string | null>(null);
+  const [pm, setPm] = React.useState('npm');
   const open = entry !== null;
   const titleId = React.useId();
-  const steps = entry ? installSteps(entry) : [];
+  // One `ibirdui add` per package manager (npm/pnpm/bun) — installs the block
+  // and every ibirdui primitive it composes in one shot — plus the framer-motion
+  // follow-up the CLI can't run for you. Both empty for roadmap entries.
+  const variants = entry ? installVariants(entry) : [];
+  const runtime = entry ? runtimeInstall(entry) : null;
+  const activeCmd = (variants.find((v) => v.pm === pm) ?? variants[0])?.cmd ?? '';
 
   const asideRef = React.useRef<HTMLElement>(null);
   // Keep the latest onClose without re-running the focus-trap effect (the parent
@@ -147,43 +153,78 @@ export function CodeDrawer({ entry, onClose }: { entry: MorphEntry | null; onClo
             </button>
           </div>
         </div>
-        {steps.length > 0 ? (
+        {variants.length > 0 ? (
           <div className="border-b border-white/10 px-5 py-4">
             <div className="mb-1 font-mono text-[10.5px] uppercase tracking-[0.09em] text-primary">
-              1 · Install the dependencies
+              1 · Install the block
             </div>
             <p className="mb-3 text-[12.5px] leading-relaxed text-zinc-400">
-              Pull the ibirdui primitives from the registry — they’re copied into your codebase, so
-              you own the source. Run these from your project root, then paste the code below.
+              One command. The block and every ibirdui primitive it composes are resolved from the
+              registry and copied into your codebase — you own the source, and you never list the
+              primitives by hand.
             </p>
-            <div className="flex flex-col gap-2">
-              {steps.map((s) => (
-                <div key={s.cmd}>
-                  <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.08em] text-zinc-500">
-                    {s.label}
-                  </div>
-                  <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] py-2 pr-2 pl-3">
-                    <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[12px] text-zinc-200">
-                      <span className="mr-2 select-none text-zinc-500">$</span>
-                      {s.cmd}
-                    </code>
-                    <button
-                      type="button"
-                      onClick={() => copyCmd(s.cmd)}
-                      aria-label={`Copy: ${s.cmd}`}
-                      className="flex-none rounded-md border border-white/15 bg-white/5 px-2.5 py-1 font-medium text-[11px] text-zinc-200 hover:bg-white/10"
-                    >
-                      {copiedCmd === s.cmd ? 'Copied ✓' : 'Copy'}
-                    </button>
-                  </div>
-                </div>
+            {/* Package-manager toggle — the command is the same `ibirdui add`, run through
+                each PM's dlx. */}
+            <div
+              role="tablist"
+              aria-label="Package manager"
+              className="mb-2 inline-flex gap-1 rounded-lg border border-white/10 bg-white/[0.03] p-1"
+            >
+              {variants.map((v) => (
+                <button
+                  key={v.pm}
+                  type="button"
+                  role="tab"
+                  aria-selected={pm === v.pm}
+                  onClick={() => setPm(v.pm)}
+                  className={`rounded-md px-3 py-1 font-medium text-[11.5px] ${
+                    pm === v.pm ? 'bg-white/10 text-zinc-50' : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  {v.pm}
+                </button>
               ))}
             </div>
+            <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] py-2 pr-2 pl-3">
+              <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[12px] text-zinc-200">
+                <span className="mr-2 select-none text-zinc-500">$</span>
+                {activeCmd}
+              </code>
+              <button
+                type="button"
+                onClick={() => copyCmd(activeCmd)}
+                aria-label={`Copy: ${activeCmd}`}
+                className="flex-none rounded-md border border-white/15 bg-white/5 px-2.5 py-1 font-medium text-[11px] text-zinc-200 hover:bg-white/10"
+              >
+                {copiedCmd === activeCmd ? 'Copied ✓' : 'Copy'}
+              </button>
+            </div>
+            {runtime ? (
+              <div className="mt-4">
+                <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.08em] text-zinc-500">
+                  Then the animation runtime
+                </div>
+                <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] py-2 pr-2 pl-3">
+                  <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[12px] text-zinc-200">
+                    <span className="mr-2 select-none text-zinc-500">$</span>
+                    {runtime}
+                  </code>
+                  <button
+                    type="button"
+                    onClick={() => copyCmd(runtime)}
+                    aria-label={`Copy: ${runtime}`}
+                    className="flex-none rounded-md border border-white/15 bg-white/5 px-2.5 py-1 font-medium text-[11px] text-zinc-200 hover:bg-white/10"
+                  >
+                    {copiedCmd === runtime ? 'Copied ✓' : 'Copy'}
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </div>
         ) : null}
-        {steps.length > 0 ? (
+        {variants.length > 0 ? (
           <div className="px-5 pt-4 font-mono text-[10.5px] uppercase tracking-[0.09em] text-primary">
-            2 · Paste the component
+            2 · The source, for reference
           </div>
         ) : null}
         <pre

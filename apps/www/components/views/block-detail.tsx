@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { BLOCKS, type Block, getBlock, siblingsOf } from '~/lib/blocks-data';
 import { h } from '~/lib/h';
+import { addCommands } from '~/lib/install-command';
 import { ROUTES } from '~/lib/routes';
 import { useUI } from '~/lib/ui-context';
 import { PreviewFrame } from '../preview-frame';
@@ -24,6 +25,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
   const [bp, setBp] = useState<Bp>('desktop');
   const [tab, setTab] = useState<Tab>('preview');
   const [fullscreen, setFullscreen] = useState(false);
+  const [pm, setPm] = useState('npm');
 
   // Close the fullscreen overlay on Escape, and lock body scroll while it's open.
   React.useEffect(() => {
@@ -48,7 +50,10 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
   // e.g. "pricing-toggle") — NOT the variant id (which is usually "default").
   // The CLI writes the block to components/blocks/<key>.tsx.
   const code = `import { ${compName} } from "@/components/blocks/${b.key}"\n\nexport default function Page() {\n  return <${compName} />\n}`;
-  const cmd = `npx ibirdui add blocks.ibird.dev/r/${b.key}`;
+  // One `ibirdui add`, offered per package manager — the CLI resolves the block
+  // and every ibirdui primitive it composes cross-registry in one command.
+  const cmds = addCommands(`blocks.ibird.dev/r/${b.key}`);
+  const cmd = (cmds.find((c) => c.pm === pm) ?? cmds[0])?.cmd ?? '';
   const bpBtn = (id: Bp, icon: string) =>
     h(
       'button',
@@ -420,16 +425,42 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
           },
         },
         h(
-          'span',
+          'div',
           {
+            role: 'tablist',
+            'aria-label': 'Gestionnaire de paquets',
             style: {
-              font: "600 11px 'Geist',sans-serif",
-              letterSpacing: '.05em',
-              textTransform: 'uppercase',
-              color: t.faint,
+              display: 'flex',
+              gap: '2px',
+              flexShrink: 0,
+              background: t.bg,
+              border: `1px solid ${t.border}`,
+              borderRadius: '8px',
+              padding: '2px',
             },
           },
-          'Install',
+          ...cmds.map((c) =>
+            h(
+              'button',
+              {
+                key: c.pm,
+                type: 'button',
+                role: 'tab',
+                'aria-selected': pm === c.pm,
+                onClick: () => setPm(c.pm),
+                style: {
+                  cursor: 'pointer',
+                  border: 'none',
+                  borderRadius: '6px',
+                  padding: '4px 9px',
+                  font: "600 11.5px 'Geist',sans-serif",
+                  background: pm === c.pm ? t.panel : 'transparent',
+                  color: pm === c.pm ? t.text : t.faint,
+                },
+              },
+              c.pm,
+            ),
+          ),
         ),
         h(
           'code',
