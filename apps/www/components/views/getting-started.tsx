@@ -179,6 +179,91 @@ function Bullets(t: Tok, items: React.ReactNode[]) {
   );
 }
 
+/** A small sub-heading inside a section, above a code sample. */
+const subhead = (t: Tok, ...children: React.ReactNode[]) =>
+  h(
+    'div',
+    {
+      style: {
+        margin: '18px 0 8px',
+        font: "600 13.5px 'Geist',sans-serif",
+        color: t.text,
+      },
+    },
+    ...children,
+  );
+
+/** An accent-tinted callout — used for the "colours stripped" troubleshooting tip. */
+const Note = (t: Tok, ...children: React.ReactNode[]) =>
+  h(
+    'div',
+    {
+      style: {
+        display: 'flex',
+        gap: '10px',
+        margin: '16px 0 4px',
+        padding: '12px 14px',
+        background: t.accentSoft,
+        border: `1px solid ${t.border}`,
+        borderRadius: '11px',
+      },
+    },
+    h(
+      'span',
+      { style: { flex: 'none', color: t.accent, marginTop: '1px' } },
+      h(Icon, { name: 'help', size: 15 }),
+    ),
+    h(
+      'p',
+      { style: { margin: 0, color: t.muted, fontSize: '13.5px', lineHeight: 1.6 } },
+      ...children,
+    ),
+  );
+
+// The Tailwind v4 wiring: v4 ignores JS presets, so the ibirdui tokens are
+// registered as v4 theme colours. `inline` keeps them pointing at the CSS vars
+// from theme.css, so dark mode + opacity modifiers keep working.
+const THEME_V4 = `/* app/globals.css (ou src/styles.css) */
+@import "tailwindcss";
+@import "./styles/theme.css";   /* les variables --primary, --card… installées ci-dessus */
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+}`;
+
+// The Tailwind v3 wiring: the preset shipped by the theme item maps every token
+// to a colour utility. Import theme.css once in your global stylesheet too.
+const THEME_V3 = `// tailwind.config.ts
+import ibirdui from "./tailwind.preset";
+
+export default {
+  presets: [ibirdui],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+};
+
+// puis, une fois, dans votre CSS global :
+// @import "./styles/theme.css";`;
+
 const USAGE = `import { Hero } from "@/components/blocks/hero";
 
 export default function Page() {
@@ -329,21 +414,86 @@ export function GettingStarted() {
       'Thème & tokens',
       p(
         t,
-        'Les blocks s’habillent avec des tokens sémantiques (',
+        'Les blocks n’utilisent que des classes ',
+        strong(t, 'sémantiques'),
+        ' (',
+        code(t, 'bg-primary'),
+        ', ',
+        code(t, 'text-primary-foreground'),
+        ', ',
+        code(t, 'bg-card'),
+        ', ',
+        code(t, 'border-input'),
+        ', …) qui pointent vers des variables CSS. Sans le layer de tokens, ces classes ne résolvent aucune couleur : c’est l’étape à ne pas sauter. Installez-le une fois :',
+      ),
+      CommandRow({
+        t,
+        reduced,
+        copy,
+        label: 'Terminal',
+        cmd: 'npx ibirdui add ui.ibird.dev/r/theme',
+      }),
+      h('div', { style: { height: '10px' } }),
+      p(
+        t,
+        'Ça écrit deux fichiers : ',
+        code(t, 'styles/theme.css'),
+        ' (les variables ',
         code(t, '--primary'),
         ', ',
         code(t, '--card'),
-        ', ',
-        code(t, '--muted'),
-        ', ',
-        code(t, '--border'),
-        ', …) en HSL, plus l’accent lime d’ibirdui. Ajoutez le preset Tailwind et les variables CSS du thème ibirdui à votre projet pour que les blocks rendent exactement comme dans le catalogue — en clair comme en sombre.',
+        ', … en clair et en sombre) et ',
+        code(t, 'tailwind.preset.ts'),
+        ' (le mapping vers les utilitaires Tailwind). Câblez-les selon votre version de Tailwind.',
       ),
+
+      subhead(t, 'Tailwind v4 ', code(t, '(@tailwindcss/vite, @import "tailwindcss")')),
       p(
         t,
-        'Tant que ces tokens existent, un block adopte instantanément votre charte : changez ',
+        'Tailwind v4 ',
+        strong(t, 'ignore les presets JS'),
+        ' : importez ',
+        code(t, 'theme.css'),
+        ' puis déclarez les tokens en couleurs v4 avec ',
+        code(t, '@theme inline'),
+        ' (le mot-clé ',
+        code(t, 'inline'),
+        ' garde le lien vers les variables, donc le mode sombre et les opacités comme ',
+        code(t, 'bg-primary/90'),
+        ' continuent de marcher) :',
+      ),
+      CodeBlock({ t, code: THEME_V4 }),
+
+      subhead(t, 'Tailwind v3 ', code(t, '(tailwind.config.ts)')),
+      p(t, 'Ajoutez le preset fourni et importez ', code(t, 'theme.css'), ' une fois :'),
+      CodeBlock({ t, code: THEME_V3 }),
+
+      subhead(t, 'Mode sombre'),
+      p(
+        t,
+        'Basculez le thème en posant ',
+        code(t, 'data-theme="dark"'),
+        ' (ou la classe ',
+        code(t, '.dark'),
+        ') sur ',
+        code(t, '<html>'),
+        '. Changez ',
         code(t, '--primary'),
-        ' et tous les accents suivent.',
+        ' dans ',
+        code(t, 'theme.css'),
+        ' et tous les accents suivent — le block adopte instantanément votre charte.',
+      ),
+
+      Note(
+        t,
+        strong(t, 'Dispositions correctes mais couleurs absentes ?'),
+        ' C’est le signe que le layer de tokens n’est pas câblé : ',
+        code(t, 'bg-primary'),
+        ' & co ne résolvent rien tandis que la mise en page (flex, padding) tient. Vérifiez que ',
+        code(t, 'theme.css'),
+        ' est bien importé et — en Tailwind v4 — que le bloc ',
+        code(t, '@theme inline'),
+        ' est présent.',
       ),
     ),
 
