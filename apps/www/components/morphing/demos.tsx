@@ -39,6 +39,7 @@ export const MORPH_DEMOS: Record<string, React.ComponentType<MorphDemoProps>> = 
   '03': ProfileCard,
   '04': ProductDetail,
   '05': NotificationCenter,
+  '06': ActionMenu,
 };
 
 // Card container: fades as a whole and orchestrates its children — staggered
@@ -1143,6 +1144,186 @@ function NotificationCenter({ expanded: open, onToggle }: MorphDemoProps) {
             </MotionCardBlock>
           )}
         </AnimatePresence>
+      </motion.div>
+    </MotionProvider>
+  );
+}
+
+// ── 06 · FAB → Action Menu ──────────────────────────────────────────────────
+// Built with the ibirdui Card, Button and Separator, animated via block-motion.
+// The FAB persists and rotates +→× while travelling into the menu header; the
+// menu Card springs in through AnimatePresence and its actions stagger in.
+interface FabAction {
+  id: string;
+  label: string;
+  shortcut: string;
+  icon: React.ReactNode;
+}
+const FAB = 56;
+const FAB_OPEN_SCALE = 40 / FAB;
+const FAB_PAD = 16;
+const fabRowStyle: React.CSSProperties = {
+  height: 'auto',
+  width: '100%',
+  justifyContent: 'flex-start',
+  gap: 12,
+  padding: '7px 8px',
+};
+
+function PlusIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-6 w-6"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+const fabGlyph = {
+  viewBox: '0 0 24 24',
+  className: 'h-[18px] w-[18px]',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 2,
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round',
+} as const;
+function DocIcon() {
+  return (
+    <svg {...fabGlyph} aria-hidden="true">
+      <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+      <path d="M6 3h8l5 5v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+    </svg>
+  );
+}
+function TaskIcon() {
+  return (
+    <svg {...fabGlyph} aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <path d="M8 12l3 3 5-6" />
+    </svg>
+  );
+}
+function InviteIcon() {
+  return (
+    <svg {...fabGlyph} aria-hidden="true">
+      <circle cx="9" cy="8" r="3.2" />
+      <path d="M3.5 20a5.5 5.5 0 0 1 11 0" />
+      <path d="M19 8v6M22 11h-6" />
+    </svg>
+  );
+}
+function UploadIcon() {
+  return (
+    <svg {...fabGlyph} aria-hidden="true">
+      <path d="M12 15V4" />
+      <path d="M8 8l4-4 4 4" />
+      <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" />
+    </svg>
+  );
+}
+const FAB_ACTIONS: FabAction[] = [
+  { id: 'doc', label: 'New document', shortcut: '⌘N', icon: <DocIcon /> },
+  { id: 'task', label: 'New task', shortcut: '⌘T', icon: <TaskIcon /> },
+  { id: 'invite', label: 'Invite people', shortcut: '⌘I', icon: <InviteIcon /> },
+  { id: 'upload', label: 'Upload file', shortcut: '⌘U', icon: <UploadIcon /> },
+];
+
+/**
+ * 06 · FAB → Action Menu. The collapsed state is a lime FAB (+); on open it
+ * morphs into a quick-actions menu — a title, a Separator and a cascade of
+ * ghost-Button actions. The FAB is a single persistent element that travels and
+ * scales into the menu header while its plus rotates into a close (×).
+ */
+function ActionMenu({ expanded: open, onToggle }: MorphDemoProps) {
+  return (
+    <MotionProvider>
+      <motion.div
+        className="relative"
+        initial={false}
+        animate={{ width: open ? 248 : 56, height: open ? 292 : 56 }}
+        transition={springs.layout}
+      >
+        {/* open — the menu card (its header leaves a spacer where the FAB rests) */}
+        <AnimatePresence initial={false}>
+          {open && (
+            <MotionCardBlock
+              key="card"
+              variants={cardReveal}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              style={{ borderRadius: 20, boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.1)' }}
+              className="absolute inset-0 flex flex-col overflow-hidden p-4"
+            >
+              {/* header — a spacer holds the FAB's slot + the menu title */}
+              <motion.div variants={item} className="flex items-center gap-3">
+                <div className="h-10 w-10 flex-none" aria-hidden="true" />
+                {/* A div, not a heading: it must not force a heading level onto
+                    the page (the section already owns the h3). */}
+                <div className="font-semibold text-[15px] tracking-tight text-foreground">
+                  Create
+                </div>
+              </motion.div>
+
+              <motion.div variants={item} className="mt-3">
+                <Separator />
+              </motion.div>
+
+              {/* actions — ibirdui ghost Buttons, cascaded in */}
+              <motion.div
+                variants={listReveal}
+                role="group"
+                aria-label="Quick actions"
+                className="mt-2 flex flex-col gap-0.5"
+              >
+                {FAB_ACTIONS.map((a) => (
+                  <motion.div key={a.id} variants={item}>
+                    <Button variant="ghost" style={fabRowStyle}>
+                      <span className="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-primary/12 text-primary">
+                        {a.icon}
+                      </span>
+                      <span className="flex-1 text-left font-medium text-[13.5px] text-foreground">
+                        {a.label}
+                      </span>
+                      <span className="font-mono text-[11px] text-muted-foreground">
+                        {a.shortcut}
+                      </span>
+                    </Button>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </MotionCardBlock>
+          )}
+        </AnimatePresence>
+
+        {/* The single, persistent FAB — travels + scales into the menu header
+            while its plus rotates into a close (×). It stays the toggle. */}
+        <motion.button
+          type="button"
+          onClick={onToggle}
+          aria-label={open ? 'Close actions' : 'Open actions'}
+          aria-expanded={open}
+          className="absolute top-0 left-0 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/40 outline-none ring-offset-2 ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+          style={{ transformOrigin: 'top left' }}
+          initial={false}
+          animate={{
+            x: open ? FAB_PAD : 0,
+            y: open ? FAB_PAD : 0,
+            scale: open ? FAB_OPEN_SCALE : 1,
+            rotate: open ? 45 : 0,
+          }}
+          transition={springs.layout}
+        >
+          <PlusIcon />
+        </motion.button>
       </motion.div>
     </MotionProvider>
   );

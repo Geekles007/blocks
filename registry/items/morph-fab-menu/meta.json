@@ -1,0 +1,40 @@
+{
+  "name": "morph-fab-menu",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A floating action button that morphs into a quick-actions menu: the FAB is a single persistent element that travels and scales from the collapsed circle into the menu header while its plus rotates into a close (×) — a real shared-element move, not a crossfade — as the Card menu springs in around it. A title, a Separator and a cascade of ghost-Button actions (icon tile, label and keyboard shortcut) stagger in on open and reverse-stagger out on close. Built on framer-motion via block-motion, so the whole morph collapses to a plain crossfade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The FAB is the single toggle in both states, with an aria-label that reflects the state (\"Open actions\" / \"Close actions\") and aria-expanded, so it is keyboard- and screen-reader-reachable",
+      "The menu title renders as plain text (not a heading) so it never forces a heading level onto the host page, and the actions are grouped with an accessible group label",
+      "Each action is a real Button; the icon tiles and the plus/close glyph are decorative and aria-hidden",
+      "The travel/scale/rotate + stagger morph respects prefers-reduced-motion via MotionProvider, collapsing to a plain crossfade"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a floating action button that expands into a quick-actions or create menu",
+      "a shared-element morph from a FAB to an action menu",
+      "an animated speed-dial / action menu built on ibirdui"
+    ],
+    "examples": ["<MorphFabMenu />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/separator.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/morph-fab-menu.tsx",
+      "path": "components/blocks/morph-fab-menu.tsx",
+      "type": "component"
+    }
+  ]
+}

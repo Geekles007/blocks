@@ -54,6 +54,7 @@ export default defineConfig({
       '@/components/blocks/morph-notification-center': blockFile(
         'morph-notification-center/files/morph-notification-center.tsx',
       ),
+      '@/components/blocks/morph-fab-menu': blockFile('morph-fab-menu/files/morph-fab-menu.tsx'),
     },
   },
   esbuild: { jsx: 'automatic' },
