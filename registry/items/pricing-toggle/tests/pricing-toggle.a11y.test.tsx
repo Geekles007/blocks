@@ -13,48 +13,48 @@ async function expectNoViolations(container: HTMLElement) {
 const PLANS: PricingTogglePlan[] = [
   {
     name: 'Pro',
-    monthlyPrice: '29 €',
-    annualPrice: '24 €',
+    monthlyPrice: '$29',
+    annualPrice: '$24',
     featured: true,
-    features: ['Projets illimités', 'Support prioritaire'],
-    action: { label: 'Choisir Pro', href: '/signup' },
+    features: ['Unlimited projects', 'Priority support'],
+    action: { label: 'Choose Pro', href: '/signup' },
   },
   {
     name: 'Team',
-    monthlyPrice: '59 €',
-    annualPrice: '49 €',
-    features: ['SSO', 'Rôles avancés'],
-    action: { label: 'Choisir Team' },
+    monthlyPrice: '$59',
+    annualPrice: '$49',
+    features: ['SSO', 'Advanced roles'],
+    action: { label: 'Choose Team' },
   },
 ];
 
 describe('PricingToggle', () => {
   it('exposes the section title as an h2 and the billing switch as a labelled switch', () => {
-    render(<PricingToggle title="Nos offres" plans={PLANS} />);
-    expect(screen.getByRole('heading', { level: 2, name: 'Nos offres' })).toBeInTheDocument();
+    render(<PricingToggle title="Our plans" plans={PLANS} />);
+    expect(screen.getByRole('heading', { level: 2, name: 'Our plans' })).toBeInTheDocument();
     expect(screen.getByRole('switch')).toHaveAttribute('aria-checked', 'false');
   });
 
   it('swaps every price from monthly to annual when the switch is toggled', () => {
-    render(<PricingToggle title="Nos offres" plans={PLANS} />);
-    expect(screen.getByText('29 €')).toBeInTheDocument();
+    render(<PricingToggle title="Our plans" plans={PLANS} />);
+    expect(screen.getByText('$29')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('switch'));
     expect(screen.getByRole('switch')).toHaveAttribute('aria-checked', 'true');
-    expect(screen.getByText('24 €')).toBeInTheDocument();
+    expect(screen.getByText('$24')).toBeInTheDocument();
   });
 
   it('renders an action with an href as a link and one without as a button', () => {
-    render(<PricingToggle title="Nos offres" plans={PLANS} />);
-    expect(screen.getByRole('link', { name: 'Choisir Pro' })).toHaveAttribute('href', '/signup');
-    expect(screen.getByRole('button', { name: 'Choisir Team' })).toBeInTheDocument();
+    render(<PricingToggle title="Our plans" plans={PLANS} />);
+    expect(screen.getByRole('link', { name: 'Choose Pro' })).toHaveAttribute('href', '/signup');
+    expect(screen.getByRole('button', { name: 'Choose Team' })).toBeInTheDocument();
   });
 
   it('has no axe violations in its fullest form', async () => {
     const { container } = render(
       <PricingToggle
-        title="Nos offres"
-        subtitle="Payez au mois ou à l'année."
-        annualHint="−20 %"
+        title="Our plans"
+        subtitle="Pay monthly or yearly."
+        annualHint="−20%"
         plans={PLANS}
       />,
     );

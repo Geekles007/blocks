@@ -1,0 +1,42 @@
+{
+  "name": "morph-product-detail",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A compact product-preview card that morphs into a full product-detail page: the product image is a single persistent element that resizes from a 56px thumbnail into a full-width hero (a real shared-element move, not a crossfade) while the preview text swaps out through AnimatePresence and the Card detail springs in. Name + rating, price, a description, a row of Badge size chips and an Add-to-cart Button pair stagger in on open and reverse-stagger out on close. Built on framer-motion via block-motion, so the whole morph collapses to a plain crossfade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Collapsed, the whole preview is a single button with an explicit aria-label (\"View <product> details\"), so it is keyboard- and screen-reader-reachable",
+      "Expanded, the card exposes a labelled close control and the product name renders as plain text (not a heading) so it never forces a heading level onto the host page",
+      "The size chips are grouped with an accessible group label and the selected size is not colour-only — it carries aria-current plus a visually-hidden \"(selected)\" label",
+      "The gradient product image is a decorative placeholder (aria-hidden) and never the click target; the wishlist icon Button carries an explicit aria-label",
+      "The size/stagger morph respects prefers-reduced-motion via MotionProvider, collapsing to a plain crossfade"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a product card that expands into a full product-detail page",
+      "a shared-element morph from a product preview to a product page",
+      "an animated product card built on ibirdui"
+    ],
+    "examples": ["<MorphProductDetail />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/separator.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/morph-product-detail.tsx",
+      "path": "components/blocks/morph-product-detail.tsx",
+      "type": "component"
+    }
+  ]
+}

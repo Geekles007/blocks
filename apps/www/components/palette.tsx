@@ -13,7 +13,7 @@ const { useState, useEffect, useRef } = React;
 
 /** ⌘K command palette: fuzzy-filter blocks and navigate to their detail page. */
 export function Palette() {
-  const { t, reduced, closePalette } = useUI();
+  const { t, m, reduced, closePalette } = useUI();
   const router = useRouter();
   const [q, setQ] = useState('');
   const list = BLOCKS.filter(
@@ -121,7 +121,7 @@ export function Palette() {
           value: q,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => setQ(e.target.value),
           onKeyDown: onKey,
-          placeholder: 'Rechercher un block…',
+          placeholder: m.palette.placeholder,
           style: {
             flex: 1,
             border: 'none',
@@ -205,7 +205,7 @@ export function Palette() {
           h(
             'div',
             { style: { padding: '28px', textAlign: 'center', color: t.faint, fontSize: '14px' } },
-            'Aucun block',
+            m.palette.empty,
           ),
       ),
       h(
@@ -226,13 +226,13 @@ export function Palette() {
           { style: { display: 'flex', gap: '5px', alignItems: 'center' } },
           h(Kbd, { t }, '↑'),
           h(Kbd, { t }, '↓'),
-          'naviguer',
+          m.palette.navigate,
         ),
         h(
           'span',
           { style: { display: 'flex', gap: '5px', alignItems: 'center' } },
           h(Kbd, { t }, '↵'),
-          'ouvrir',
+          m.palette.open,
         ),
       ),
     ),

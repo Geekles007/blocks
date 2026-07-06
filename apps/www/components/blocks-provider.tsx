@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { type CSS, h } from '~/lib/h';
+import { DICTS, LOCALE_KEY, type Locale, detectLocale } from '~/lib/i18n';
 import { ACCENT, type Theme, tok } from '~/lib/tokens';
 import { type UI, UIContext } from '~/lib/ui-context';
 import { Palette } from './palette';
@@ -19,9 +20,34 @@ export function BlocksProvider({ children }: { children: React.ReactNode }) {
   const accent = ACCENT;
   const [reduced, setReduced] = useState(false);
   const [theme, setTheme] = useState<Theme>('dark');
+  const [locale, setLocaleState] = useState<Locale>('en');
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Resolve the real locale on mount (localStorage → browser language). Starting
+  // from 'en' keeps the static-export markup deterministic, then this switches to
+  // the visitor's preference — same pattern as the theme default.
+  useEffect(() => {
+    setLocaleState(detectLocale());
+  }, []);
+
+  const setLocale = React.useCallback(
+    (l: Locale) => {
+      setLocaleState(l);
+      try {
+        window.localStorage.setItem(LOCALE_KEY, l);
+      } catch {
+        /* noop */
+      }
+    },
+    [setLocaleState],
+  );
+
+  // Keep the document language in sync (mount-detect and manual switch alike).
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -43,6 +69,7 @@ export function BlocksProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const t = tok(theme, accent);
+  const m = DICTS[locale];
   const fireToast = (msg: string) => {
     setToast(msg);
     if (toastTimer.current) clearTimeout(toastTimer.current);
@@ -55,6 +82,9 @@ export function BlocksProvider({ children }: { children: React.ReactNode }) {
     reduced,
     accent,
     paletteOpen,
+    locale,
+    m,
+    setLocale,
     toggleTheme: () => setTheme((th) => (th === 'dark' ? 'light' : 'dark')),
     openPalette: () => setPaletteOpen(true),
     closePalette: () => setPaletteOpen(false),
@@ -64,7 +94,7 @@ export function BlocksProvider({ children }: { children: React.ReactNode }) {
       } catch {
         /* noop */
       }
-      fireToast(msg || 'Copié');
+      fireToast(msg || m.common.copied);
     },
   };
 

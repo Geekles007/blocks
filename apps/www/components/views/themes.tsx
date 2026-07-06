@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import type * as React from 'react';
 import { h } from '~/lib/h';
+import type { Messages } from '~/lib/i18n';
 import { ROUTES } from '~/lib/routes';
 import type { Tok } from '~/lib/tokens';
 import { useUI } from '~/lib/ui-context';
@@ -10,44 +11,41 @@ import { PageContainer, PageHeader } from '../page';
 import { Badge, Button, Icon, SectionLabel } from '../primitives';
 
 // Swatch groups — each key is a real token on `Tok`, so the chips update live
-// when the visitor flips the theme.
-type Swatch = { key: keyof Tok; role: string };
+// when the visitor flips the theme. The role label is resolved from the message
+// dictionary (`m.themes.roles[key]`).
+type Swatch = { key: keyof Tok };
 const SURFACES: Swatch[] = [
-  { key: 'bg', role: 'Fond de page' },
-  { key: 'bg2', role: 'Fond secondaire' },
-  { key: 'panel', role: 'Panneau / carte' },
-  { key: 'panel2', role: 'Panneau surélevé' },
-  { key: 'border', role: 'Bordure' },
-  { key: 'borderStrong', role: 'Bordure marquée' },
+  { key: 'bg' },
+  { key: 'bg2' },
+  { key: 'panel' },
+  { key: 'panel2' },
+  { key: 'border' },
+  { key: 'borderStrong' },
 ];
-const INK: Swatch[] = [
-  { key: 'text', role: 'Texte principal' },
-  { key: 'muted', role: 'Texte atténué' },
-  { key: 'faint', role: 'Texte discret' },
-];
+const INK: Swatch[] = [{ key: 'text' }, { key: 'muted' }, { key: 'faint' }];
 const ACCENTS: Swatch[] = [
-  { key: 'accent', role: 'Accent (--primary)' },
-  { key: 'accentSoft', role: 'Accent — voile' },
-  { key: 'accentSoft2', role: 'Accent — voile 2' },
-  { key: 'accentRing', role: 'Halo de focus' },
-  { key: 'accentFg', role: 'Texte sur accent' },
+  { key: 'accent' },
+  { key: 'accentSoft' },
+  { key: 'accentSoft2' },
+  { key: 'accentRing' },
+  { key: 'accentFg' },
 ];
 
 // The semantic CSS variables blocks actually consume — mirrored from the ibirdui
-// theme. Listed so consumers know exactly what to define.
-const CSS_TOKENS: { name: string; role: string }[] = [
-  { name: '--background / --foreground', role: 'Surface de page et texte' },
-  { name: '--card / --card-foreground', role: 'Cartes et panneaux' },
-  { name: '--primary / --primary-foreground', role: 'L’accent lime et son texte' },
-  { name: '--secondary / --secondary-foreground', role: 'Actions et surfaces secondaires' },
-  { name: '--muted / --muted-foreground', role: 'Zones et textes atténués' },
-  { name: '--accent / --accent-foreground', role: 'Survols et états subtils' },
-  { name: '--border · --input · --ring', role: 'Bordures, champs et halo de focus' },
-  { name: '--destructive · --success · --warning', role: 'États sémantiques' },
+// theme. The role for each is `m.themes.cssRoles[i]`.
+const CSS_TOKEN_NAMES = [
+  '--background / --foreground',
+  '--card / --card-foreground',
+  '--primary / --primary-foreground',
+  '--secondary / --secondary-foreground',
+  '--muted / --muted-foreground',
+  '--accent / --accent-foreground',
+  '--border · --input · --ring',
+  '--destructive · --success · --warning',
 ];
 
 /** One colour chip + its token name, role and current value. */
-function SwatchTile({ t, s }: { t: Tok; s: Swatch }) {
+function SwatchTile({ t, m, s }: { t: Tok; m: Messages; s: Swatch }) {
   const value = t[s.key] as string;
   return h(
     'div',
@@ -93,13 +91,13 @@ function SwatchTile({ t, s }: { t: Tok; s: Swatch }) {
             textOverflow: 'ellipsis',
           },
         },
-        s.role,
+        m.themes.roles[String(s.key)] ?? String(s.key),
       ),
     ),
   );
 }
 
-function SwatchGrid({ t, items }: { t: Tok; items: Swatch[] }) {
+function SwatchGrid({ t, m, items }: { t: Tok; m: Messages; items: Swatch[] }) {
   return h(
     'div',
     {
@@ -109,12 +107,12 @@ function SwatchGrid({ t, items }: { t: Tok; items: Swatch[] }) {
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
       },
     },
-    ...items.map((s) => h(SwatchTile, { key: String(s.key), t, s })),
+    ...items.map((s) => h(SwatchTile, { key: String(s.key), t, m, s })),
   );
 }
 
 export function Themes() {
-  const { t, reduced, theme, toggleTheme } = useUI();
+  const { t, m, reduced, theme, toggleTheme } = useUI();
   const router = useRouter();
 
   const h2 = (title: string) =>
@@ -153,17 +151,13 @@ export function Themes() {
     h(PageHeader, {
       t,
       reduced,
-      kicker: 'Thèmes',
+      kicker: m.themes.kicker,
       title: [
-        'Un thème, deux modes, ',
-        h('span', { style: { color: t.accent } }, 'un accent'),
-        '.',
+        m.themes.titleLead,
+        h('span', { style: { color: t.accent } }, m.themes.titleAccent),
+        m.themes.titleTail,
       ],
-      subtitle: [
-        'Les blocks ne codent jamais une couleur en dur : ils lisent des tokens sémantiques en HSL. Le même block s’habille de votre charte en clair comme en sombre, et changer ',
-        mono('--primary'),
-        ' redéfinit tous les accents d’un coup.',
-      ],
+      subtitle: [m.themes.subtitleLead, mono('--primary'), m.themes.subtitleTail],
       actions: [
         h(
           Button,
@@ -174,14 +168,14 @@ export function Themes() {
             leftIcon: theme === 'dark' ? 'sun' : 'moon',
             onClick: toggleTheme,
           },
-          theme === 'dark' ? 'Passer en clair' : 'Passer en sombre',
+          theme === 'dark' ? m.themes.toLight : m.themes.toDark,
         ),
         h(
           'span',
           {
             style: { alignSelf: 'center', color: t.faint, fontSize: '13px' },
           },
-          'Basculez et regardez les échantillons ci-dessous se recolorer.',
+          m.themes.toggleHint,
         ),
       ],
     }),
@@ -190,28 +184,24 @@ export function Themes() {
     h(
       'section',
       { style: { marginTop: '48px' } },
-      h(SectionLabel, { t, style: { padding: '0 0 10px' } }, 'Surfaces & encre'),
-      h2('La palette neutre'),
-      lead(
-        'Fonds, panneaux, bordures et niveaux de texte. Ces tokens portent toute la structure ; l’accent n’intervient qu’en touches.',
-      ),
+      h(SectionLabel, { t, style: { padding: '0 0 10px' } }, m.themes.surfaces),
+      h2(m.themes.surfacesTitle),
+      lead(m.themes.surfacesLead),
       h('div', { style: { height: '20px' } }),
-      h(SwatchGrid, { t, items: SURFACES }),
+      h(SwatchGrid, { t, m, items: SURFACES }),
       h('div', { style: { height: '10px' } }),
-      h(SwatchGrid, { t, items: INK }),
+      h(SwatchGrid, { t, m, items: INK }),
     ),
 
     // ── Accent ──────────────────────────────────────────────────────────────
     h(
       'section',
       { style: { marginTop: '48px' } },
-      h(SectionLabel, { t, style: { padding: '0 0 10px' } }, 'Accent'),
-      h2('Un seul point d’attention'),
-      lead(
-        'L’accent par défaut est le lime ibirdui. Il porte les CTA, les états actifs et les halos de focus — dérivé en un voile et un anneau pour rester lisible partout.',
-      ),
+      h(SectionLabel, { t, style: { padding: '0 0 10px' } }, m.themes.accent),
+      h2(m.themes.accentTitle),
+      lead(m.themes.accentLead),
       h('div', { style: { height: '20px' } }),
-      h(SwatchGrid, { t, items: ACCENTS }),
+      h(SwatchGrid, { t, m, items: ACCENTS }),
       // Live accent sample
       h(
         'div',
@@ -228,15 +218,15 @@ export function Themes() {
             padding: '18px 20px',
           },
         },
-        h(Button, { t, reduced, rightIcon: 'arrow' }, 'Bouton primaire'),
-        h(Badge, { t, tone: 'accent', dot: true }, 'Badge accent'),
+        h(Button, { t, reduced, rightIcon: 'arrow' }, m.themes.samplePrimary),
+        h(Badge, { t, tone: 'accent', dot: true }, m.themes.sampleBadge),
         h(
           'a',
           {
             href: '#',
             style: { color: t.accent, fontSize: '14px', fontWeight: 600, textDecoration: 'none' },
           },
-          'Lien accentué',
+          m.themes.sampleLink,
         ),
         h(
           'span',
@@ -261,14 +251,14 @@ export function Themes() {
     h(
       'section',
       { style: { marginTop: '48px' } },
-      h(SectionLabel, { t, style: { padding: '0 0 10px' } }, 'Tokens'),
-      h2('Les variables que vous définissez'),
+      h(SectionLabel, { t, style: { padding: '0 0 10px' } }, m.themes.tokens),
+      h2(m.themes.tokensTitle),
       lead(
-        'Les blocks consomment ce jeu de variables sémantiques, calqué sur le thème ibirdui. Fournissez-les dans votre CSS (le www garde son propre miroir dans ',
+        m.themes.tokensLeadLead,
         mono('app/globals.css'),
-        ' et ',
+        m.themes.tokensLeadMid,
         mono('lib/tokens.ts'),
-        ') et tout s’aligne.',
+        m.themes.tokensLeadTail,
       ),
       h(
         'div',
@@ -280,11 +270,11 @@ export function Themes() {
             overflow: 'hidden',
           },
         },
-        ...CSS_TOKENS.map((row, i) =>
+        ...CSS_TOKEN_NAMES.map((name, i) =>
           h(
             'div',
             {
-              key: row.name,
+              key: name,
               style: {
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -301,9 +291,9 @@ export function Themes() {
               {
                 style: { fontFamily: "'Geist Mono',monospace", fontSize: '12.5px', color: t.text },
               },
-              row.name,
+              name,
             ),
-            h('span', { style: { color: t.faint, fontSize: '13px' } }, row.role),
+            h('span', { style: { color: t.faint, fontSize: '13px' } }, m.themes.cssRoles[i] ?? ''),
           ),
         ),
       ),
@@ -331,12 +321,12 @@ export function Themes() {
         h(
           'span',
           { style: { color: t.text, fontSize: '14.5px', fontWeight: 500, maxWidth: '54ch' } },
-          'Prêt à brancher le thème ? Le guide détaille le preset Tailwind et les variables CSS à ajouter.',
+          m.themes.footerNote,
         ),
         h(
           Button,
           { t, reduced, rightIcon: 'arrow', onClick: () => router.push(ROUTES.gettingStarted) },
-          'Prise en main',
+          m.nav.guide,
         ),
       ),
     ),

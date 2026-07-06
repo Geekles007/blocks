@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import type { Locale, Messages } from './i18n';
 import type { Theme, Tok } from './tokens';
 
 /**
@@ -14,6 +15,10 @@ export interface UI {
   reduced: boolean;
   accent: string;
   paletteOpen: boolean;
+  /** Active locale and its resolved message dictionary. */
+  locale: Locale;
+  m: Messages;
+  setLocale: (l: Locale) => void;
   toggleTheme: () => void;
   openPalette: () => void;
   closePalette: () => void;

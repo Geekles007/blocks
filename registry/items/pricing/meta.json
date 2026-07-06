@@ -20,7 +20,7 @@
       "a pricing grid comparing plans by feature list"
     ],
     "examples": [
-      "<Pricing title=\"Un prix simple, sans surprise\" plans={[{ name: 'Starter', price: '0 €', period: '/ mois', features: ['1 projet', '2 membres'], action: { label: 'Commencer', href: '/signup' } }, { name: 'Pro', price: '29 €', period: '/ mois', featured: true, features: ['Projets illimités', 'Support prioritaire'], action: { label: 'Choisir Pro', href: '/signup' } }]} />"
+      "<Pricing title=\"Simple, no-surprise pricing\" plans={[{ name: 'Starter', price: '$0', period: '/ mo', features: ['1 project', '2 members'], action: { label: 'Get started', href: '/signup' } }, { name: 'Pro', price: '$29', period: '/ mo', featured: true, features: ['Unlimited projects', 'Priority support'], action: { label: 'Choose Pro', href: '/signup' } }]} />"
     ]
   },
   "dependencies": ["react", "framer-motion"],

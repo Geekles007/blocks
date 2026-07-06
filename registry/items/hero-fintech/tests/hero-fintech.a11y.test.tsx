@@ -12,36 +12,36 @@ async function expectNoViolations(container: HTMLElement) {
 
 describe('HeroFintech', () => {
   it('exposes the title as the single top-level heading', () => {
-    render(<HeroFintech title="La banque qui joue franc jeu" />);
+    render(<HeroFintech title="The bank that plays it straight" />);
     const h1s = screen.getAllByRole('heading', { level: 1 });
     expect(h1s).toHaveLength(1);
-    expect(h1s[0]).toHaveTextContent('La banque qui joue franc jeu');
+    expect(h1s[0]).toHaveTextContent('The bank that plays it straight');
   });
 
   it('renders an action with an href as a link', () => {
     render(
-      <HeroFintech title="Titre" primaryAction={{ label: 'Ouvrir un compte', href: '/signup' }} />,
+      <HeroFintech title="Title" primaryAction={{ label: 'Open an account', href: '/signup' }} />,
     );
-    expect(screen.getByRole('link', { name: 'Ouvrir un compte' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Open an account' })).toHaveAttribute(
       'href',
       '/signup',
     );
   });
 
   it('renders an action without an href as a button', () => {
-    render(<HeroFintech title="Titre" secondaryAction={{ label: 'Voir les tarifs' }} />);
-    expect(screen.getByRole('button', { name: 'Voir les tarifs' })).toBeInTheDocument();
+    render(<HeroFintech title="Title" secondaryAction={{ label: 'See pricing' }} />);
+    expect(screen.getByRole('button', { name: 'See pricing' })).toBeInTheDocument();
   });
 
   it('has no axe violations in its fullest form', async () => {
     const { container } = render(
       <HeroFintech
-        eyebrow="Agréé ACPR"
-        title="La banque qui joue franc jeu"
-        subtitle="Zéro frais caché, dépôts garantis, chiffrement de bout en bout."
-        primaryAction={{ label: 'Ouvrir un compte', href: '/signup' }}
-        secondaryAction={{ label: 'Voir les tarifs', href: '/pricing' }}
-        assurance="Dépôts garantis jusqu'à 100 000 €"
+        eyebrow="FDIC insured"
+        title="The bank that plays it straight"
+        subtitle="Zero hidden fees, insured deposits, end-to-end encryption."
+        primaryAction={{ label: 'Open an account', href: '/signup' }}
+        secondaryAction={{ label: 'See pricing', href: '/pricing' }}
+        assurance="Deposits insured up to $100,000"
       />,
     );
     await expectNoViolations(container);

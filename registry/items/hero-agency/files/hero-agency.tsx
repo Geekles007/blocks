@@ -17,14 +17,14 @@ export interface HeroAgencyAction {
 }
 
 export interface HeroAgencyMeta {
-  /** Left label, e.g. "Basé à". */
+  /** Left label, e.g. "Based in". */
   label: string;
   /** Right value, e.g. "Paris, FR". */
   value: React.ReactNode;
 }
 
 export interface HeroAgencyProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
-  /** Small index / kicker, e.g. "Studio créatif — Est. 2016". */
+  /** Small index / kicker, e.g. "Creative studio — Est. 2016". */
   eyebrow?: React.ReactNode;
   title: React.ReactNode;
   subtitle?: React.ReactNode;
@@ -34,18 +34,18 @@ export interface HeroAgencyProps extends Omit<React.HTMLAttributes<HTMLElement>,
 }
 
 const DEFAULT_META: HeroAgencyMeta[] = [
-  { label: 'Services', value: 'Marque · Web · Motion' },
-  { label: 'Basé à', value: 'Paris, FR' },
-  { label: 'Depuis', value: '2016' },
+  { label: 'Services', value: 'Brand · Web · Motion' },
+  { label: 'Based in', value: 'Paris, FR' },
+  { label: 'Since', value: '2016' },
 ];
 
 /**
- * Parti pris : la typo géante, sans complexe. Un titre démesuré qui déborde la
- * grille, aligné à gauche, avec un rail de méta discret qui casse la symétrie —
- * l'audace vient de l'échelle et du vide, pas de la couleur. L'accent ne touche
- * qu'un mot souligné et la flèche du CTA. Le trait décoratif est aria-hidden ;
- * le titre est l'unique `h1` et nomme le repère de section. Composé sur la
- * primitive ibirdui `button`.
+ * A big-type-without-apology hero: an oversized title that spills past the grid,
+ * left-aligned, with a quiet meta rail that breaks the symmetry — the boldness
+ * comes from scale and whitespace, not colour. The accent touches only one
+ * underlined word and the CTA arrow. The decorative rule is aria-hidden; the
+ * title is the sole `h1` and names the section landmark. Composed on the ibirdui
+ * `button` primitive.
  */
 export function HeroAgency({
   eyebrow,

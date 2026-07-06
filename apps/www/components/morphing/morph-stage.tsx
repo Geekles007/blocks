@@ -1,12 +1,16 @@
+'use client';
+
 import type * as React from 'react';
+import { useUI } from '~/lib/ui-context';
 
 /** Soft placeholder shown in a stage whose live demo hasn't been built yet. */
 function StagePlaceholder() {
+  const { m } = useUI();
   return (
     <div className="flex flex-col items-center gap-3 text-center">
       <div className="h-14 w-14 animate-pulse rounded-2xl border border-dashed border-border bg-muted/50" />
       <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
-        Composant à venir
+        {m.morphing.comingSoon}
       </span>
     </div>
   );

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import type * as React from 'react';
 import { h } from '~/lib/h';
+import type { Messages } from '~/lib/i18n';
 import { ROUTES } from '~/lib/routes';
 import type { Tok } from '~/lib/tokens';
 import { useUI } from '~/lib/ui-context';
@@ -12,12 +13,14 @@ import { Button, Icon, SectionLabel } from '../primitives';
 /** A monospace command row with a copy button — mirrors the block-detail install box. */
 function CommandRow({
   t,
+  m,
   reduced,
   copy,
   cmd,
   label,
 }: {
   t: Tok;
+  m: Messages;
   reduced: boolean;
   copy: (text: string, msg?: string) => void;
   cmd: string;
@@ -71,9 +74,9 @@ function CommandRow({
         size: 'sm',
         variant: 'soft',
         leftIcon: 'copy',
-        onClick: () => copy(cmd, 'Commande copiée'),
+        onClick: () => copy(cmd, m.blockDetail.cmdCopied),
       },
-      'Copier',
+      m.common.copy,
     ),
   );
 }
@@ -223,9 +226,9 @@ const Note = (t: Tok, ...children: React.ReactNode[]) =>
 // The Tailwind v4 wiring: v4 ignores JS presets, so the ibirdui tokens are
 // registered as v4 theme colours. `inline` keeps them pointing at the CSS vars
 // from theme.css, so dark mode + opacity modifiers keep working.
-const THEME_V4 = `/* app/globals.css (ou src/styles.css) */
+const themeV4 = (fr: boolean) => `/* app/globals.css (${fr ? 'ou' : 'or'} src/styles.css) */
 @import "tailwindcss";
-@import "./styles/theme.css";   /* les variables --primary, --card… installées ci-dessus */
+@import "./styles/theme.css";   /* ${fr ? 'les variables --primary, --card… installées ci-dessus' : 'the --primary, --card… variables installed above'} */
 
 @theme inline {
   --color-background: hsl(var(--background));
@@ -253,7 +256,7 @@ const THEME_V4 = `/* app/globals.css (ou src/styles.css) */
 
 // The Tailwind v3 wiring: the preset shipped by the theme item maps every token
 // to a colour utility. Import theme.css once in your global stylesheet too.
-const THEME_V3 = `// tailwind.config.ts
+const themeV3 = (fr: boolean) => `// tailwind.config.ts
 import ibirdui from "./tailwind.preset";
 
 export default {
@@ -261,24 +264,25 @@ export default {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
 };
 
-// puis, une fois, dans votre CSS global :
+// ${fr ? 'puis, une fois, dans votre CSS global :' : 'then, once, in your global stylesheet:'}
 // @import "./styles/theme.css";`;
 
-const USAGE = `import { Hero } from "@/components/blocks/hero";
+const usage = (fr: boolean) => `import { Hero } from "@/components/blocks/hero";
 
 export default function Page() {
   return (
     <Hero
-      title="Des blocks qui bougent juste."
-      subtitle="Compositions accessibles, animées, prêtes à coller."
-      primaryAction={{ label: "Commencer", href: "/signup" }}
+      title="${fr ? 'Des blocks qui bougent juste.' : 'Blocks that move just right.'}"
+      subtitle="${fr ? 'Compositions accessibles, animées, prêtes à coller.' : 'Accessible, animated compositions, ready to paste.'}"
+      primaryAction={{ label: "${fr ? 'Commencer' : 'Get started'}", href: "/signup" }}
       secondaryAction={{ label: "GitHub", href: "https://github.com" }}
     />
   );
 }`;
 
 export function GettingStarted() {
-  const { t, reduced, copy } = useUI();
+  const { t, m, locale, reduced, copy } = useUI();
+  const fr = locale === 'fr';
 
   const nextCard = (href: string, icon: string, title: string, body: string) =>
     h(
@@ -328,40 +332,50 @@ export function GettingStarted() {
     h(PageHeader, {
       t,
       reduced,
-      kicker: 'Guide',
-      title: 'Prise en main',
-      subtitle:
-        'Les blocks ibirdui sont des sections complètes, accessibles et animées, distribuées en registry-as-code : pas de dépendance runtime, vous copiez le code source dans votre projet et il vous appartient.',
+      kicker: m.nav.guide,
+      title: fr ? 'Prise en main' : 'Getting started',
+      subtitle: fr
+        ? 'Les blocks ibirdui sont des sections complètes, accessibles et animées, distribuées en registry-as-code : pas de dépendance runtime, vous copiez le code source dans votre projet et il vous appartient.'
+        : 'ibirdui blocks are complete, accessible, animated sections shipped as registry-as-code: no runtime dependency — you copy the source into your project and it’s yours.',
     }),
 
-    // ── 1. Prérequis ──────────────────────────────────────────────────────
+    // ── 1. Prerequisites ──────────────────────────────────────────────────
     Section(
       t,
-      'Étape 1',
-      'Prérequis',
-      p(t, 'Avant d’ajouter un block, assurez-vous d’avoir :'),
+      fr ? 'Étape 1' : 'Step 1',
+      fr ? 'Prérequis' : 'Prerequisites',
+      p(
+        t,
+        fr
+          ? 'Avant d’ajouter un block, assurez-vous d’avoir :'
+          : 'Before adding a block, make sure you have:',
+      ),
       Bullets(t, [
         h(
           'span',
           null,
           strong(t, 'Node.js 20+'),
-          ' et un gestionnaire de paquets (pnpm, npm ou yarn).',
+          fr
+            ? ' et un gestionnaire de paquets (pnpm, npm ou yarn).'
+            : ' and a package manager (pnpm, npm or yarn).',
         ),
         h(
           'span',
           null,
-          'Un projet ',
+          fr ? 'Un projet ' : 'A ',
           strong(t, 'React'),
-          ' — Next.js, Remix ou Vite — avec ',
+          fr ? ' — Next.js, Remix ou Vite — avec ' : ' project — Next.js, Remix or Vite — with ',
           strong(t, 'Tailwind CSS'),
-          ' configuré.',
+          fr ? ' configuré.' : ' configured.',
         ),
         h(
           'span',
           null,
-          'L’alias d’import ',
+          fr ? 'L’alias d’import ' : 'The ',
           code(t, '@/*'),
-          ' pointant vers votre dossier source (les blocks importent leurs primitives via ',
+          fr
+            ? ' pointant vers votre dossier source (les blocks importent leurs primitives via '
+            : ' import alias pointing at your source folder (blocks import their primitives via ',
           code(t, '@/components/*'),
           ').',
         ),
@@ -369,22 +383,27 @@ export function GettingStarted() {
           'span',
           null,
           strong(t, 'framer-motion'),
-          ' — les blocks orchestrent leurs animations avec.',
+          fr
+            ? ' — les blocks orchestrent leurs animations avec.'
+            : ' — blocks orchestrate their animations with it.',
         ),
       ]),
     ),
 
-    // ── 2. Ajouter un block ───────────────────────────────────────────────
+    // ── 2. Add a block ────────────────────────────────────────────────────
     Section(
       t,
-      'Étape 2',
-      'Ajouter un block',
+      fr ? 'Étape 2' : 'Step 2',
+      fr ? 'Ajouter un block' : 'Add a block',
       p(
         t,
-        'Chaque block se récupère par son URL de registry avec la CLI ibirdui. Le block et toutes les primitives ibirdui qu’il compose sont résolus et copiés dans votre projet en une commande :',
+        fr
+          ? 'Chaque block se récupère par son URL de registry avec la CLI ibirdui. Le block et toutes les primitives ibirdui qu’il compose sont résolus et copiés dans votre projet en une commande :'
+          : 'Each block is fetched by its registry URL with the ibirdui CLI. The block and every ibirdui primitive it composes are resolved and copied into your project in one command:',
       ),
       CommandRow({
         t,
+        m,
         reduced,
         copy,
         label: 'Terminal',
@@ -393,30 +412,32 @@ export function GettingStarted() {
       h('div', { style: { height: '10px' } }),
       p(
         t,
-        'Remplacez ',
+        fr ? 'Remplacez ' : 'Replace ',
         code(t, 'hero'),
-        ' par n’importe quelle clé du catalogue (',
+        fr ? ' par n’importe quelle clé du catalogue (' : ' with any catalogue key (',
         code(t, 'pricing-toggle'),
         ', ',
         code(t, 'morph-button-card'),
         ', ',
         code(t, 'morph-search-panel'),
-        ', …). Les primitives sont tirées automatiquement de ',
+        fr
+          ? ', …). Les primitives sont tirées automatiquement de '
+          : ', …). Primitives are pulled automatically from ',
         code(t, 'ui.ibird.dev'),
-        ' — vous n’avez rien d’autre à installer.',
+        fr ? ' — vous n’avez rien d’autre à installer.' : ' — you have nothing else to install.',
       ),
     ),
 
-    // ── 3. Thème & tokens ─────────────────────────────────────────────────
+    // ── 3. Theme & tokens ─────────────────────────────────────────────────
     Section(
       t,
-      'Étape 3',
-      'Thème & tokens',
+      fr ? 'Étape 3' : 'Step 3',
+      fr ? 'Thème & tokens' : 'Theme & tokens',
       p(
         t,
-        'Les blocks n’utilisent que des classes ',
-        strong(t, 'sémantiques'),
-        ' (',
+        fr ? 'Les blocks n’utilisent que des classes ' : 'Blocks only use ',
+        strong(t, fr ? 'sémantiques' : 'semantic'),
+        fr ? ' (' : ' classes (',
         code(t, 'bg-primary'),
         ', ',
         code(t, 'text-primary-foreground'),
@@ -424,10 +445,13 @@ export function GettingStarted() {
         code(t, 'bg-card'),
         ', ',
         code(t, 'border-input'),
-        ', …) qui pointent vers des variables CSS. Sans le layer de tokens, ces classes ne résolvent aucune couleur : c’est l’étape à ne pas sauter. Installez-le une fois :',
+        fr
+          ? ', …) qui pointent vers des variables CSS. Sans le layer de tokens, ces classes ne résolvent aucune couleur : c’est l’étape à ne pas sauter. Installez-le une fois :'
+          : ', …) that point at CSS variables. Without the token layer these classes resolve no colour: that’s the step not to skip. Install it once:',
       ),
       CommandRow({
         t,
+        m,
         reduced,
         copy,
         label: 'Terminal',
@@ -436,81 +460,114 @@ export function GettingStarted() {
       h('div', { style: { height: '10px' } }),
       p(
         t,
-        'Ça écrit deux fichiers : ',
+        fr ? 'Ça écrit deux fichiers : ' : 'It writes two files: ',
         code(t, 'styles/theme.css'),
-        ' (les variables ',
+        fr ? ' (les variables ' : ' (the ',
         code(t, '--primary'),
         ', ',
         code(t, '--card'),
-        ', … en clair et en sombre) et ',
+        fr ? ', … en clair et en sombre) et ' : ', … variables in light and dark) and ',
         code(t, 'tailwind.preset.ts'),
-        ' (le mapping vers les utilitaires Tailwind). Câblez-les selon votre version de Tailwind.',
+        fr
+          ? ' (le mapping vers les utilitaires Tailwind). Câblez-les selon votre version de Tailwind.'
+          : ' (the mapping to Tailwind utilities). Wire them up per your Tailwind version.',
       ),
 
       subhead(t, 'Tailwind v4 ', code(t, '(@tailwindcss/vite, @import "tailwindcss")')),
       p(
         t,
         'Tailwind v4 ',
-        strong(t, 'ignore les presets JS'),
-        ' : importez ',
+        strong(t, fr ? 'ignore les presets JS' : 'ignores JS presets'),
+        fr ? ' : importez ' : ': import ',
         code(t, 'theme.css'),
-        ' puis déclarez les tokens en couleurs v4 avec ',
+        fr
+          ? ' puis déclarez les tokens en couleurs v4 avec '
+          : ' then declare the tokens as v4 colours with ',
         code(t, '@theme inline'),
-        ' (le mot-clé ',
+        fr ? ' (le mot-clé ' : ' (the ',
         code(t, 'inline'),
-        ' garde le lien vers les variables, donc le mode sombre et les opacités comme ',
+        fr
+          ? ' garde le lien vers les variables, donc le mode sombre et les opacités comme '
+          : ' keyword keeps the link to the variables, so dark mode and opacities like ',
         code(t, 'bg-primary/90'),
-        ' continuent de marcher) :',
+        fr ? ' continuent de marcher) :' : ' keep working):',
       ),
-      CodeBlock({ t, code: THEME_V4 }),
+      CodeBlock({ t, code: themeV4(fr) }),
 
       subhead(t, 'Tailwind v3 ', code(t, '(tailwind.config.ts)')),
-      p(t, 'Ajoutez le preset fourni et importez ', code(t, 'theme.css'), ' une fois :'),
-      CodeBlock({ t, code: THEME_V3 }),
-
-      subhead(t, 'Mode sombre'),
       p(
         t,
-        'Basculez le thème en posant ',
-        code(t, 'data-theme="dark"'),
-        ' (ou la classe ',
-        code(t, '.dark'),
-        ') sur ',
-        code(t, '<html>'),
-        '. Changez ',
-        code(t, '--primary'),
-        ' dans ',
+        fr ? 'Ajoutez le preset fourni et importez ' : 'Add the shipped preset and import ',
         code(t, 'theme.css'),
-        ' et tous les accents suivent — le block adopte instantanément votre charte.',
+        fr ? ' une fois :' : ' once:',
+      ),
+      CodeBlock({ t, code: themeV3(fr) }),
+
+      subhead(t, fr ? 'Mode sombre' : 'Dark mode'),
+      p(
+        t,
+        fr ? 'Basculez le thème en posant ' : 'Flip the theme by setting ',
+        code(t, 'data-theme="dark"'),
+        fr ? ' (ou la classe ' : ' (or the ',
+        code(t, '.dark'),
+        fr ? ') sur ' : ' class) on ',
+        code(t, '<html>'),
+        fr ? '. Changez ' : '. Change ',
+        code(t, '--primary'),
+        fr ? ' dans ' : ' in ',
+        code(t, 'theme.css'),
+        fr
+          ? ' et tous les accents suivent — le block adopte instantanément votre charte.'
+          : ' and every accent follows — the block instantly adopts your brand.',
       ),
 
       Note(
         t,
-        strong(t, 'Dispositions correctes mais couleurs absentes ?'),
-        ' C’est le signe que le layer de tokens n’est pas câblé : ',
+        strong(
+          t,
+          fr
+            ? 'Dispositions correctes mais couleurs absentes ?'
+            : 'Layouts right but colours missing?',
+        ),
+        fr
+          ? ' C’est le signe que le layer de tokens n’est pas câblé : '
+          : ' That’s the sign the token layer isn’t wired: ',
         code(t, 'bg-primary'),
-        ' & co ne résolvent rien tandis que la mise en page (flex, padding) tient. Vérifiez que ',
+        fr
+          ? ' & co ne résolvent rien tandis que la mise en page (flex, padding) tient. Vérifiez que '
+          : ' & co resolve nothing while the layout (flex, padding) holds. Check that ',
         code(t, 'theme.css'),
-        ' est bien importé et — en Tailwind v4 — que le bloc ',
+        fr
+          ? ' est bien importé et — en Tailwind v4 — que le bloc '
+          : ' is imported and — on Tailwind v4 — that the ',
         code(t, '@theme inline'),
-        ' est présent.',
+        fr ? ' est présent.' : ' block is present.',
       ),
     ),
 
-    // ── 4. Utiliser un block ──────────────────────────────────────────────
+    // ── 4. Use a block ────────────────────────────────────────────────────
     Section(
       t,
-      'Étape 4',
-      'Utiliser un block',
-      p(t, 'Importez le composant et passez-lui vos données. Exemple avec le block Hero :'),
-      CodeBlock({ t, code: USAGE }),
+      fr ? 'Étape 4' : 'Step 4',
+      fr ? 'Utiliser un block' : 'Use a block',
+      p(
+        t,
+        fr
+          ? 'Importez le composant et passez-lui vos données. Exemple avec le block Hero :'
+          : 'Import the component and pass it your data. Example with the Hero block:',
+      ),
+      CodeBlock({ t, code: usage(fr) }),
     ),
 
-    // ── Étapes suivantes ──────────────────────────────────────────────────
+    // ── Next steps ────────────────────────────────────────────────────────
     h(
       'section',
       { style: { marginTop: '48px', borderTop: `1px solid ${t.border}`, paddingTop: '30px' } },
-      h(SectionLabel, { t, style: { padding: '0 0 12px' } }, 'Étapes suivantes'),
+      h(
+        SectionLabel,
+        { t, style: { padding: '0 0 12px' } },
+        fr ? 'Étapes suivantes' : 'Next steps',
+      ),
       h(
         'div',
         {
@@ -523,14 +580,18 @@ export function GettingStarted() {
         nextCard(
           ROUTES.catalogue,
           'sparkles',
-          'Parcourir le catalogue',
-          'Tous les blocks par catégorie : Marketing, Pricing, Morphing.',
+          fr ? 'Parcourir le catalogue' : 'Browse the catalogue',
+          fr
+            ? 'Tous les blocks par catégorie : Marketing, Pricing, Morphing.'
+            : 'All blocks by category: Marketing, Pricing, Morphing.',
         ),
         nextCard(
           ROUTES.morphing,
           'command',
-          'Voir le Morphing',
-          'Les transitions shared-element, expliquées et démontrées en direct.',
+          fr ? 'Voir le Morphing' : 'See Morphing',
+          fr
+            ? 'Les transitions shared-element, expliquées et démontrées en direct.'
+            : 'Shared-element transitions, explained and demonstrated live.',
         ),
       ),
     ),

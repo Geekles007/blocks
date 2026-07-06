@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import type { MorphEntry } from '~/lib/morphing-data';
+import { type MorphEntry, morphText } from '~/lib/morphing-data';
+import { useUI } from '~/lib/ui-context';
 import { ComponentTag } from './component-tag';
 import type { MorphDemoProps } from './demos';
 import { MorphStage } from './morph-stage';
@@ -21,10 +22,12 @@ export function MorphSection({
   Demo?: React.ComponentType<MorphDemoProps>;
   onViewCode: () => void;
 }) {
+  const { m, locale } = useUI();
   const [expanded, setExpanded] = React.useState(false);
   const toggle = React.useCallback(() => setExpanded((v) => !v), []);
   const stageId = React.useId();
   const hasDemo = Boolean(Demo);
+  const text = morphText(entry, locale);
 
   return (
     <section className="flex flex-col gap-8 border-t border-border py-[52px] lg:flex-row lg:items-start lg:gap-[52px]">
@@ -33,10 +36,10 @@ export function MorphSection({
           {entry.n}
         </div>
         <h3 className="mt-2.5 font-semibold text-xl leading-tight tracking-tight text-foreground">
-          {entry.title}
+          {text.title}
         </h3>
         <p className="mt-1.5 text-[14.5px] leading-relaxed text-muted-foreground">
-          {entry.description}
+          {text.description}
         </p>
 
         {entry.tags.length > 0 ? (
@@ -47,13 +50,13 @@ export function MorphSection({
           </div>
         ) : null}
 
-        {entry.whatMorphs ? (
+        {text.whatMorphs ? (
           <div className="mt-[18px] rounded-2xl border border-border bg-card p-4">
             <div className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-muted-foreground">
-              What morphs
+              {m.morphing.whatMorphs}
             </div>
             <p className="mt-2.5 text-[13.5px] leading-relaxed text-foreground/70">
-              {entry.whatMorphs}
+              {text.whatMorphs}
             </p>
             {entry.timing ? (
               <div className="mt-3 flex flex-wrap gap-1.5">
@@ -83,11 +86,11 @@ export function MorphSection({
           >
             {hasDemo ? (
               <>
-                {expanded ? 'Click to collapse' : 'Click to expand'}
+                {expanded ? m.morphing.collapse : m.morphing.expand}
                 <span aria-hidden="true">↔</span>
               </>
             ) : (
-              'Bientôt jouable'
+              m.morphing.soonPlayable
             )}
           </button>
           {entry.code ? (
@@ -97,7 +100,7 @@ export function MorphSection({
               className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 font-medium text-xs text-foreground shadow-sm hover:bg-accent"
             >
               <span className="font-mono text-[11px] text-primary">&lt;/&gt;</span>
-              View code
+              {m.morphing.viewCode}
             </button>
           ) : null}
         </div>

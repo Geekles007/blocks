@@ -1,0 +1,42 @@
+{
+  "name": "morph-avatar-profile",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A circular Avatar that morphs into a detailed profile card: the Avatar is a single persistent element that travels and scales from the collapsed circle into the card header (a real shared-element move, not a crossfade) while the Card springs in through AnimatePresence around it. The name and role, a Pro Badge, a bio, a Separator-split stats row and a Follow/Message Button pair stagger in on open and reverse-stagger out on close. Built on framer-motion via block-motion, so the whole morph collapses to a plain crossfade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Collapsed, the block is a button wrapping the Avatar with an explicit aria-label (\"View <name>'s profile\"), so it is keyboard- and screen-reader-reachable",
+      "Expanded, the card exposes a labelled close control and the person's name renders as plain text (not a heading) so it never forces a heading level onto the host page",
+      "The stats columns are split by real Separators (decorative) and the decorative Avatar/close icons are aria-hidden, so they don't pollute the accessible name",
+      "The size/stagger morph respects prefers-reduced-motion via MotionProvider, collapsing to a plain crossfade"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "an avatar that expands into a detailed profile card",
+      "a shared-element morph from an avatar to a profile popover",
+      "an animated profile card built on ibirdui"
+    ],
+    "examples": ["<MorphAvatarProfile />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/avatar.json",
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/separator.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/morph-avatar-profile.tsx",
+      "path": "components/blocks/morph-avatar-profile.tsx",
+      "type": "component"
+    }
+  ]
+}

@@ -21,26 +21,25 @@ export interface PricingSingleProps extends Omit<React.HTMLAttributes<HTMLElemen
   eyebrow?: React.ReactNode;
   title: React.ReactNode;
   subtitle?: React.ReactNode;
-  /** Plan name shown on the card (e.g. "Licence à vie"). */
+  /** Plan name shown on the card (e.g. "Lifetime license"). */
   planName: React.ReactNode;
-  /** Formatted headline price (e.g. "199 €"). */
+  /** Formatted headline price (e.g. "$199"). */
   price: React.ReactNode;
-  /** Muted unit after the price (e.g. "paiement unique"). */
+  /** Muted unit after the price (e.g. "one-time payment"). */
   period?: React.ReactNode;
   /** Everything included, laid out in two columns on wide screens. */
   features: React.ReactNode[];
   primaryAction: PricingSingleAction;
-  /** Reassurance line under the CTA (e.g. "Garantie 30 jours"). */
+  /** Reassurance line under the CTA (e.g. "30-day guarantee"). */
   note?: React.ReactNode;
 }
 
 /**
- * Parti pris : une seule offre, posée au centre, qui n'a rien à prouver contre
- * d'autres colonnes. Le prix domine, la liste des bénéfices se déplie sur deux
- * colonnes en desktop et retombe sur une seule en mobile, et un seul CTA pleine
- * largeur ferme la carte. Le titre de section est un `h2`, le nom du plan un
- * `h3` ; la liste est un vrai `ul`. Composé sur les primitives ibirdui `badge`
- * et `button`.
+ * A single offer, set in the centre, with nothing to prove against other columns.
+ * The price dominates, the list of benefits unfolds across two columns on desktop
+ * and falls back to one on mobile, and a single full-width CTA closes the card.
+ * The section title is an `h2`, the plan name an `h3`; the list is a real `ul`.
+ * Composed on the ibirdui `badge` and `button` primitives.
  */
 export function PricingSingle({
   eyebrow,

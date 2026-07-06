@@ -1,14 +1,16 @@
 'use client';
 
 import type * as React from 'react';
-import { type Block, SPECS } from '~/lib/blocks-data';
+import { type Block, resolveSpec } from '~/lib/blocks-data';
 import { type CSS, h } from '~/lib/h';
 import type { Tok } from '~/lib/tokens';
+import { useUI } from '~/lib/ui-context';
 
 /** Dev-facing spec (composition, structure, responsive, choreography) shown
  *  below the live preview on a block's detail page. */
 export function SpecGrid({ t, b }: { t: Tok; b: Block }) {
-  const spec = SPECS[b.key];
+  const { m, locale } = useUI();
+  const spec = resolveSpec(b.key, locale);
   const primitives = spec?.primitives ?? b.prims;
   const variants = spec?.variants ?? b.variants;
   const cardStyle: CSS = {
@@ -82,7 +84,7 @@ export function SpecGrid({ t, b }: { t: Tok; b: Block }) {
           color: t.text,
         },
       },
-      'Détails du block',
+      m.spec.title,
     ),
     spec?.concept
       ? h(
@@ -109,13 +111,13 @@ export function SpecGrid({ t, b }: { t: Tok; b: Block }) {
               maxWidth: '70ch',
             },
           },
-          `Block ${b.name} — composé sur les primitives ibirdui, animé par block-motion, responsive et accessible (prefers-reduced-motion respecté).`,
+          m.spec.fallbackConcept(b.name),
         ),
     h(
       'div',
       { className: 'bm-specgrid' },
       card(
-        'Composition · primitives ibirdui',
+        m.spec.composition,
         h(
           'div',
           {
@@ -152,7 +154,7 @@ export function SpecGrid({ t, b }: { t: Tok; b: Block }) {
       ),
       spec?.structure
         ? card(
-            'Structure & hiérarchie',
+            m.spec.structure,
             h(
               'p',
               { style: { margin: 0, color: t.muted, fontSize: '13px', lineHeight: 1.55 } },
@@ -162,7 +164,7 @@ export function SpecGrid({ t, b }: { t: Tok; b: Block }) {
         : null,
       spec?.responsive?.length
         ? card(
-            'Responsive · 3 breakpoints',
+            m.spec.responsive,
             h(
               'div',
               { style: { display: 'flex', flexDirection: 'column', gap: '8px' } },
@@ -183,7 +185,7 @@ export function SpecGrid({ t, b }: { t: Tok; b: Block }) {
         : null,
       spec?.choreography
         ? card(
-            'Chorégraphie · signature move',
+            m.spec.choreography,
             h(
               'p',
               { style: { margin: '0 0 10px', color: t.muted, fontSize: '13px', lineHeight: 1.55 } },
@@ -212,7 +214,7 @@ export function SpecGrid({ t, b }: { t: Tok; b: Block }) {
       h(
         'div',
         { style: { ...cardStyle, gridColumn: '1 / -1' } },
-        h('div', { style: headStyle }, 'Variantes / props'),
+        h('div', { style: headStyle }, m.spec.variants),
         h(
           'div',
           { style: { display: 'flex', flexWrap: 'wrap', gap: '7px' } },

@@ -19,9 +19,9 @@ export interface PricingToggleAction {
 
 export interface PricingTogglePlan {
   name: string;
-  /** Formatted monthly price (e.g. "29 €"). */
+  /** Formatted monthly price (e.g. "$29"). */
   monthlyPrice: string;
-  /** Formatted annual (per-month) price (e.g. "24 €"). */
+  /** Formatted annual (per-month) price (e.g. "$24"). */
   annualPrice: string;
   description?: React.ReactNode;
   features: React.ReactNode[];
@@ -33,31 +33,31 @@ export interface PricingToggleProps extends Omit<React.HTMLAttributes<HTMLElemen
   title: React.ReactNode;
   subtitle?: React.ReactNode;
   plans: PricingTogglePlan[];
-  /** Label for the monthly option (default "Mensuel"). */
+  /** Label for the monthly option (default "Monthly"). */
   monthlyLabel?: React.ReactNode;
-  /** Label for the annual option (default "Annuel"). */
+  /** Label for the annual option (default "Annual"). */
   annualLabel?: React.ReactNode;
-  /** Savings hint shown next to the annual label (e.g. "−20 %"). */
+  /** Savings hint shown next to the annual label (e.g. "−20%"). */
   annualHint?: React.ReactNode;
   /** Start on the annual tab. */
   defaultAnnual?: boolean;
 }
 
 /**
- * Parti pris : un seul plan porte l'accent, et un `Switch` mensuel/annuel fait
- * basculer tous les prix d'un même geste. Le chiffre se remplace en fondu
- * vertical pour que la bascule se sente sans jamais bousculer la mise en page.
- * La rangée de bascule est un vrai groupe étiqueté (`role="group"`) et le
- * `Switch` porte un `aria-label` explicite ; le titre de section est un `h2` et
- * chaque nom de plan un `h3`. Sous `prefers-reduced-motion`, la transition de
- * prix retombe sur un simple fondu. Composé sur la primitive ibirdui `switch`.
+ * A single plan carries the accent, and a monthly/annual `Switch` flips every
+ * price in one gesture. The figure swaps with a vertical fade so the toggle is
+ * felt without ever jostling the layout. The toggle row is a real labelled group
+ * (`role="group"`) and the `Switch` carries an explicit `aria-label`; the section
+ * title is an `h2` and each plan name an `h3`. Under `prefers-reduced-motion`, the
+ * price transition falls back to a plain fade. Composed on the ibirdui `switch`
+ * primitive.
  */
 export function PricingToggle({
   title,
   subtitle,
   plans,
-  monthlyLabel = 'Mensuel',
-  annualLabel = 'Annuel',
+  monthlyLabel = 'Monthly',
+  annualLabel = 'Annual',
   annualHint,
   defaultAnnual = false,
   className,
@@ -101,7 +101,7 @@ export function PricingToggle({
               className="mt-8 inline-flex flex-wrap items-center justify-center gap-3"
             >
               <span id={groupId} className="sr-only">
-                Périodicité de facturation
+                Billing period
               </span>
               <span
                 className={cn(
@@ -114,7 +114,7 @@ export function PricingToggle({
               <Switch
                 checked={annual}
                 onCheckedChange={setAnnual}
-                aria-label={`Facturation ${annual ? 'annuelle' : 'mensuelle'}`}
+                aria-label={`${annual ? 'Annual' : 'Monthly'} billing`}
               />
               <span
                 className={cn(
@@ -178,10 +178,10 @@ function PlanCard({ plan, annual }: { plan: PricingTogglePlan; annual: boolean }
         >
           {price}
         </motion.span>
-        <span className="text-muted-foreground text-sm">/ mois</span>
+        <span className="text-muted-foreground text-sm">/ mo</span>
       </div>
       <p className="mt-1 text-muted-foreground text-xs">
-        {annual ? 'facturé annuellement' : 'facturé mensuellement'}
+        {annual ? 'billed annually' : 'billed monthly'}
       </p>
 
       <Cta

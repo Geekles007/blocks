@@ -20,7 +20,7 @@
       "a bold typographic hero with a meta rail"
     ],
     "examples": [
-      "<HeroAgency eyebrow=\"Studio créatif — Est. 2016\" title=\"On donne une voix aux marques qui osent\" subtitle=\"Identité, produits numériques et motion pour les équipes ambitieuses.\" primaryAction={{ label: 'Voir les projets', href: '/work' }} />"
+      "<HeroAgency eyebrow=\"Creative studio — Est. 2016\" title=\"We give a voice to brands that dare\" subtitle=\"Identity, digital products and motion for ambitious teams.\" primaryAction={{ label: 'View work', href: '/work' }} />"
     ]
   },
   "dependencies": ["react", "framer-motion"],
