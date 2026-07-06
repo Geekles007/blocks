@@ -13,12 +13,13 @@ import { Badge, Icon, SectionLabel } from '../primitives';
 const { useState } = React;
 
 export function Catalogue() {
-  const { t, reduced } = useUI();
+  const { t, m, reduced } = useUI();
   const router = useRouter();
-  const [cur, setCur] = useState('Tous');
+  const [cur, setCur] = useState('all');
   const [q, setQ] = useState('');
+  const catLabel = (c: string) => (c === 'all' ? m.catalogue.all : c);
   const list = BLOCKS.filter(
-    (b) => (cur === 'Tous' || b.cat === cur) && b.name.toLowerCase().includes(q.toLowerCase()),
+    (b) => (cur === 'all' || b.cat === cur) && b.name.toLowerCase().includes(q.toLowerCase()),
   );
   return h(
     'div',
@@ -32,11 +33,11 @@ export function Catalogue() {
         className: 'ib-side',
         style: { borderRight: `1px solid ${t.border}`, padding: '24px 14px' },
       },
-      h(SectionLabel, { t, style: { padding: '0 8px 8px' } }, 'Catégories'),
+      h(SectionLabel, { t, style: { padding: '0 8px 8px' } }, m.catalogue.categories),
       h(
         'nav',
         { style: { display: 'flex', flexDirection: 'column', gap: '2px' } },
-        ...['Tous', ...CATS].map((c) => {
+        ...['all', ...CATS].map((c) => {
           const a = cur === c;
           return h(
             'button',
@@ -58,7 +59,7 @@ export function Catalogue() {
                 font: "500 13.5px 'Geist',sans-serif",
               },
             },
-            c,
+            catLabel(c),
             h(
               'span',
               { style: { color: t.faint, fontSize: '11px', fontFamily: "'Geist Mono',monospace" } },
@@ -96,16 +97,15 @@ export function Catalogue() {
                 color: t.text,
               },
             },
-            cur,
+            catLabel(cur),
           ),
           h(
             'p',
             { style: { margin: 0, color: t.faint, fontSize: '13.5px' } },
-            (() => {
-              const nb = list.length;
-              const nv = list.reduce((a, b) => a + b.variants.length, 0);
-              return `${nb} block${nb > 1 ? 's' : ''} · ${nv} variante${nv > 1 ? 's' : ''}`;
-            })(),
+            m.catalogue.summary(
+              list.length,
+              list.reduce((a, b) => a + b.variants.length, 0),
+            ),
           ),
         ),
         h(
@@ -126,7 +126,7 @@ export function Catalogue() {
           h('input', {
             value: q,
             onChange: (e: React.ChangeEvent<HTMLInputElement>) => setQ(e.target.value),
-            placeholder: 'Filtrer…',
+            placeholder: m.catalogue.filter,
             style: {
               flex: 1,
               border: 'none',
@@ -195,7 +195,7 @@ export function Catalogue() {
                 h(
                   'div',
                   { style: { color: t.faint, fontSize: '12px', marginTop: '2px' } },
-                  `${b.variants.length} variante${b.variants.length > 1 ? 's' : ''}`,
+                  m.catalogue.variants(b.variants.length),
                 ),
               ),
               h(Badge, { t, tone: 'neutral' }, b.cat),
@@ -206,7 +206,7 @@ export function Catalogue() {
           h(
             'div',
             { style: { padding: '60px', textAlign: 'center', color: t.faint } },
-            'Aucun block',
+            m.catalogue.empty,
           ),
       ),
     ),

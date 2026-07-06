@@ -12,31 +12,29 @@ async function expectNoViolations(container: HTMLElement) {
 
 describe('HeroAgency', () => {
   it('exposes the title as the single top-level heading', () => {
-    render(<HeroAgency title="On donne une voix aux marques qui osent" />);
+    render(<HeroAgency title="We give a voice to brands that dare" />);
     const h1s = screen.getAllByRole('heading', { level: 1 });
     expect(h1s).toHaveLength(1);
-    expect(h1s[0]).toHaveTextContent('On donne une voix aux marques qui osent');
+    expect(h1s[0]).toHaveTextContent('We give a voice to brands that dare');
   });
 
   it('renders an action with an href as a link', () => {
-    render(
-      <HeroAgency title="Titre" primaryAction={{ label: 'Voir les projets', href: '/work' }} />,
-    );
-    expect(screen.getByRole('link', { name: 'Voir les projets' })).toHaveAttribute('href', '/work');
+    render(<HeroAgency title="Title" primaryAction={{ label: 'View work', href: '/work' }} />);
+    expect(screen.getByRole('link', { name: 'View work' })).toHaveAttribute('href', '/work');
   });
 
   it('renders an action without an href as a button', () => {
-    render(<HeroAgency title="Titre" primaryAction={{ label: 'Nous écrire' }} />);
-    expect(screen.getByRole('button', { name: 'Nous écrire' })).toBeInTheDocument();
+    render(<HeroAgency title="Title" primaryAction={{ label: 'Contact us' }} />);
+    expect(screen.getByRole('button', { name: 'Contact us' })).toBeInTheDocument();
   });
 
   it('has no axe violations in its fullest form', async () => {
     const { container } = render(
       <HeroAgency
-        eyebrow="Studio créatif — Est. 2016"
-        title="On donne une voix aux marques qui osent"
-        subtitle="Identité, produits numériques et motion pour les équipes ambitieuses."
-        primaryAction={{ label: 'Voir les projets', href: '/work' }}
+        eyebrow="Creative studio — Est. 2016"
+        title="We give a voice to brands that dare"
+        subtitle="Identity, digital products and motion for ambitious teams."
+        primaryAction={{ label: 'View work', href: '/work' }}
       />,
     );
     await expectNoViolations(container);

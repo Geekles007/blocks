@@ -1,6 +1,6 @@
 'use client';
 
-import { MORPH_COMPONENTS } from '~/lib/morphing-data';
+import { MORPH_COMPONENTS, morphBlurb } from '~/lib/morphing-data';
 import { useUI } from '~/lib/ui-context';
 import { PageHeader } from '../page';
 import { Badge } from '../primitives';
@@ -20,7 +20,7 @@ function FeatureChip({ swatch, label }: { swatch: React.ReactNode; label: string
  * of the site — then adds the feature chips and primitive legend beneath it.
  */
 export function MorphHeader() {
-  const { t, reduced } = useUI();
+  const { t, m, locale, reduced } = useUI();
   return (
     <header className="mx-auto max-w-[1180px] px-6 pt-14 pb-5 sm:px-10">
       <PageHeader
@@ -30,15 +30,17 @@ export function MorphHeader() {
         titleMaxWidth="18ch"
         kicker={
           <Badge t={t} tone="accent" dot>
-            Collection · en cours
+            {m.morphing.kicker}
           </Badge>
         }
         title={
           <>
-            Un objet qui <span style={{ color: t.accent }}>se transforme</span> en un autre.
+            {m.morphing.titleLead}
+            <span style={{ color: t.accent }}>{m.morphing.titleAccent}</span>
+            {m.morphing.titleTail}
           </>
         }
-        subtitle="Des composants où un élément évolue vers un autre — construits sur les primitives ibirdui et animés avec framer-motion. Chaque élément préserve la continuité visuelle : rien ne disparaît, tout se transforme."
+        subtitle={m.morphing.subtitle}
       />
 
       <div className="mt-6 flex flex-wrap gap-2.5">
@@ -60,7 +62,7 @@ export function MorphHeader() {
 
       <div className="mt-7 border-t border-border pt-6">
         <div className="mb-3.5 font-mono text-[10.5px] uppercase tracking-[0.1em] text-muted-foreground">
-          ibirdui primitives — each morph is tagged with the components it’s built from
+          {m.morphing.legend}
         </div>
         <div className="flex flex-wrap gap-x-7 gap-y-2.5">
           {MORPH_COMPONENTS.map((c) => (
@@ -69,7 +71,7 @@ export function MorphHeader() {
               <span className="font-mono font-semibold text-[12.5px] text-foreground">
                 {c.name}
               </span>
-              <span className="text-[12.5px] text-muted-foreground">{c.blurb}</span>
+              <span className="text-[12.5px] text-muted-foreground">{morphBlurb(c, locale)}</span>
             </div>
           ))}
         </div>

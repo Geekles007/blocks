@@ -18,7 +18,7 @@ export interface HeroFintechAction {
 }
 
 export interface HeroFintechTrust {
-  /** Big figure, e.g. "0,00 €". */
+  /** Big figure, e.g. "$0.00". */
   value: string;
   /** Muted caption under the figure. */
   label: string;
@@ -43,18 +43,18 @@ export interface HeroFintechProps extends Omit<React.HTMLAttributes<HTMLElement>
 }
 
 const DEFAULT_METRICS: HeroFintechTrust[] = [
-  { value: '0 €', label: 'Frais cachés' },
-  { value: '100 000 €', label: 'Dépôts garantis' },
-  { value: 'AES-256', label: 'Chiffrement' },
+  { value: '$0', label: 'Hidden fees' },
+  { value: '$100k', label: 'Deposits insured' },
+  { value: 'AES-256', label: 'Encryption' },
 ];
 
 /**
- * Parti pris : la confiance par la sobriété. Une colonne de copie rassurante à
- * gauche, une carte bancaire « posée » à droite avec un solde en chiffres
- * tabulaires et une bande de garanties chiffrées dessous — le neutre porte tout,
- * l'accent ne souligne que la sécurité. La carte est décorative (`aria-hidden`) ;
- * le titre est l'unique `h1` et nomme le repère de section. Composé sur les
- * primitives ibirdui `badge` et `button`.
+ * A trust-through-restraint hero: a column of reassuring copy on the left, a bank
+ * card "resting" on the right with a balance in tabular figures and a strip of
+ * encrypted guarantees underneath — the neutrals carry everything, the accent
+ * underlines only security. The card is decorative (`aria-hidden`); the title is
+ * the sole `h1` and names the section landmark. Composed on the ibirdui `badge`
+ * and `button` primitives.
  */
 export function HeroFintech({
   eyebrow,
@@ -63,9 +63,9 @@ export function HeroFintech({
   primaryAction,
   secondaryAction,
   assurance,
-  cardHolder = 'Compte courant',
+  cardHolder = 'Checking account',
   cardNumber = '•••• •••• •••• 4021',
-  balance = { value: '12 480,50 €', label: 'Solde disponible' },
+  balance = { value: '$12,480.50', label: 'Available balance' },
   metrics = DEFAULT_METRICS,
   className,
   ...rest

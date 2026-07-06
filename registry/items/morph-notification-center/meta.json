@@ -1,0 +1,40 @@
+{
+  "name": "morph-notification-center",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A notification bell with an unread-count Badge that morphs into a notification centre: the surface springs between the bell and a full drawer while the Button and the Card swap through AnimatePresence, so both get a real enter and exit. Inside, a header (bell, title and a filled unread pill), a list of notifications with tinted semantic icon tiles — the latest unread carrying a highlight surface — and a centred Mark-all-as-read link stagger in on open and reverse-stagger out on close. Built on framer-motion via block-motion, so the whole morph collapses to a plain crossfade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Collapsed, the block is an icon Button whose aria-label spells out the unread count (\"Open notifications (3 unread)\"), so the count is announced and not conveyed by the dot Badge alone",
+      "Expanded, the header bell doubles as the close control with an explicit aria-label, and the title renders as plain text (not a heading) so it never forces a heading level onto the host page",
+      "Each unread row is not marked by the highlight surface alone — it also carries a visually-hidden \"(unread)\" label; the tinted icon tiles are decorative and aria-hidden so they don't repeat the sender's name",
+      "The size/stagger morph respects prefers-reduced-motion via MotionProvider, collapsing to a plain crossfade"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a notification bell that expands into a notification centre or drawer",
+      "a shared-element morph from a badge to a notifications panel",
+      "an animated notification centre built on ibirdui"
+    ],
+    "examples": ["<MorphNotificationCenter />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/morph-notification-center.tsx",
+      "path": "components/blocks/morph-notification-center.tsx",
+      "type": "component"
+    }
+  ]
+}

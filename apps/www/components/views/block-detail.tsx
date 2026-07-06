@@ -18,7 +18,7 @@ type Bp = 'desktop' | 'tablet' | 'mobile';
 type Tab = 'preview' | 'code';
 
 export function BlockDetail({ blockKey }: { blockKey: string }) {
-  const { t, reduced, theme, copy, toggleTheme } = useUI();
+  const { t, m, locale, reduced, theme, copy, toggleTheme } = useUI();
   const router = useRouter();
   const b = (getBlock(blockKey) ?? BLOCKS[0]) as Block;
   const [variant, setVariant] = useState(0);
@@ -133,7 +133,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
           },
         },
         h(Icon, { name: 'arrow', size: 14, style: { transform: 'rotate(180deg)' } }),
-        'Catalogue',
+        m.nav.catalogue,
       ),
       h(SectionLabel, { t }, b.cat),
       h(
@@ -165,7 +165,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
         }),
       ),
       h('div', { style: { height: '1px', background: t.border, margin: '16px 0' } }),
-      h(SectionLabel, { t }, 'Primitives ibirdui'),
+      h(SectionLabel, { t }, m.blockDetail.primitives),
       h(
         'div',
         { style: { display: 'flex', flexWrap: 'wrap', gap: '6px', padding: '0 4px' } },
@@ -203,9 +203,9 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
       h(
         'p',
         { style: { margin: '0 0 16px', color: t.faint, fontSize: '13.5px' } },
-        'Variante ',
+        `${m.blockDetail.variant} `,
         h('code', { style: { fontFamily: "'Geist Mono',monospace", color: t.muted } }, vid),
-        ` · composé sur ${b.prims.length} primitives`,
+        m.blockDetail.composedOn(b.prims.length),
       ),
       h(
         'div',
@@ -252,9 +252,9 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
           h(
             'div',
             { style: { display: 'flex', gap: '2px' } },
-            tabBtn('preview', 'Preview'),
+            tabBtn('preview', m.blockDetail.preview),
             h('span', { style: { width: '14px' } }),
-            tabBtn('code', 'Code'),
+            tabBtn('code', m.blockDetail.code),
           ),
         ),
         h(
@@ -282,7 +282,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
             'button',
             {
               onClick: toggleTheme,
-              title: 'Thème',
+              title: m.blockDetail.theme,
               style: {
                 display: 'flex',
                 alignItems: 'center',
@@ -305,7 +305,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
                 setTab('preview');
                 setFullscreen(true);
               },
-              title: 'Plein écran',
+              title: m.blockDetail.fullscreen,
               style: {
                 display: 'flex',
                 alignItems: 'center',
@@ -355,7 +355,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
                 h(
                   'div',
                   { key: b.key + variant + bp },
-                  renderPreview(b.preview, { t, reduced, v: variant }),
+                  renderPreview(b.preview, { t, reduced, v: variant, locale }),
                 ),
               ),
             ),
@@ -374,7 +374,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
             h(
               'button',
               {
-                onClick: () => copy(code, 'Code copié'),
+                onClick: () => copy(code, m.blockDetail.codeCopied),
                 style: {
                   position: 'absolute',
                   top: '12px',
@@ -392,7 +392,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
                 },
               },
               h(Icon, { name: 'copy', size: 14 }),
-              'Copier',
+              m.common.copy,
             ),
             h(
               'pre',
@@ -428,7 +428,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
           'div',
           {
             role: 'tablist',
-            'aria-label': 'Gestionnaire de paquets',
+            'aria-label': m.codeDrawer.packageManager,
             style: {
               display: 'flex',
               gap: '2px',
@@ -484,9 +484,9 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
             size: 'sm',
             variant: 'soft',
             leftIcon: 'copy',
-            onClick: () => copy(cmd, 'Commande copiée'),
+            onClick: () => copy(cmd, m.blockDetail.cmdCopied),
           },
-          'Copier',
+          m.common.copy,
         ),
       ),
       h(SpecGrid, { t, b }),
@@ -497,7 +497,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
         {
           role: 'dialog',
           'aria-modal': true,
-          'aria-label': `${b.name} — aperçu plein écran`,
+          'aria-label': m.blockDetail.fullscreenLabel(b.name),
           onClick: () => setFullscreen(false),
           style: {
             position: 'fixed',
@@ -559,7 +559,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
               'button',
               {
                 onClick: toggleTheme,
-                title: 'Thème',
+                title: m.blockDetail.theme,
                 style: {
                   display: 'flex',
                   alignItems: 'center',
@@ -579,7 +579,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
               'button',
               {
                 onClick: () => setFullscreen(false),
-                title: 'Quitter le plein écran (Échap)',
+                title: m.blockDetail.exitFullscreen,
                 style: {
                   display: 'flex',
                   alignItems: 'center',
@@ -627,7 +627,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
               h(
                 'div',
                 { key: b.key + variant + bp },
-                renderPreview(b.preview, { t, reduced, v: variant }),
+                renderPreview(b.preview, { t, reduced, v: variant, locale }),
               ),
             ),
           ),

@@ -9,7 +9,7 @@
     "tested": true,
     "notes": [
       "Renders a real table with a caption, column header cells (scope=col) for each plan and row header cells (scope=row) for each feature",
-      "Check / dash cells expose a visually-hidden 'Inclus' / 'Non inclus' label so meaning does not rely on the icon alone",
+      "Check / dash cells expose a visually-hidden 'Included' / 'Not included' label so meaning does not rely on the icon alone",
       "The section title is an h2 that labels the section landmark",
       "CTAs render as real links when given an href, otherwise as buttons",
       "The reveal animation respects prefers-reduced-motion via MotionProvider"
@@ -21,7 +21,7 @@
       "a pricing matrix with checkmarks per plan and feature"
     ],
     "examples": [
-      "<PricingCompare title=\"Comparez les offres\" plans={[{ name: 'Starter', price: '0 €', period: '/ mois', action: { label: 'Commencer', href: '/signup' } }, { name: 'Pro', price: '29 €', period: '/ mois', featured: true, action: { label: 'Choisir Pro', href: '/signup' } }]} rows={[{ label: 'Projets', values: ['3', 'Illimité'] }, { label: 'Support prioritaire', values: [false, true] }]} />"
+      "<PricingCompare title=\"Compare plans\" plans={[{ name: 'Starter', price: '$0', period: '/ mo', action: { label: 'Get started', href: '/signup' } }, { name: 'Pro', price: '$29', period: '/ mo', featured: true, action: { label: 'Choose Pro', href: '/signup' } }]} rows={[{ label: 'Projects', values: ['3', 'Unlimited'] }, { label: 'Priority support', values: [false, true] }]} />"
     ]
   },
   "dependencies": ["react", "framer-motion"],

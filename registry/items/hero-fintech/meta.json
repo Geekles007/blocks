@@ -20,7 +20,7 @@
       "a hero pairing reassuring copy with a card visual and security figures"
     ],
     "examples": [
-      "<HeroFintech eyebrow=\"Agréé ACPR\" title=\"La banque qui joue franc jeu\" subtitle=\"Zéro frais caché, dépôts garantis, chiffrement de bout en bout.\" primaryAction={{ label: 'Ouvrir un compte', href: '/signup' }} secondaryAction={{ label: 'Voir les tarifs', href: '/pricing' }} assurance=\"Dépôts garantis jusqu'à 100 000 €\" />"
+      "<HeroFintech eyebrow=\"FDIC insured\" title=\"The bank that plays it straight\" subtitle=\"Zero hidden fees, insured deposits, end-to-end encryption.\" primaryAction={{ label: 'Open an account', href: '/signup' }} secondaryAction={{ label: 'See pricing', href: '/pricing' }} assurance=\"Deposits insured up to $100,000\" />"
     ]
   },
   "dependencies": ["react", "framer-motion"],

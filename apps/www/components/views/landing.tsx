@@ -17,7 +17,7 @@ const FEATURED = BLOCKS;
 const INSTALL_CMD = 'npx ibirdui add blocks.ibird.dev/r/hero';
 
 export function Landing() {
-  const { t, reduced, copy } = useUI();
+  const { t, m, reduced, copy } = useUI();
   const router = useRouter();
   return h(
     'div',
@@ -70,18 +70,17 @@ export function Landing() {
           titleMaxWidth: '15ch',
           kicker: h(Badge, { t, tone: 'accent', dot: true }, 'Compatible shadcn · MIT'),
           title: [
-            'Copie une commande. ',
-            h('span', { style: { color: t.accent } }, 'C’est à toi.'),
+            m.landing.titleLead,
+            h('span', { style: { color: t.accent } }, m.landing.titleAccent),
           ],
-          subtitle:
-            'Un catalogue de blocks UI complets, animés au morphing et accessibles — construits sur les primitives ibirdui. Installe-les en une commande, garde le code.',
+          subtitle: m.landing.subtitle,
           actions: [
             h(
               Button,
               { t, reduced, rightIcon: 'arrow', onClick: () => router.push(ROUTES.catalogue) },
-              'Parcourir le catalogue',
+              m.landing.browse,
             ),
-            h(Button, { t, reduced, variant: 'outline', leftIcon: 'github' }, 'Star on GitHub'),
+            h(Button, { t, reduced, variant: 'outline', leftIcon: 'github' }, m.landing.starGithub),
           ],
           children: h(InstallCommand, {
             t,
@@ -120,13 +119,9 @@ export function Landing() {
                 color: t.text,
               },
             },
-            'Blocks vedettes',
+            m.landing.featuredTitle,
           ),
-          h(
-            'p',
-            { style: { margin: 0, color: t.faint, fontSize: '14px' } },
-            'Rendus live. Survole, clique, change de thème.',
-          ),
+          h('p', { style: { margin: 0, color: t.faint, fontSize: '14px' } }, m.landing.featuredSub),
         ),
         h(
           Button,
@@ -137,7 +132,7 @@ export function Landing() {
             rightIcon: 'arrow',
             onClick: () => router.push(ROUTES.catalogue),
           },
-          'Tout voir',
+          m.landing.seeAll,
         ),
       ),
       h(
@@ -212,7 +207,7 @@ export function Landing() {
                     fontSize: '12.5px',
                   },
                 },
-                'Ouvrir',
+                m.landing.open,
                 h(Icon, { name: 'arrow', size: 14 }),
               ),
             ),

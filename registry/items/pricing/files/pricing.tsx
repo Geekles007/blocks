@@ -20,9 +20,9 @@ export interface PricingAction {
 export interface PricingPlan {
   /** Plan name, e.g. "Pro". Rendered as the card heading. */
   name: string;
-  /** Headline price, already formatted (e.g. "29 €"). */
+  /** Headline price, already formatted (e.g. "$29"). */
   price: React.ReactNode;
-  /** Muted unit after the price (e.g. "/ mois"). */
+  /** Muted unit after the price (e.g. "/ mo"). */
   period?: React.ReactNode;
   /** One-line pitch under the price. */
   description?: React.ReactNode;
@@ -32,7 +32,7 @@ export interface PricingPlan {
   action: PricingAction;
   /** Highlight this plan (ring, filled CTA, "popular" badge). */
   featured?: boolean;
-  /** Optional label shown on the featured plan (defaults to "Populaire"). */
+  /** Optional label shown on the featured plan (defaults to "Popular"). */
   badge?: React.ReactNode;
 }
 
@@ -44,14 +44,13 @@ export interface PricingProps extends Omit<React.HTMLAttributes<HTMLElement>, 't
 }
 
 /**
- * Parti pris : une grille de paliers sobre où seule l'offre recommandée porte
- * l'accent — anneau, CTA plein et badge « Populaire ». Tout le reste reste
- * neutre pour que le regard tombe sur un seul plan. La grille passe d'une
- * colonne en mobile à autant de colonnes que de plans en desktop, chaque carte
- * gardant sa hauteur pleine pour aligner les CTA en bas. Le titre de section est
- * un `h2` (une section de tarifs vit rarement en haut de page) et nomme le
- * repère via `aria-labelledby` ; chaque nom de plan est un `h3`. Composé sur les
- * primitives ibirdui `badge` et `button`.
+ * A restrained tier grid where only the recommended plan carries the accent —
+ * ring, filled CTA and a "Popular" badge. Everything else stays neutral so the
+ * eye lands on a single plan. The grid goes from one column on mobile to as many
+ * columns as there are plans on desktop, each card keeping its full height so the
+ * CTAs align at the bottom. The section title is an `h2` (a pricing section rarely
+ * lives at the top of the page) and names the landmark via `aria-labelledby`; each
+ * plan name is an `h3`. Composed on the ibirdui `badge` and `button` primitives.
  */
 export function Pricing({ eyebrow, title, subtitle, plans, className, ...rest }: PricingProps) {
   const headingId = React.useId();
@@ -121,7 +120,7 @@ function PlanCard({ plan }: { plan: PricingPlan }) {
     >
       {plan.featured ? (
         <div className="absolute top-0 right-6 -translate-y-1/2">
-          <Badge className="shadow-sm">{plan.badge ?? 'Populaire'}</Badge>
+          <Badge className="shadow-sm">{plan.badge ?? 'Popular'}</Badge>
         </div>
       ) : null}
 

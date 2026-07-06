@@ -7,7 +7,7 @@ import { useUI } from '~/lib/ui-context';
 import { Icon } from '../primitives';
 
 export function NotFoundView() {
-  const { t } = useUI();
+  const { t, m } = useUI();
   return h(
     'div',
     {
@@ -50,14 +50,14 @@ export function NotFoundView() {
           textWrap: 'balance',
         },
       },
-      'Page introuvable',
+      m.notFound.title,
     ),
     h(
       'p',
       {
         style: { margin: 0, color: t.muted, fontSize: '15px', lineHeight: 1.55, maxWidth: '40ch' },
       },
-      'Cette page n’existe pas ou a été déplacée. Reviens au catalogue pour explorer les blocks et les primitives.',
+      m.notFound.body,
     ),
     h(
       'div',
@@ -86,7 +86,7 @@ export function NotFoundView() {
             color: t.accentFg,
           },
         },
-        'Accueil',
+        m.notFound.home,
       ),
       h(
         Link,
@@ -105,7 +105,7 @@ export function NotFoundView() {
             border: `1px solid ${t.borderStrong}`,
           },
         },
-        'Catalogue',
+        m.nav.catalogue,
         h(Icon, { name: 'arrow', size: 15 }),
       ),
     ),

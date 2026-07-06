@@ -20,7 +20,7 @@
       "a lifetime or one-off offer card with a benefit list"
     ],
     "examples": [
-      "<PricingSingle eyebrow=\"Offre de lancement\" title=\"Un seul prix, tout compris\" planName=\"Licence à vie\" price=\"199 €\" period=\"paiement unique\" features={['Mises à jour à vie', 'Support par e-mail']} primaryAction={{ label: 'Acheter', href: '/checkout' }} note=\"Garantie 30 jours satisfait ou remboursé\" />"
+      "<PricingSingle eyebrow=\"Launch offer\" title=\"One price, everything included\" planName=\"Lifetime license\" price=\"$199\" period=\"one-time payment\" features={['Lifetime updates', 'Email support']} primaryAction={{ label: 'Buy now', href: '/checkout' }} note=\"30-day money-back guarantee\" />"
     ]
   },
   "dependencies": ["react", "framer-motion"],

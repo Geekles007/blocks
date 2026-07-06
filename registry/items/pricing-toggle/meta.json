@@ -21,7 +21,7 @@
       "a pricing grid whose prices switch between monthly and yearly"
     ],
     "examples": [
-      "<PricingToggle title=\"Payez au mois ou à l'année\" annualHint=\"−20 %\" plans={[{ name: 'Pro', monthlyPrice: '29 €', annualPrice: '24 €', featured: true, features: ['Projets illimités'], action: { label: 'Choisir Pro', href: '/signup' } }]} />"
+      "<PricingToggle title=\"Pay monthly or yearly\" annualHint=\"−20%\" plans={[{ name: 'Pro', monthlyPrice: '$29', annualPrice: '$24', featured: true, features: ['Unlimited projects'], action: { label: 'Choose Pro', href: '/signup' } }]} />"
     ]
   },
   "dependencies": ["react", "framer-motion"],

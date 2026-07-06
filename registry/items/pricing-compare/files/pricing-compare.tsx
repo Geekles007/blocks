@@ -18,9 +18,9 @@ export interface PricingCompareAction {
 
 export interface PricingComparePlan {
   name: string;
-  /** Formatted price (e.g. "29 €"). */
+  /** Formatted price (e.g. "$29"). */
   price: React.ReactNode;
-  /** Muted unit under the price (e.g. "/ mois"). */
+  /** Muted unit under the price (e.g. "/ mo"). */
   period?: React.ReactNode;
   action: PricingCompareAction;
   /** Highlight this plan's column. */
@@ -39,26 +39,25 @@ export interface PricingCompareProps extends Omit<React.HTMLAttributes<HTMLEleme
   subtitle?: React.ReactNode;
   plans: PricingComparePlan[];
   rows: PricingCompareRow[];
-  /** Header label above the feature column (default "Fonctionnalités"). */
+  /** Header label above the feature column (default "Features"). */
   featureLabel?: React.ReactNode;
 }
 
 /**
- * Parti pris : une vraie table sémantique qui met les plans en colonnes et les
- * fonctionnalités en lignes, pour une comparaison scannable d'un coup d'œil. La
- * colonne recommandée est teintée à l'accent ; les cases cochées portent un
- * libellé lisible par lecteur d'écran (« Inclus » / « Non inclus »). En dessous
- * de la largeur disponible, la table défile horizontalement dans son cadre
- * plutôt que de déborder de la page — la première colonne reste collée pour
- * garder le contexte. Le titre de section est un `h2`. Composé sur la primitive
- * ibirdui `button`.
+ * A real semantic table that lays plans out in columns and features in rows, for
+ * a comparison you can scan at a glance. The recommended column is tinted with the
+ * accent; the checked cells carry a screen-reader-readable label ("Included" /
+ * "Not included"). Below the available width, the table scrolls horizontally
+ * inside its frame rather than overflowing the page — the first column stays
+ * stuck to keep the context. The section title is an `h2`. Composed on the ibirdui
+ * `button` primitive.
  */
 export function PricingCompare({
   title,
   subtitle,
   plans,
   rows,
-  featureLabel = 'Fonctionnalités',
+  featureLabel = 'Features',
   className,
   ...rest
 }: PricingCompareProps) {
@@ -97,9 +96,7 @@ export function PricingCompare({
             className="mt-12 overflow-x-auto rounded-2xl border border-border"
           >
             <table className="w-full min-w-[640px] border-collapse text-left">
-              <caption className="sr-only">
-                Comparaison des offres et de leurs fonctionnalités
-              </caption>
+              <caption className="sr-only">Comparison of plans and their features</caption>
               <thead>
                 <tr className="border-border border-b">
                   <th
@@ -167,14 +164,14 @@ function Cell({ value }: { value: boolean | string | undefined }) {
   if (value) {
     return (
       <>
-        <span className="sr-only">Inclus</span>
+        <span className="sr-only">Included</span>
         <CheckIcon />
       </>
     );
   }
   return (
     <>
-      <span className="sr-only">Non inclus</span>
+      <span className="sr-only">Not included</span>
       <span aria-hidden="true" className="inline-block h-px w-3 bg-border align-middle" />
     </>
   );

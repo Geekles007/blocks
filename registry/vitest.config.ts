@@ -45,6 +45,15 @@ export default defineConfig({
       '@/components/blocks/morph-search-panel': blockFile(
         'morph-search-panel/files/morph-search-panel.tsx',
       ),
+      '@/components/blocks/morph-avatar-profile': blockFile(
+        'morph-avatar-profile/files/morph-avatar-profile.tsx',
+      ),
+      '@/components/blocks/morph-product-detail': blockFile(
+        'morph-product-detail/files/morph-product-detail.tsx',
+      ),
+      '@/components/blocks/morph-notification-center': blockFile(
+        'morph-notification-center/files/morph-notification-center.tsx',
+      ),
     },
   },
   esbuild: { jsx: 'automatic' },

@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { type MorphEntry, installVariants, runtimeInstall } from '~/lib/morphing-data';
+import { type MorphEntry, installVariants, morphText, runtimeInstall } from '~/lib/morphing-data';
+import { useUI } from '~/lib/ui-context';
 
 /**
  * Slide-in code panel, implemented as a modal dialog: `role="dialog"` +
@@ -12,6 +13,7 @@ import { type MorphEntry, installVariants, runtimeInstall } from '~/lib/morphing
  * "copied" micro-state.
  */
 export function CodeDrawer({ entry, onClose }: { entry: MorphEntry | null; onClose: () => void }) {
+  const { m, locale } = useUI();
   const [copied, setCopied] = React.useState(false);
   const [copiedCmd, setCopiedCmd] = React.useState<string | null>(null);
   const [pm, setPm] = React.useState('npm');
@@ -129,10 +131,10 @@ export function CodeDrawer({ entry, onClose }: { entry: MorphEntry | null; onClo
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
           <div className="flex min-w-0 flex-col gap-1">
             <span className="font-mono text-[10.5px] tracking-[0.06em] text-primary">
-              REACT · IBIRDUI PRIMITIVES
+              {m.codeDrawer.eyebrow}
             </span>
             <span id={titleId} className="truncate font-semibold text-[14.5px] text-zinc-50">
-              {entry?.title ?? ''}
+              {entry ? morphText(entry, locale).title : ''}
             </span>
           </div>
           <div className="flex flex-none gap-2">
@@ -141,12 +143,12 @@ export function CodeDrawer({ entry, onClose }: { entry: MorphEntry | null; onClo
               onClick={copy}
               className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 font-medium text-xs text-zinc-200 hover:bg-white/10"
             >
-              {copied ? 'Copied ✓' : 'Copy'}
+              {copied ? m.codeDrawer.copied : m.codeDrawer.copy}
             </button>
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close code panel"
+              aria-label={m.codeDrawer.close}
               className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-zinc-400 hover:bg-white/10"
             >
               ✕
@@ -156,18 +158,16 @@ export function CodeDrawer({ entry, onClose }: { entry: MorphEntry | null; onClo
         {variants.length > 0 ? (
           <div className="border-b border-white/10 px-5 py-4">
             <div className="mb-1 font-mono text-[10.5px] uppercase tracking-[0.09em] text-primary">
-              1 · Install the block
+              {m.codeDrawer.step1}
             </div>
             <p className="mb-3 text-[12.5px] leading-relaxed text-zinc-400">
-              One command. The block and every ibirdui primitive it composes are resolved from the
-              registry and copied into your codebase — you own the source, and you never list the
-              primitives by hand.
+              {m.codeDrawer.installBlurb}
             </p>
             {/* Package-manager toggle — the command is the same `ibirdui add`, run through
                 each PM's dlx. */}
             <div
               role="tablist"
-              aria-label="Package manager"
+              aria-label={m.codeDrawer.packageManager}
               className="mb-2 inline-flex gap-1 rounded-lg border border-white/10 bg-white/[0.03] p-1"
             >
               {variants.map((v) => (
@@ -193,16 +193,16 @@ export function CodeDrawer({ entry, onClose }: { entry: MorphEntry | null; onClo
               <button
                 type="button"
                 onClick={() => copyCmd(activeCmd)}
-                aria-label={`Copy: ${activeCmd}`}
+                aria-label={m.codeDrawer.copyCmd(activeCmd)}
                 className="flex-none rounded-md border border-white/15 bg-white/5 px-2.5 py-1 font-medium text-[11px] text-zinc-200 hover:bg-white/10"
               >
-                {copiedCmd === activeCmd ? 'Copied ✓' : 'Copy'}
+                {copiedCmd === activeCmd ? m.codeDrawer.copied : m.codeDrawer.copy}
               </button>
             </div>
             {runtime ? (
               <div className="mt-4">
                 <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.08em] text-zinc-500">
-                  Then the animation runtime
+                  {m.codeDrawer.runtimeLabel}
                 </div>
                 <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] py-2 pr-2 pl-3">
                   <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[12px] text-zinc-200">
@@ -212,10 +212,10 @@ export function CodeDrawer({ entry, onClose }: { entry: MorphEntry | null; onClo
                   <button
                     type="button"
                     onClick={() => copyCmd(runtime)}
-                    aria-label={`Copy: ${runtime}`}
+                    aria-label={m.codeDrawer.copyCmd(runtime)}
                     className="flex-none rounded-md border border-white/15 bg-white/5 px-2.5 py-1 font-medium text-[11px] text-zinc-200 hover:bg-white/10"
                   >
-                    {copiedCmd === runtime ? 'Copied ✓' : 'Copy'}
+                    {copiedCmd === runtime ? m.codeDrawer.copied : m.codeDrawer.copy}
                   </button>
                 </div>
               </div>
@@ -224,11 +224,11 @@ export function CodeDrawer({ entry, onClose }: { entry: MorphEntry | null; onClo
         ) : null}
         {variants.length > 0 ? (
           <div className="px-5 pt-4 font-mono text-[10.5px] uppercase tracking-[0.09em] text-primary">
-            2 · The source, for reference
+            {m.codeDrawer.step2}
           </div>
         ) : null}
         <pre
-          aria-label="Source code"
+          aria-label={m.codeDrawer.sourceLabel}
           className="m-0 min-h-0 flex-1 overflow-auto p-5 font-mono text-[12.5px] leading-[1.75] text-zinc-300"
         >
           {entry?.code ?? ''}

@@ -1,6 +1,7 @@
 'use client';
 
 import { h } from '~/lib/h';
+import type { Messages } from '~/lib/i18n';
 import { Reveal } from '~/lib/motion';
 import type { Tok } from '~/lib/tokens';
 import { useUI } from '~/lib/ui-context';
@@ -18,14 +19,19 @@ const KIND_COLOR: Record<Kind, string> = {
   Retrait: '#f43f5e',
 };
 
+/** A string in both locales. */
+interface LS {
+  en: string;
+  fr: string;
+}
 interface Change {
   kind: Kind;
-  text: string;
+  text: LS;
 }
 interface Release {
-  date: string; // ISO, drives the displayed French date
+  date: string; // ISO, drives the displayed localized date
   tag: string; // short version label
-  title: string;
+  title: LS;
   changes: Change[];
 }
 
@@ -34,110 +40,154 @@ const RELEASES: Release[] = [
   {
     date: '2026-07-04',
     tag: 'v0.4',
-    title: 'Morphing & prise en main',
+    title: { en: 'Morphing & onboarding', fr: 'Morphing & prise en main' },
     changes: [
       {
         kind: 'Ajout',
-        text: 'Deux blocks Morphing installables : morph-button-card et morph-search-panel, avec tests d’accessibilité.',
+        text: {
+          en: 'Two installable Morphing blocks: morph-button-card and morph-search-panel, with accessibility tests.',
+          fr: 'Deux blocks Morphing installables : morph-button-card et morph-search-panel, avec tests d’accessibilité.',
+        },
       },
       {
         kind: 'Ajout',
-        text: 'Page Prise en main (guide d’installation) et entrée « Guide » dans la navigation.',
+        text: {
+          en: 'Getting-started page (install guide) and a “Guide” entry in the navigation.',
+          fr: 'Page Prise en main (guide d’installation) et entrée « Guide » dans la navigation.',
+        },
       },
-      { kind: 'Ajout', text: 'Catégorie Morphing dans le catalogue.' },
-      { kind: 'Amélioration', text: 'Vitrine Morphing enrichie et accessibilité corrigée.' },
+      {
+        kind: 'Ajout',
+        text: {
+          en: 'Morphing category in the catalogue.',
+          fr: 'Catégorie Morphing dans le catalogue.',
+        },
+      },
       {
         kind: 'Amélioration',
-        text: 'Logo de marque blocks et catalogue resserré sur les blocks livrés.',
+        text: {
+          en: 'Richer Morphing showcase and fixed accessibility.',
+          fr: 'Vitrine Morphing enrichie et accessibilité corrigée.',
+        },
       },
-      { kind: 'Correctif', text: 'Favicon visible sur tous les onglets de navigateur.' },
+      {
+        kind: 'Amélioration',
+        text: {
+          en: 'blocks brand logo and catalogue tightened to shipped blocks.',
+          fr: 'Logo de marque blocks et catalogue resserré sur les blocks livrés.',
+        },
+      },
+      {
+        kind: 'Correctif',
+        text: {
+          en: 'Favicon visible across all browser tabs.',
+          fr: 'Favicon visible sur tous les onglets de navigateur.',
+        },
+      },
     ],
   },
   {
     date: '2026-07-03',
     tag: 'v0.3',
-    title: 'Blocks & vitrine Morphing',
+    title: { en: 'Blocks & Morphing showcase', fr: 'Blocks & vitrine Morphing' },
     changes: [
-      { kind: 'Ajout', text: 'Famille Hero : hero, hero-terminal, hero-fintech, hero-agency.' },
       {
         kind: 'Ajout',
-        text: 'Famille Pricing : pricing, pricing-toggle, pricing-single, pricing-compare.',
+        text: {
+          en: 'Hero family: hero, hero-terminal, hero-fintech, hero-agency.',
+          fr: 'Famille Hero : hero, hero-terminal, hero-fintech, hero-agency.',
+        },
       },
       {
         kind: 'Ajout',
-        text: 'Vitrine Morphing : des transitions shared-element expliquées et démontrées en direct.',
+        text: {
+          en: 'Pricing family: pricing, pricing-toggle, pricing-single, pricing-compare.',
+          fr: 'Famille Pricing : pricing, pricing-toggle, pricing-single, pricing-compare.',
+        },
+      },
+      {
+        kind: 'Ajout',
+        text: {
+          en: 'Morphing showcase: shared-element transitions explained and demonstrated live.',
+          fr: 'Vitrine Morphing : des transitions shared-element expliquées et démontrées en direct.',
+        },
       },
       {
         kind: 'Retrait',
-        text: 'Catalogue de primitives et nav Docs retirés — recentrage sur les blocks.',
+        text: {
+          en: 'Primitives catalogue and Docs nav removed — refocused on blocks.',
+          fr: 'Catalogue de primitives et nav Docs retirés — recentrage sur les blocks.',
+        },
       },
     ],
   },
   {
     date: '2026-07-02',
     tag: 'v0.2',
-    title: 'Accent lime',
+    title: { en: 'Lime accent', fr: 'Accent lime' },
     changes: [
       {
         kind: 'Amélioration',
-        text: 'Bascule de l’accent du site de l’indigo vers le lime ibirdui, aligné sur le thème des primitives.',
+        text: {
+          en: 'Switched the site accent from indigo to the ibirdui lime, aligned with the primitives’ theme.',
+          fr: 'Bascule de l’accent du site de l’indigo vers le lime ibirdui, aligné sur le thème des primitives.',
+        },
       },
     ],
   },
   {
     date: '2026-07-01',
     tag: 'v0.1',
-    title: 'Fondations',
+    title: { en: 'Foundations', fr: 'Fondations' },
     changes: [
       {
         kind: 'Ajout',
-        text: 'Portage des blocks depuis le monorepo ibirdui, en registry-as-code.',
+        text: {
+          en: 'Ported the blocks from the ibirdui monorepo, as registry-as-code.',
+          fr: 'Portage des blocks depuis le monorepo ibirdui, en registry-as-code.',
+        },
       },
-      { kind: 'Ajout', text: 'Catalogue de primitives Foundation exposé sur /primitives.' },
+      {
+        kind: 'Ajout',
+        text: {
+          en: 'Foundation primitives catalogue exposed at /primitives.',
+          fr: 'Catalogue de primitives Foundation exposé sur /primitives.',
+        },
+      },
       {
         kind: 'Infra',
-        text: 'Workflow GitHub Actions de déploiement FTP (lftp/FTPS, réutilisation de session TLS).',
+        text: {
+          en: 'GitHub Actions FTP deploy workflow (lftp/FTPS, TLS session reuse).',
+          fr: 'Workflow GitHub Actions de déploiement FTP (lftp/FTPS, réutilisation de session TLS).',
+        },
       },
       {
         kind: 'Correctif',
-        text: 'Les sources de primitives externes ne sont plus type-checkées dans ce repo.',
+        text: {
+          en: 'External primitive sources are no longer type-checked in this repo.',
+          fr: 'Les sources de primitives externes ne sont plus type-checkées dans ce repo.',
+        },
       },
     ],
   },
   {
     date: '2026-06-29',
     tag: 'v0.0',
-    title: 'Genèse',
+    title: { en: 'Genesis', fr: 'Genèse' },
     changes: [
       {
         kind: 'Ajout',
-        text: 'Scaffold du monorepo blocks (registry-as-code) : registry, www, CI.',
+        text: {
+          en: 'Scaffolded the blocks monorepo (registry-as-code): registry, www, CI.',
+          fr: 'Scaffold du monorepo blocks (registry-as-code) : registry, www, CI.',
+        },
       },
     ],
   },
 ];
 
-const MONTHS = [
-  'janvier',
-  'février',
-  'mars',
-  'avril',
-  'mai',
-  'juin',
-  'juillet',
-  'août',
-  'septembre',
-  'octobre',
-  'novembre',
-  'décembre',
-];
-function frDate(iso: string): string {
-  const [y, m, d] = iso.split('-').map(Number);
-  return `${d} ${MONTHS[(m ?? 1) - 1]} ${y}`;
-}
-
 /** A category chip: coloured dot + label, tinted to the change kind. */
-function KindChip({ t, kind }: { t: Tok; kind: Kind }) {
+function KindChip({ t, m, kind }: { t: Tok; m: Messages; kind: Kind }) {
   const c = KIND_COLOR[kind];
   return h(
     'span',
@@ -157,12 +207,16 @@ function KindChip({ t, kind }: { t: Tok; kind: Kind }) {
       },
     },
     h('span', { style: { width: '6px', height: '6px', borderRadius: '50%', background: c } }),
-    kind,
+    m.changelog.kinds[kind],
   );
 }
 
 export function Changelog() {
-  const { t, reduced } = useUI();
+  const { t, m, locale, reduced } = useUI();
+  const fmtDate = (iso: string) => {
+    const [y, mo, d] = iso.split('-').map(Number);
+    return m.changelog.formatDate(d ?? 1, m.changelog.months[(mo ?? 1) - 1] ?? '', y ?? 0);
+  };
 
   return h(
     PageContainer,
@@ -172,17 +226,16 @@ export function Changelog() {
     h(PageHeader, {
       t,
       reduced,
-      kicker: 'Changelog',
-      title: 'Ce qui a changé',
-      subtitle:
-        'Chaque livraison de blocks, amélioration et correctif — la plus récente en premier. Les blocks sont versionnés individuellement dans le registry ; cette page suit l’évolution du catalogue.',
+      kicker: m.changelog.kicker,
+      title: m.changelog.title,
+      subtitle: m.changelog.subtitle,
     }),
 
     // ── Legend ────────────────────────────────────────────────────────────
     h(
       'div',
       { style: { display: 'flex', flexWrap: 'wrap', gap: '8px', margin: '22px 0 6px' } },
-      ...(Object.keys(KIND_COLOR) as Kind[]).map((k) => h(KindChip, { key: k, t, kind: k })),
+      ...(Object.keys(KIND_COLOR) as Kind[]).map((k) => h(KindChip, { key: k, t, m, kind: k })),
     ),
 
     // ── Timeline ──────────────────────────────────────────────────────────
@@ -225,7 +278,7 @@ export function Changelog() {
             h(
               'span',
               { style: { font: "650 12px 'Geist Mono',monospace", color: t.faint } },
-              frDate(r.date),
+              fmtDate(r.date),
             ),
             h(Badge, { t, tone: i === 0 ? 'accent' : 'neutral' }, r.tag),
           ),
@@ -239,7 +292,7 @@ export function Changelog() {
                 color: t.text,
               },
             },
-            r.title,
+            r.title[locale],
           ),
           // Change list
           h(
@@ -260,11 +313,11 @@ export function Changelog() {
                     padding: '11px 13px',
                   },
                 },
-                h(KindChip, { t, kind: c.kind }),
+                h(KindChip, { t, m, kind: c.kind }),
                 h(
                   'span',
                   { style: { color: t.muted, fontSize: '14px', lineHeight: 1.55 } },
-                  c.text,
+                  c.text[locale],
                 ),
               ),
             ),
@@ -286,7 +339,7 @@ export function Changelog() {
           lineHeight: 1.6,
         },
       },
-      'Les blocks sont versionnés individuellement : les numéros détaillés vivent dans chaque meta.json du registry.',
+      m.changelog.footnote,
     ),
   );
 }

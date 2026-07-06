@@ -1,5 +1,6 @@
 'use client';
 
+import { Avatar } from '@/components/avatar';
 import { Badge, type BadgeVariant } from '@/components/badge';
 import { Button } from '@/components/button';
 import { Card } from '@/components/card';
@@ -35,6 +36,9 @@ export interface MorphDemoProps {
 export const MORPH_DEMOS: Record<string, React.ComponentType<MorphDemoProps>> = {
   '01': UpgradeCard,
   '02': SearchPanel,
+  '03': ProfileCard,
+  '04': ProductDetail,
+  '05': NotificationCenter,
 };
 
 // Card container: fades as a whole and orchestrates its children — staggered
@@ -442,5 +446,704 @@ function SearchPanel({ expanded: open, onToggle }: MorphDemoProps) {
         </AnimatePresence>
       </motion.div>
     </MotionConfig>
+  );
+}
+
+// ── 03 · Avatar → Profile Card ──────────────────────────────────────────────
+// Built with the ibirdui Avatar, Card, Badge, Button and Separator, animated via
+// block-motion (MotionProvider + layout spring) so it honours prefers-reduced-
+// motion. The collapsed Avatar and the expanded Card each mount/unmount through
+// AnimatePresence (real enter + exit); the card's sections stagger in on open.
+const MotionCardBlock = motion.create(Card) as typeof motion.div;
+
+// No src, so Avatar renders its initials fallback ("AL") — offline and stable.
+const PERSON = {
+  name: 'Ada Lovelace',
+  role: 'Design Engineer',
+  handle: '@ada',
+  bio: 'Building the morphing block collection. Occasional poet of analytical engines.',
+  stats: [
+    { label: 'Followers', value: '1.2k' },
+    { label: 'Following', value: '312' },
+    { label: 'Projects', value: '48' },
+  ],
+} as const;
+
+// The avatar is 52px collapsed and 56px in the card header — scaling the single
+// element up rather than swapping in a bigger one keeps it continuous.
+const AVATAR = 52;
+const AVATAR_OPEN_SCALE = 56 / AVATAR;
+// Card padding (p-5 = 20px): where the travelling avatar comes to rest, matching
+// the header's reserved slot.
+const CARD_PAD = 20;
+
+function CloseIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
+/**
+ * 03 · Avatar → Profile Card. The collapsed state is the ibirdui Avatar as a
+ * profile trigger; on open it morphs into a profile card — the name + role, a Pro
+ * Badge, a bio, a Separator-split stats row and a Follow/Message Button pair. The
+ * avatar itself is a *single, persistent* element that travels and scales from
+ * the collapsed circle into its slot in the card header (shared-element style, no
+ * crossfade); the surface springs between the two sizes and the card's sections
+ * stagger in around it.
+ */
+function ProfileCard({ expanded: open, onToggle }: MorphDemoProps) {
+  return (
+    <MotionProvider>
+      <motion.div
+        className="relative"
+        initial={false}
+        animate={{ width: open ? 336 : 52, height: open ? 316 : 52 }}
+        transition={springs.layout}
+      >
+        {/* open — the profile card, mounted only while expanded (real enter + exit).
+            Its header leaves a spacer where the travelling avatar comes to rest. */}
+        <AnimatePresence initial={false}>
+          {open && (
+            <MotionCardBlock
+              key="card"
+              variants={cardReveal}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              style={{ borderRadius: 22, boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.1)' }}
+              className="absolute inset-0 flex flex-col overflow-hidden p-5"
+            >
+              {/* header — a spacer reserves the avatar's slot + a labelled close */}
+              <motion.div variants={item} className="flex items-start gap-3.5">
+                <div className="h-14 w-14 flex-none" aria-hidden="true" />
+                <div className="min-w-0 flex-1 pt-0.5">
+                  {/* A div, not a heading: it must not force a heading level onto
+                      the page (the section already owns the h3). */}
+                  <div className="flex items-center gap-2">
+                    <span className="truncate font-semibold text-[16px] tracking-tight text-foreground">
+                      {PERSON.name}
+                    </span>
+                    <Badge style={{ padding: '2px 8px', fontSize: '11px' }}>Pro</Badge>
+                  </div>
+                  <div className="mt-0.5 text-[13px] text-muted-foreground">
+                    {PERSON.role} · {PERSON.handle}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={onToggle}
+                  aria-label="Close profile"
+                  className="-mr-1 -mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-full text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <CloseIcon />
+                </button>
+              </motion.div>
+
+              <motion.p
+                variants={item}
+                className="mt-3.5 text-[13.5px] leading-relaxed text-foreground/70"
+              >
+                {PERSON.bio}
+              </motion.p>
+
+              <motion.div variants={item} className="mt-4">
+                <Separator />
+              </motion.div>
+
+              {/* stats — three columns that cascade in */}
+              <motion.div variants={listReveal} className="mt-4 flex items-stretch">
+                {PERSON.stats.map((s, i) => (
+                  <React.Fragment key={s.label}>
+                    {i > 0 && <Separator orientation="vertical" className="mx-1" />}
+                    <motion.div variants={item} className="flex flex-1 flex-col items-center">
+                      <span className="font-semibold text-[16px] tracking-tight text-foreground">
+                        {s.value}
+                      </span>
+                      <span className="mt-0.5 text-[11.5px] text-muted-foreground">{s.label}</span>
+                    </motion.div>
+                  </React.Fragment>
+                ))}
+              </motion.div>
+
+              {/* actions — Follow (primary) + Message (secondary) */}
+              <motion.div variants={item} className="mt-auto flex gap-2 pt-4">
+                <Button className="flex-1">Follow</Button>
+                <Button variant="secondary" className="flex-1">
+                  Message
+                </Button>
+              </motion.div>
+            </MotionCardBlock>
+          )}
+        </AnimatePresence>
+
+        {/* The single, persistent Avatar. Because it never unmounts, it *travels*
+            and scales between the collapsed circle (x/y 0, scale 1) and its header
+            slot (x/y = card padding, scale 56/52) on the same layout spring — no
+            crossfade. Collapsed it's the interactive trigger; open it's decorative
+            (the card's close control + text take over), so it's disabled + hidden
+            from assistive tech to stay out of the tab order and a11y tree. */}
+        <motion.button
+          type="button"
+          onClick={open ? undefined : onToggle}
+          disabled={open}
+          tabIndex={open ? -1 : 0}
+          aria-hidden={open || undefined}
+          aria-label={open ? undefined : `View ${PERSON.name}'s profile`}
+          aria-expanded={open}
+          className="absolute top-0 left-0 z-20 inline-flex p-0 rounded-full outline-none ring-offset-2 ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+          style={{ transformOrigin: 'top left', pointerEvents: open ? 'none' : 'auto' }}
+          initial={false}
+          animate={{
+            x: open ? CARD_PAD : 0,
+            y: open ? CARD_PAD : 0,
+            scale: open ? AVATAR_OPEN_SCALE : 1,
+            // A lime glow that fades out as the avatar settles into the card.
+            boxShadow: open
+              ? '0 10px 25px -5px rgba(163, 230, 53, 0)'
+              : '0 10px 25px -5px rgba(163, 230, 53, 0.45)',
+          }}
+          transition={springs.layout}
+        >
+          <Avatar
+            name={PERSON.name}
+            size={AVATAR}
+            aria-hidden="true"
+            className="bg-primary/15 font-semibold text-primary"
+          />
+        </motion.button>
+      </motion.div>
+    </MotionProvider>
+  );
+}
+
+// ── 04 · Product Card → Product Detail ──────────────────────────────────────
+// Built with the ibirdui Card, Button, Badge and Separator, animated via
+// block-motion (MotionProvider + layout spring) so it honours prefers-reduced-
+// motion. The product image is a single persistent element that resizes from a
+// 56px thumbnail into a full-width hero (shared-element style, no crossfade); the
+// preview text swaps through AnimatePresence and the detail sections stagger in.
+const PRODUCT = {
+  name: 'Trailblazer Runner',
+  price: '$129',
+  rating: '4.8',
+  reviews: '128',
+  description:
+    'A featherweight trail shoe with a responsive foam midsole and a grippy all-terrain outsole. Built to go the distance.',
+  sizes: [{ label: '40' }, { label: '41', active: true }, { label: '42' }, { label: '43' }] as {
+    label: string;
+    active?: boolean;
+  }[],
+};
+
+// 56px square thumbnail collapsed → full-width hero open, anchored at the p-4 pad.
+const IMG = 56;
+const IMG_OPEN_W = 308; // container 340 − 2×16 padding
+const IMG_OPEN_H = 140;
+const PROD_PAD = 16;
+const prodChipStyle = { padding: '5px 12px', fontSize: '12.5px' } as const;
+
+function StarIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[14px] w-[14px] text-primary"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12 2.5l2.9 5.9 6.5.95-4.7 4.58 1.11 6.47L12 17.9l-5.81 3.06 1.11-6.47-4.7-4.58 6.5-.95z" />
+    </svg>
+  );
+}
+
+function HeartIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[18px] w-[18px]"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1 7.8 7.8 7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z" />
+    </svg>
+  );
+}
+
+function BagIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-full w-full"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.7}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+      <path d="M3 6h18" />
+      <path d="M16 10a4 4 0 0 1-8 0" />
+    </svg>
+  );
+}
+
+/**
+ * 04 · Product Card → Product Detail. The collapsed state is a compact product
+ * preview (thumbnail + name + price) that is itself the trigger; on open it
+ * morphs into a full detail page — hero image, name + rating, price, description,
+ * a row of Badge size chips and an Add-to-cart Button. The product image is a
+ * single persistent element that resizes from the thumbnail into the hero (no
+ * crossfade); the surface springs between the two sizes and the sections stagger.
+ */
+function ProductDetail({ expanded: open, onToggle }: MorphDemoProps) {
+  return (
+    <MotionProvider>
+      <motion.div
+        className="relative"
+        initial={false}
+        animate={{ width: open ? 340 : 244, height: open ? 424 : 88 }}
+        transition={springs.layout}
+      >
+        {/* collapsed — the product preview card, and the trigger */}
+        <AnimatePresence initial={false}>
+          {!open && (
+            <motion.button
+              key="closed"
+              type="button"
+              onClick={onToggle}
+              aria-label={`View ${PRODUCT.name} details`}
+              aria-expanded={open}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="absolute inset-0 flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left shadow-lg shadow-black/5 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <div className="h-14 w-14 flex-none" aria-hidden="true" />
+              <div className="min-w-0 flex-1">
+                <div className="truncate font-semibold text-[14.5px] text-foreground">
+                  {PRODUCT.name}
+                </div>
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="font-semibold text-[13px] text-primary">{PRODUCT.price}</span>
+                  <Badge style={{ padding: '2px 8px', fontSize: '10.5px' }}>New</Badge>
+                </div>
+              </div>
+            </motion.button>
+          )}
+        </AnimatePresence>
+
+        {/* open — the product-detail card (top spacer = where the hero grows in) */}
+        <AnimatePresence initial={false}>
+          {open && (
+            <MotionCardBlock
+              key="card"
+              variants={cardReveal}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              style={{ borderRadius: 20, boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.1)' }}
+              className="absolute inset-0 flex flex-col overflow-hidden p-4"
+            >
+              <div className="h-[140px] flex-none" aria-hidden="true" />
+
+              {/* name + rating, price on the right */}
+              <motion.div variants={item} className="mt-4 flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  {/* A div, not a heading: it must not force a heading level onto
+                      the page (the section already owns the h3). */}
+                  <div className="truncate font-semibold text-[16px] tracking-tight text-foreground">
+                    {PRODUCT.name}
+                  </div>
+                  <div className="mt-1 flex items-center gap-1.5 text-[12.5px] text-muted-foreground">
+                    <StarIcon />
+                    <span className="font-medium text-foreground">{PRODUCT.rating}</span>
+                    <span>· {PRODUCT.reviews} reviews</span>
+                  </div>
+                </div>
+                <div className="flex-none font-semibold text-[17px] tracking-tight text-foreground">
+                  {PRODUCT.price}
+                </div>
+              </motion.div>
+
+              <motion.p
+                variants={item}
+                className="mt-3 text-[13px] leading-relaxed text-foreground/70"
+              >
+                {PRODUCT.description}
+              </motion.p>
+
+              {/* size chips — the active one isn't colour-only: aria-current + label */}
+              <motion.div variants={item} className="mt-4">
+                <div className="font-mono text-[10.5px] text-muted-foreground uppercase tracking-[0.09em]">
+                  Size
+                </div>
+                <div role="group" aria-label="Size" className="mt-2 flex gap-2">
+                  {PRODUCT.sizes.map((s) => {
+                    const variant: BadgeVariant = s.active ? 'default' : 'secondary';
+                    return (
+                      <Badge
+                        key={s.label}
+                        variant={variant}
+                        style={prodChipStyle}
+                        aria-current={s.active || undefined}
+                      >
+                        {s.label}
+                        {s.active && <span className="sr-only"> (selected)</span>}
+                      </Badge>
+                    );
+                  })}
+                </div>
+              </motion.div>
+
+              {/* actions — a Separator rules off the Add-to-cart row */}
+              <motion.div variants={item} className="mt-auto pt-4">
+                <Separator />
+                <div className="mt-4 flex gap-2">
+                  <Button className="flex-1">Add to cart</Button>
+                  <Button variant="outline" size="icon" aria-label="Save to wishlist">
+                    <HeartIcon />
+                  </Button>
+                </div>
+              </motion.div>
+
+              {/* close — floats over the hero, above the image (z-20) */}
+              <motion.button
+                variants={item}
+                type="button"
+                onClick={onToggle}
+                aria-label="Close product details"
+                className="absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-card/80 text-foreground shadow-sm outline-none backdrop-blur hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <CloseIcon />
+              </motion.button>
+            </MotionCardBlock>
+          )}
+        </AnimatePresence>
+
+        {/* The single, persistent product image — resizes from thumbnail to hero
+            on the same layout spring, no crossfade. Decorative + non-interactive. */}
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-4 left-4 z-10 flex items-center justify-center overflow-hidden bg-primary/10 bg-gradient-to-br from-primary/30 to-transparent"
+          initial={false}
+          animate={{
+            width: open ? IMG_OPEN_W : IMG,
+            height: open ? IMG_OPEN_H : IMG,
+            borderRadius: open ? 14 : 12,
+          }}
+          style={{ left: PROD_PAD, top: PROD_PAD }}
+          transition={springs.layout}
+        >
+          <motion.div
+            className="text-primary/45"
+            initial={false}
+            animate={{ width: open ? 44 : 26, height: open ? 44 : 26 }}
+            transition={springs.layout}
+          >
+            <BagIcon />
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </MotionProvider>
+  );
+}
+
+// ── 05 · Notification Dot → Center ──────────────────────────────────────────
+// Built with the ibirdui Button, Badge and Card, animated via block-motion. The
+// bell Button and the drawer Card swap through AnimatePresence (real enter +
+// exit); the drawer's header, notification rows and footer stagger in on open.
+type Tile = 'mc' | 'check' | 'warning' | 'dollar';
+interface Note {
+  id: string;
+  tile: Tile;
+  /** Optional bold lead (a name), rendered before the regular-weight title. */
+  lead?: string;
+  title: string;
+  meta: string;
+  unread?: boolean;
+  /** The one row that carries the highlight surface (the latest unread). */
+  highlighted?: boolean;
+}
+const NOTES: Note[] = [
+  {
+    id: 'mira',
+    tile: 'mc',
+    lead: 'Mira Chen',
+    title: 'assigned you a task',
+    meta: 'Design review · 2m ago',
+    unread: true,
+    highlighted: true,
+  },
+  {
+    id: 'deploy',
+    tile: 'check',
+    title: 'Deploy to production succeeded',
+    meta: 'CI/CD · 18m ago',
+    unread: true,
+  },
+  {
+    id: 'storage',
+    tile: 'warning',
+    title: 'Storage nearing 80% of limit',
+    meta: 'Billing · 1h ago',
+    unread: true,
+  },
+  { id: 'payout', tile: 'dollar', title: 'You received a $240 payout', meta: 'Payments · 3h ago' },
+];
+const NEW = NOTES.filter((n) => n.unread).length;
+
+// Each notification kind gets a tinted tile using a semantic theme token, so the
+// whole thing re-themes with the host palette.
+const TILE: Record<Tile, string> = {
+  mc: 'bg-primary text-primary-foreground',
+  check: 'bg-muted text-foreground/80',
+  warning: 'bg-warning/15 text-warning',
+  dollar: 'bg-success/15 text-success',
+};
+
+// Inline styles override the Badge's own classes reliably (it joins classNames
+// without tailwind-merge).
+const countStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: -2,
+  right: -2,
+  height: 20,
+  minWidth: 20,
+  padding: '0 5px',
+  borderRadius: 999,
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '11px',
+  fontVariantNumeric: 'tabular-nums',
+};
+
+function TileIcon({ tile }: { tile: Tile }) {
+  if (tile === 'mc') return <>MC</>;
+  if (tile === 'check') {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        className="h-[18px] w-[18px]"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2.4}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M20 6L9 17l-5-5" />
+      </svg>
+    );
+  }
+  if (tile === 'warning') {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        className="h-[18px] w-[18px]"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 8v4.5" />
+        <path d="M12 16h.01" />
+      </svg>
+    );
+  }
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[18px] w-[18px]"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="12" y1="1.5" x2="12" y2="22.5" />
+      <path d="M17 5.5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    </svg>
+  );
+}
+
+function BellIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </svg>
+  );
+}
+
+/**
+ * 05 · Notification Dot → Center. The collapsed state is the ibirdui Button (bell)
+ * with an unread-count Badge; on open it morphs into a notification centre — a
+ * header (bell doubling as the close control, title, filled unread pill), a list
+ * of rows with tinted semantic icon tiles (the latest unread highlighted) and a
+ * centred Mark-all-as-read link. The surface springs between the two sizes and
+ * the drawer's sections stagger in.
+ */
+function NotificationCenter({ expanded: open, onToggle }: MorphDemoProps) {
+  return (
+    <MotionProvider>
+      <motion.div
+        className="relative"
+        initial={false}
+        animate={{ width: open ? 380 : 52, height: open ? 428 : 52 }}
+        transition={springs.layout}
+      >
+        {/* closed — the bell Button + an unread-count Badge, the trigger */}
+        <AnimatePresence initial={false}>
+          {!open && (
+            <motion.div
+              key="closed"
+              className="absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+            >
+              <Button
+                onClick={onToggle}
+                size="icon"
+                aria-expanded={open}
+                aria-label={`Open notifications (${NEW} unread)`}
+                className="h-full w-full rounded-full shadow-lg shadow-primary/40"
+              >
+                <BellIcon className="h-[21px] w-[21px]" />
+              </Button>
+              <Badge variant="destructive" aria-hidden="true" style={countStyle}>
+                {NEW}
+              </Badge>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* open — the notification centre */}
+        <AnimatePresence initial={false}>
+          {open && (
+            <MotionCardBlock
+              key="card"
+              variants={cardReveal}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              style={{ borderRadius: 22, boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.1)' }}
+              className="absolute inset-0 flex flex-col overflow-hidden"
+            >
+              {/* header — the bell (also the close control) + title + "N new" pill */}
+              <motion.div
+                variants={item}
+                className="flex items-center justify-between px-5 pt-5 pb-3"
+              >
+                <div className="flex items-center gap-2.5">
+                  <button
+                    type="button"
+                    onClick={onToggle}
+                    aria-label="Close notifications"
+                    className="relative flex-none rounded-full text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <BellIcon className="h-[18px] w-[18px]" />
+                    <span
+                      aria-hidden="true"
+                      className="absolute -top-1.5 -right-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-destructive px-1 font-semibold text-[10px] text-destructive-foreground"
+                    >
+                      {NEW}
+                    </span>
+                  </button>
+                  {/* A div, not a heading: it must not force a heading level onto
+                      the page (the section already owns the h3). */}
+                  <div className="font-semibold text-[16px] tracking-tight text-foreground">
+                    Notifications
+                  </div>
+                </div>
+                <Badge style={{ borderRadius: 999, padding: '3px 11px', fontSize: '12px' }}>
+                  {NEW} new
+                </Badge>
+              </motion.div>
+
+              {/* list — custom rows with tinted icon tiles, latest unread highlighted */}
+              <motion.div
+                variants={listReveal}
+                className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-auto px-3"
+              >
+                {NOTES.map((n) => (
+                  <motion.div
+                    key={n.id}
+                    variants={item}
+                    className={cx(
+                      'flex items-center gap-3 rounded-2xl px-3 py-2.5',
+                      n.highlighted && 'bg-primary/[0.07]',
+                    )}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={cx(
+                        'flex h-10 w-10 flex-none items-center justify-center rounded-xl font-semibold text-[13px]',
+                        TILE[n.tile],
+                      )}
+                    >
+                      <TileIcon tile={n.tile} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[13.5px] text-foreground">
+                        {n.lead ? (
+                          <>
+                            <span className="font-semibold">{n.lead}</span>{' '}
+                            <span className="text-foreground/80">{n.title}</span>
+                          </>
+                        ) : (
+                          <span className="font-semibold">{n.title}</span>
+                        )}
+                        {n.unread && <span className="sr-only"> (unread)</span>}
+                      </div>
+                      <div className="mt-0.5 text-[12px] text-muted-foreground">{n.meta}</div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* footer — a centred "Mark all as read" link */}
+              <motion.div variants={item} className="px-3 pt-2 pb-4">
+                <Button variant="link" className="w-full bg-transparent">
+                  Mark all as read
+                </Button>
+              </motion.div>
+            </MotionCardBlock>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </MotionProvider>
   );
 }
