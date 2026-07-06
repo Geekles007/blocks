@@ -61,6 +61,9 @@ export default defineConfig({
       '@/components/blocks/morph-calendar-event': blockFile(
         'morph-calendar-event/files/morph-calendar-event.tsx',
       ),
+      '@/components/blocks/morph-message-conversation': blockFile(
+        'morph-message-conversation/files/morph-message-conversation.tsx',
+      ),
     },
   },
   esbuild: { jsx: 'automatic' },

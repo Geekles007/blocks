@@ -1,0 +1,43 @@
+{
+  "name": "morph-message-conversation",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A chat preview that morphs into a full conversation: the surface springs between the preview row and the messaging panel while the preview trigger and the Card swap through AnimatePresence — both get real enter and exit. Inside, a header (Avatar, name, online status and a labelled close), a scrolling log of incoming and outgoing message bubbles that pop in, and an Input + round send Button composer stagger in on open and reverse-stagger out on close. Built on framer-motion via block-motion, so the whole morph collapses to a plain crossfade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The collapsed preview is a single labelled toggle (\"Open conversation with … , N unread\" + aria-expanded); the expanded card carries a labelled close control, so both states are keyboard- and screen-reader-reachable",
+      "The contact name renders as plain text (not a heading) so it never forces a heading level onto the host page; the messages sit in a role=log region labelled with the contact",
+      "Each bubble carries a visually-hidden sender prefix so incoming vs outgoing never relies on colour or side alone; the avatar, unread pill and status dot are decorative and aria-hidden",
+      "The composer Input and send Button are labelled; the size/stagger morph respects prefers-reduced-motion via MotionProvider, collapsing to a plain crossfade"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a chat preview that expands into a full conversation or messaging panel",
+      "a morph from a message preview to a chat thread with a composer",
+      "an animated messaging interface built on ibirdui"
+    ],
+    "examples": ["<MorphMessageConversation />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/avatar.json",
+    "https://ui.ibird.dev/r/input.json",
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/separator.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/morph-message-conversation.tsx",
+      "path": "components/blocks/morph-message-conversation.tsx",
+      "type": "component"
+    }
+  ]
+}

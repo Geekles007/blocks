@@ -42,6 +42,7 @@ export const MORPH_DEMOS: Record<string, React.ComponentType<MorphDemoProps>> = 
   '06': ActionMenu,
   '07': KpiDashboard,
   '08': CalendarEvent,
+  '09': MessageConversation,
 };
 
 // Card container: fades as a whole and orchestrates its children — staggered
@@ -1825,6 +1826,214 @@ function CalendarEvent({ expanded: open, onToggle }: MorphDemoProps) {
             transition={springs.layout}
           />
         </motion.button>
+      </motion.div>
+    </MotionProvider>
+  );
+}
+
+// ── 09 · Message Bubble → Conversation ──────────────────────────────────────
+// Built with the ibirdui Card, Avatar, Input, Button, Badge and Separator,
+// animated via block-motion. The chat preview and the conversation Card swap
+// through AnimatePresence (real enter + exit); the header, message log and
+// composer stagger in on open, and each bubble pops in from its own side.
+const CHAT_PERSON = { name: 'Mira Chen', role: 'Product designer' };
+interface ChatMessage {
+  id: string;
+  from: 'them' | 'me';
+  text: string;
+}
+const CHAT_MESSAGES: ChatMessage[] = [
+  { id: 'm1', from: 'them', text: 'Did you get a chance to look at the morph specs?' },
+  { id: 'm2', from: 'me', text: 'Yes — pushing the last two blocks today.' },
+  { id: 'm3', from: 'them', text: 'Amazing. The FAB one looks so good.' },
+  { id: 'm4', from: 'me', text: 'Calendar + KPI just merged too.' },
+];
+const CHAT_UNREAD = 2;
+const CHAT_PREVIEW = CHAT_MESSAGES[CHAT_MESSAGES.length - 1]?.text ?? '';
+
+// Bubbles rise from their own side rather than all from the bottom.
+const bubbleReveal: Variants = {
+  hidden: { opacity: 0, y: 10, scale: 0.96 },
+  show: { opacity: 1, y: 0, scale: 1, transition: springs.smooth },
+  exit: { opacity: 0, scale: 0.98, transition: { duration: 0.15 } },
+};
+
+function SendIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[18px] w-[18px]"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M22 2L11 13" />
+      <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+    </svg>
+  );
+}
+
+/**
+ * 09 · Message Bubble → Conversation. The collapsed state is a chat preview row
+ * (avatar + name + last-message snippet + unread pill) as the trigger; on open it
+ * morphs into a full conversation — a header (avatar, name, online status), a
+ * scrolling log of incoming/outgoing bubbles and an Input + send Button composer.
+ * The surface springs between the two sizes and the sections stagger in; each
+ * bubble pops in from its own side.
+ */
+function MessageConversation({ expanded: open, onToggle }: MorphDemoProps) {
+  return (
+    <MotionProvider>
+      <motion.div
+        className="relative"
+        initial={false}
+        animate={{ width: open ? 380 : 280, height: open ? 440 : 68 }}
+        transition={springs.layout}
+      >
+        {/* collapsed — the chat preview row, and the trigger */}
+        <AnimatePresence initial={false}>
+          {!open && (
+            <motion.button
+              key="closed"
+              type="button"
+              onClick={onToggle}
+              aria-label={`Open conversation with ${CHAT_PERSON.name}, ${CHAT_UNREAD} unread`}
+              aria-expanded={open}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="absolute inset-0 flex items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left shadow-lg shadow-black/5 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Avatar
+                name={CHAT_PERSON.name}
+                size={40}
+                aria-hidden="true"
+                className="flex-none bg-primary/15 font-semibold text-primary"
+              />
+              <div className="min-w-0 flex-1">
+                <div className="truncate font-semibold text-[14px] text-foreground">
+                  {CHAT_PERSON.name}
+                </div>
+                <div className="truncate text-[12.5px] text-muted-foreground">{CHAT_PREVIEW}</div>
+              </div>
+              <Badge
+                aria-hidden="true"
+                style={{
+                  flex: 'none',
+                  minWidth: 20,
+                  height: 20,
+                  padding: '0 6px',
+                  borderRadius: 999,
+                  fontSize: '11px',
+                }}
+              >
+                {CHAT_UNREAD}
+              </Badge>
+            </motion.button>
+          )}
+        </AnimatePresence>
+
+        {/* open — the conversation */}
+        <AnimatePresence initial={false}>
+          {open && (
+            <MotionCardBlock
+              key="card"
+              variants={cardReveal}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              style={{ borderRadius: 22, boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.1)' }}
+              className="absolute inset-0 flex flex-col overflow-hidden"
+            >
+              {/* header — avatar + name + online status, and a labelled close */}
+              <motion.div variants={item} className="flex items-center gap-3 px-4 pt-4 pb-3">
+                <Avatar
+                  name={CHAT_PERSON.name}
+                  size={38}
+                  aria-hidden="true"
+                  className="flex-none bg-primary/15 font-semibold text-primary"
+                />
+                <div className="min-w-0 flex-1">
+                  {/* A div, not a heading: it must not force a heading level onto
+                      the page (the section already owns the h3). */}
+                  <div className="truncate font-semibold text-[15px] tracking-tight text-foreground">
+                    {CHAT_PERSON.name}
+                  </div>
+                  <div className="mt-0.5 flex items-center gap-1.5 text-[12px] text-muted-foreground">
+                    <span aria-hidden="true" className="h-2 w-2 rounded-full bg-success" />
+                    Online
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={onToggle}
+                  aria-label="Close conversation"
+                  className="-mr-1 flex h-8 w-8 flex-none items-center justify-center rounded-full text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <CloseIcon />
+                </button>
+              </motion.div>
+
+              <motion.div variants={item}>
+                <Separator />
+              </motion.div>
+
+              {/* messages — incoming (left, muted) and outgoing (right, accent) bubbles */}
+              <motion.div
+                variants={listReveal}
+                role="log"
+                aria-label={`Conversation with ${CHAT_PERSON.name}`}
+                className="flex min-h-0 flex-1 flex-col gap-2 overflow-auto px-4 py-3.5"
+              >
+                {CHAT_MESSAGES.map((m) => (
+                  <motion.div
+                    key={m.id}
+                    variants={bubbleReveal}
+                    className={cx('flex', m.from === 'me' ? 'justify-end' : 'justify-start')}
+                  >
+                    <div
+                      className={cx(
+                        'max-w-[78%] rounded-2xl px-3.5 py-2 text-[13.5px] leading-snug',
+                        m.from === 'me'
+                          ? 'rounded-br-md bg-primary text-primary-foreground'
+                          : 'rounded-bl-md bg-muted text-foreground',
+                      )}
+                    >
+                      {/* keeps the sender clear for assistive tech, not colour-only */}
+                      <span className="sr-only">
+                        {m.from === 'me' ? 'You: ' : `${CHAT_PERSON.name}: `}
+                      </span>
+                      {m.text}
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* composer — an Input + a round send Button */}
+              <motion.div
+                variants={item}
+                className="flex items-center gap-2 border-border border-t px-3 py-3"
+              >
+                <Input
+                  placeholder="Message…"
+                  aria-label="Message"
+                  style={{ height: 40, borderRadius: 999, fontSize: '14px' }}
+                />
+                <Button
+                  size="icon"
+                  aria-label="Send message"
+                  className="h-10 w-10 flex-none rounded-full"
+                >
+                  <SendIcon />
+                </Button>
+              </motion.div>
+            </MotionCardBlock>
+          )}
+        </AnimatePresence>
       </motion.div>
     </MotionProvider>
   );
