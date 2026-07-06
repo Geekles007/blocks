@@ -1,0 +1,42 @@
+{
+  "name": "morph-calendar-event",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A calendar day cell that morphs into an event-detail panel: the date tile is a single persistent element that travels and scales from the collapsed cell into the card header — a real shared-element move, not a crossfade — as the Card springs in around it. The event title + kind Badge, a time and location row with tinted icon tiles, an Avatar stack of attendees, a Separator-split note and an Accept/Maybe Button pair stagger in on open and reverse-stagger out on close. Built on framer-motion via block-motion, so the whole morph collapses to a plain crossfade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The collapsed day cell is a single labelled toggle (\"View event: …\" + aria-expanded); when open the persistent tile becomes decorative (disabled, aria-hidden, out of the tab order) and the card's labelled close control takes over",
+      "The event title renders as plain text (not a heading) so it never forces a heading level onto the host page; the attendees are wrapped in a group labelled with the going count",
+      "The attendee avatars and every icon/dot are decorative and aria-hidden; the going count carries the meaning in text",
+      "The travel/scale + stagger morph respects prefers-reduced-motion via MotionProvider, collapsing to a plain crossfade"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a calendar day cell that expands into an event-detail panel",
+      "a shared-element morph from a date tile to an event card",
+      "an animated event popover built on ibirdui"
+    ],
+    "examples": ["<MorphCalendarEvent />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/avatar.json",
+    "https://ui.ibird.dev/r/separator.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/morph-calendar-event.tsx",
+      "path": "components/blocks/morph-calendar-event.tsx",
+      "type": "component"
+    }
+  ]
+}

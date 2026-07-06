@@ -41,6 +41,7 @@ export const MORPH_DEMOS: Record<string, React.ComponentType<MorphDemoProps>> = 
   '05': NotificationCenter,
   '06': ActionMenu,
   '07': KpiDashboard,
+  '08': CalendarEvent,
 };
 
 // Card container: fades as a whole and orchestrates its children — staggered
@@ -1576,6 +1577,254 @@ function KpiDashboard({ expanded: open, onToggle }: MorphDemoProps) {
             </MotionCardBlock>
           )}
         </AnimatePresence>
+      </motion.div>
+    </MotionProvider>
+  );
+}
+
+// ── 08 · Calendar Day → Event Details ───────────────────────────────────────
+// Built with the ibirdui Card, Button, Badge, Avatar and Separator, animated via
+// block-motion. The date tile is a single persistent element that travels and
+// scales from the collapsed cell into the card header (shared-element style, no
+// crossfade); the Card springs in through AnimatePresence and its rows stagger in.
+const CAL_EVENT = {
+  weekday: 'Wed',
+  day: '24',
+  month: 'Jul',
+  title: 'Design review',
+  kind: 'Meeting',
+  dateLong: 'Wednesday, July 24',
+  time: '2:00 – 3:00 PM',
+  location: 'Studio · Room 4',
+  note: 'Walk through the morphing block set and lock the launch scope.',
+};
+// No src, so each Avatar renders its initials fallback — offline and stable.
+const CAL_ATTENDEES = [
+  { id: 'ada', name: 'Ada Lovelace' },
+  { id: 'mira', name: 'Mira Chen' },
+  { id: 'kojo', name: 'Kojo Boateng' },
+];
+const CAL_GOING = 5;
+// The date tile is 76px collapsed and 52px in the header; scaling the single
+// element keeps it continuous. CAL_PAD (p-5 = 20px) is where it comes to rest.
+const CAL_CELL = 76;
+const CAL_CELL_OPEN_SCALE = 52 / CAL_CELL;
+const CAL_PAD = 20;
+
+function CalClockIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[17px] w-[17px]"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7.5V12l3 2" />
+    </svg>
+  );
+}
+function CalPinIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[17px] w-[17px]"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z" />
+      <circle cx="12" cy="11" r="2.4" />
+    </svg>
+  );
+}
+function CalDetailRow({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-3 text-[13.5px] text-foreground/85">
+      <span
+        aria-hidden="true"
+        className="flex h-8 w-8 flex-none items-center justify-center rounded-[10px] bg-muted text-muted-foreground"
+      >
+        {icon}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+/**
+ * 08 · Calendar Day → Event Details. The collapsed state is an accent date tile
+ * (weekday + number + event dot) as the trigger; on open it morphs into an
+ * event-detail panel — title + kind Badge, a time and location row, an Avatar
+ * stack of attendees, a Separator-split note and an Accept/Maybe Button pair. The
+ * date tile is a single, persistent element that travels and scales from the
+ * collapsed cell into its slot in the card header (no crossfade); the surface
+ * springs between the two sizes and the card's rows stagger in around it.
+ */
+function CalendarEvent({ expanded: open, onToggle }: MorphDemoProps) {
+  return (
+    <MotionProvider>
+      <motion.div
+        className="relative"
+        initial={false}
+        animate={{ width: open ? 360 : CAL_CELL, height: open ? 344 : CAL_CELL }}
+        transition={springs.layout}
+      >
+        {/* open — the event-detail card, mounted only while expanded (real enter +
+            exit). Its header leaves a spacer where the travelling tile comes to rest. */}
+        <AnimatePresence initial={false}>
+          {open && (
+            <MotionCardBlock
+              key="card"
+              variants={cardReveal}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              style={{ borderRadius: 22, boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.1)' }}
+              className="absolute inset-0 flex flex-col overflow-hidden p-5"
+            >
+              {/* header — a spacer reserves the tile's slot + a labelled close */}
+              <motion.div variants={item} className="flex items-start gap-3.5">
+                <div className="h-[52px] w-[52px] flex-none" aria-hidden="true" />
+                <div className="min-w-0 flex-1 pt-0.5">
+                  <div className="flex items-center gap-2">
+                    {/* A div, not a heading: it must not force a heading level onto
+                        the page (the section already owns the h3). */}
+                    <span className="truncate font-semibold text-[16px] tracking-tight text-foreground">
+                      {CAL_EVENT.title}
+                    </span>
+                    <Badge variant="secondary" style={{ padding: '2px 8px', fontSize: '11px' }}>
+                      {CAL_EVENT.kind}
+                    </Badge>
+                  </div>
+                  <div className="mt-0.5 text-[13px] text-muted-foreground">
+                    {CAL_EVENT.dateLong}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={onToggle}
+                  aria-label="Close event details"
+                  className="-mr-1 -mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-full text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <CloseIcon />
+                </button>
+              </motion.div>
+
+              {/* details — time + location rows with tinted icon tiles */}
+              <motion.div variants={item} className="mt-4 flex flex-col gap-2.5">
+                <CalDetailRow icon={<CalClockIcon />}>{CAL_EVENT.time}</CalDetailRow>
+                <CalDetailRow icon={<CalPinIcon />}>{CAL_EVENT.location}</CalDetailRow>
+              </motion.div>
+
+              {/* attendees — an Avatar stack + a going count */}
+              <motion.div
+                variants={item}
+                role="group"
+                aria-label={`Attendees, ${CAL_GOING} going`}
+                className="mt-4 flex items-center gap-3"
+              >
+                <div className="flex items-center">
+                  {CAL_ATTENDEES.map((a, i) => (
+                    <Avatar
+                      key={a.id}
+                      name={a.name}
+                      size={30}
+                      aria-hidden="true"
+                      className="bg-muted font-medium text-[11px] text-foreground/70 ring-2 ring-card"
+                      style={{ marginLeft: i === 0 ? 0 : -10 }}
+                    />
+                  ))}
+                  <span
+                    aria-hidden="true"
+                    className="-ml-[10px] flex h-[30px] w-[30px] items-center justify-center rounded-full bg-primary/12 font-semibold text-[11px] text-primary ring-2 ring-card"
+                  >
+                    +{CAL_GOING - CAL_ATTENDEES.length}
+                  </span>
+                </div>
+                <span className="text-[12.5px] text-muted-foreground">{CAL_GOING} going</span>
+              </motion.div>
+
+              <motion.div variants={item} className="mt-4">
+                <Separator />
+              </motion.div>
+
+              <motion.p
+                variants={item}
+                className="mt-4 text-[13px] leading-relaxed text-foreground/70"
+              >
+                {CAL_EVENT.note}
+              </motion.p>
+
+              {/* actions — Accept (primary) + Maybe (outline) */}
+              <motion.div variants={item} className="mt-auto flex gap-2 pt-4">
+                <Button className="flex-1">Accept</Button>
+                <Button variant="outline" className="flex-1">
+                  Maybe
+                </Button>
+              </motion.div>
+            </MotionCardBlock>
+          )}
+        </AnimatePresence>
+
+        {/* The single, persistent date tile. Because it never unmounts, it *travels*
+            and scales between the collapsed cell (x/y 0, scale 1) and its header slot
+            (x/y = card padding, scale 52/76) on the same layout spring — no crossfade.
+            Collapsed it's the interactive trigger; open it's decorative (the card's
+            close control + text take over), so it's disabled + hidden from assistive
+            tech to stay out of the tab order and a11y tree. */}
+        <motion.button
+          type="button"
+          onClick={open ? undefined : onToggle}
+          disabled={open}
+          tabIndex={open ? -1 : 0}
+          aria-hidden={open || undefined}
+          aria-label={
+            open
+              ? undefined
+              : `View event: ${CAL_EVENT.title}, ${CAL_EVENT.weekday} ${CAL_EVENT.month} ${CAL_EVENT.day}`
+          }
+          aria-expanded={open}
+          className="absolute top-0 left-0 z-20 flex flex-col items-center justify-center rounded-2xl bg-primary/10 outline-none ring-offset-2 ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+          style={{
+            width: CAL_CELL,
+            height: CAL_CELL,
+            transformOrigin: 'top left',
+            pointerEvents: open ? 'none' : 'auto',
+          }}
+          initial={false}
+          animate={{
+            x: open ? CAL_PAD : 0,
+            y: open ? CAL_PAD : 0,
+            scale: open ? CAL_CELL_OPEN_SCALE : 1,
+            boxShadow: open
+              ? '0 10px 25px -5px rgba(163, 230, 53, 0)'
+              : '0 10px 25px -5px rgba(163, 230, 53, 0.35)',
+          }}
+          transition={springs.layout}
+        >
+          <span className="font-medium text-[11px] uppercase tracking-wide text-primary/70">
+            {CAL_EVENT.weekday}
+          </span>
+          <span className="font-semibold text-[26px] leading-none tracking-tight text-primary tabular-nums">
+            {CAL_EVENT.day}
+          </span>
+          {/* event dot — fades out as the tile settles into the header */}
+          <motion.span
+            aria-hidden="true"
+            className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary"
+            initial={false}
+            animate={{ opacity: open ? 0 : 1 }}
+            transition={springs.layout}
+          />
+        </motion.button>
       </motion.div>
     </MotionProvider>
   );
