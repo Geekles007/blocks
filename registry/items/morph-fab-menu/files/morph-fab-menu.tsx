@@ -117,7 +117,7 @@ export function MorphFabMenu() {
               >
                 {ACTIONS.map((a) => (
                   <motion.div key={a.id} variants={item}>
-                    <Button variant="ghost" style={rowStyle}>
+                    <Button variant="ghost" className="bg-transparent" style={rowStyle}>
                       <span className="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-primary/12 text-primary">
                         {a.icon}
                       </span>
