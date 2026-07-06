@@ -1,0 +1,41 @@
+{
+  "name": "morph-kpi-dashboard",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A compact KPI widget that morphs into a full analytics dashboard: the surface springs between the two sizes while the KPI trigger and the Card swap through AnimatePresence — both get real enter and exit. Inside, a header with a period Badge, a row of KPI stat tiles with coloured trend deltas, a bar chart whose columns grow from the baseline, a Separator and a report-link Button stagger in on open and reverse-stagger out on close. Built on framer-motion via block-motion, so the whole morph collapses to a plain crossfade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The collapsed widget is a single labelled toggle (\"Open analytics dashboard\" + aria-expanded); the expanded card carries a labelled close control, so both states are keyboard- and screen-reader-reachable",
+      "The dashboard title renders as plain text (not a heading) so it never forces a heading level onto the host page, and the KPI tiles are grouped with an accessible group label",
+      "The bar chart is a role=img with an aria-label summarising the trend; its columns, arrows and the sparkline are decorative and aria-hidden, and trend colour is paired with a +/- delta so it never relies on colour alone",
+      "The size/stagger morph respects prefers-reduced-motion via MotionProvider, collapsing to a plain crossfade"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a compact KPI or stat widget that expands into an analytics dashboard",
+      "a morph from a single metric card to a full dashboard with a chart",
+      "an animated analytics overview built on ibirdui"
+    ],
+    "examples": ["<MorphKpiDashboard />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/separator.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/morph-kpi-dashboard.tsx",
+      "path": "components/blocks/morph-kpi-dashboard.tsx",
+      "type": "component"
+    }
+  ]
+}
