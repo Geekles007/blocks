@@ -58,6 +58,9 @@ export default defineConfig({
       '@/components/blocks/morph-kpi-dashboard': blockFile(
         'morph-kpi-dashboard/files/morph-kpi-dashboard.tsx',
       ),
+      '@/components/blocks/morph-calendar-event': blockFile(
+        'morph-calendar-event/files/morph-calendar-event.tsx',
+      ),
     },
   },
   esbuild: { jsx: 'automatic' },
