@@ -16,7 +16,15 @@
       "@/components/data-list": ["./.primitives/components/data-list.tsx"],
       "@/components/state-boundary": ["./.primitives/components/state-boundary.tsx"],
       "@/lib/block-motion": ["./.primitives/lib/block-motion.tsx"],
-      "@/lib/async-state": ["./.primitives/lib/async-state.ts"]
+      "@/lib/async-state": ["./.primitives/lib/async-state.ts"],
+      "@/components/blocks/navbar": ["./items/navbar/files/navbar.tsx"],
+      "@/components/blocks/hero": ["./items/hero/files/hero.tsx"],
+      "@/components/blocks/features": ["./items/features/files/features.tsx"],
+      "@/components/blocks/testimonials": ["./items/testimonials/files/testimonials.tsx"],
+      "@/components/blocks/pricing-toggle": ["./items/pricing-toggle/files/pricing-toggle.tsx"],
+      "@/components/blocks/faq": ["./items/faq/files/faq.tsx"],
+      "@/components/blocks/cta": ["./items/cta/files/cta.tsx"],
+      "@/components/blocks/footer": ["./items/footer/files/footer.tsx"]
     }
   },
   "include": ["build.ts", "items/**/files/**/*.ts", "items/**/files/**/*.tsx"],

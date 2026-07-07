@@ -171,6 +171,13 @@ export const en = {
     ready: 'Ready',
     footerNote:
       'The first templates are on the way — each is assembled purely from shipped blocks, so nothing here is a mockup you can’t install.',
+    detailBack: 'All templates',
+    composedOf: 'Composed of',
+    livePreview: 'Live preview',
+    install: 'Install the template',
+    installBlurb:
+      'One command installs the page plus every block and primitive it composes — you own the source.',
+    soonHint: 'This template is on the roadmap — not installable yet.',
   },
   morphing: {
     kicker: 'Collection · in progress',

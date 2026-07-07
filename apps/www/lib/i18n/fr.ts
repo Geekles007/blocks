@@ -181,6 +181,13 @@ export const fr: Messages = {
     ready: 'Prêt',
     footerNote:
       'Les premiers templates arrivent — chacun est assemblé uniquement à partir de blocks déjà livrés, donc rien ici n’est une maquette non installable.',
+    detailBack: 'Tous les templates',
+    composedOf: 'Composé de',
+    livePreview: 'Aperçu live',
+    install: 'Installer le template',
+    installBlurb:
+      'Une commande installe la page plus chaque block et primitive qu’elle compose — tu possèdes la source.',
+    soonHint: 'Ce template est sur la roadmap — pas encore installable.',
   },
   morphing: {
     kicker: 'Collection · en cours',

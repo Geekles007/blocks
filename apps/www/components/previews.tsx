@@ -17,6 +17,7 @@ import { Pricing } from '@/components/blocks/pricing';
 import { PricingCompare } from '@/components/blocks/pricing-compare';
 import { PricingSingle } from '@/components/blocks/pricing-single';
 import { PricingToggle } from '@/components/blocks/pricing-toggle';
+import { SaasLanding } from '@/components/blocks/saas-landing';
 import { Testimonials } from '@/components/blocks/testimonials';
 import * as React from 'react';
 import { h } from '~/lib/h';
@@ -867,4 +868,17 @@ const PREVIEWS: Record<string, (p: PreviewProps) => React.ReactElement> = {
 export function renderPreview(key: string, props: PreviewProps): React.ReactElement | null {
   const Cmp = PREVIEWS[key];
   return Cmp ? h(Cmp, props) : null;
+}
+
+// ── Templates ────────────────────────────────────────────────────────────────
+// Full-page templates render the real composed block (self-contained content),
+// keyed by the template's registryKey.
+const TEMPLATE_PREVIEWS: Record<string, () => React.ReactElement> = {
+  'saas-landing': () => h(SaasLanding, null),
+};
+
+/** Render the live full-page preview for a template key, or `null`. */
+export function renderTemplatePreview(key: string): React.ReactElement | null {
+  const Cmp = TEMPLATE_PREVIEWS[key];
+  return Cmp ? h(Cmp) : null;
 }

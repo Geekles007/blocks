@@ -52,6 +52,17 @@ export const TEMPLATES: Template[] = [
     description: 'Hero, feature grid, social proof and pricing — a complete product landing.',
     cat: 'Marketing',
     shape: 'landing',
+    registryKey: 'saas-landing',
+    blocks: [
+      'navbar',
+      'hero',
+      'features',
+      'testimonials',
+      'pricing-toggle',
+      'faq',
+      'cta',
+      'footer',
+    ],
   },
   {
     key: 'startup-launch',

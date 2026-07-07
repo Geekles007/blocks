@@ -24,6 +24,10 @@ export const DEFAULT_BASE = 'https://ui.ibird.dev';
 
 const normalizeBaseUrl = (u) => u.replace(/\/+$/, '');
 const isAbsoluteUrl = (ref) => /^https?:\/\//i.test(ref);
+// This *is* the blocks registry, so a dep pointing back at it (a template that
+// composes local blocks) resolves from `registry/items`, not over HTTP — skip it
+// here; each composed block's own primitive deps are already collected as roots.
+const isSelfRegistryRef = (ref) => /(^|\/\/)blocks\.ibird\.dev\b/i.test(ref);
 const itemUrl = (base, name) => `${normalizeBaseUrl(base)}/r/${name}.json`;
 const baseUrlFromItemUrl = (url) => url.replace(/\/r\/[^/]+\.json$/, '');
 
@@ -56,7 +60,10 @@ async function rootDeps() {
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
     const meta = await readJson(join(REGISTRY_ITEMS, entry.name, 'meta.json'));
-    for (const dep of meta.registryDependencies ?? []) deps.add(dep);
+    for (const dep of meta.registryDependencies ?? []) {
+      if (isSelfRegistryRef(dep)) continue;
+      deps.add(dep);
+    }
   }
   return [...deps];
 }
@@ -82,7 +89,10 @@ export async function fetchPrimitivesInto(outDir, { base = DEFAULT_BASE, roots, 
     seen.set(url, item);
     // A cross-registry item's name-based deps resolve against its own origin.
     const childBase = isAbsoluteUrl(ref) ? baseUrlFromItemUrl(url) : fromBase;
-    for (const dep of item.registryDependencies ?? []) await visit(dep, childBase);
+    for (const dep of item.registryDependencies ?? []) {
+      if (isSelfRegistryRef(dep)) continue;
+      await visit(dep, childBase);
+    }
   }
 
   for (const ref of rootRefs) await visit(ref, normalizeBaseUrl(base));

@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import * as React from 'react';
 import { h } from '~/lib/h';
 import type { Locale, Messages } from '~/lib/i18n';
 import { Reveal } from '~/lib/motion';
+import { ROUTES } from '~/lib/routes';
 import {
   TEMPLATES,
   TEMPLATE_CATS,
@@ -366,69 +368,78 @@ export function Templates() {
 function card(t: Tok, m: Messages, tpl: Template, locale: Locale) {
   const shipped = isShipped(tpl);
   const text = templateText(tpl, locale);
-  return h(
+  const onMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.borderColor = t.accentRing;
+  };
+  const onMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.borderColor = t.border;
+  };
+  const cardStyle = {
+    display: 'block',
+    background: t.bg2,
+    border: `1px solid ${t.border}`,
+    borderRadius: '14px',
+    overflow: 'hidden',
+    transition: 'border-color .2s',
+    textDecoration: 'none',
+    color: t.text,
+    cursor: shipped ? 'pointer' : 'default',
+  } as const;
+
+  // The card body — the framed silhouette + name/description/category.
+  const preview = h(
     'div',
     {
-      key: tpl.key,
       style: {
-        background: t.bg2,
-        border: `1px solid ${t.border}`,
-        borderRadius: '14px',
+        height: '186px',
         overflow: 'hidden',
-        transition: 'border-color .2s',
-      },
-      onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => {
-        e.currentTarget.style.borderColor = t.accentRing;
-      },
-      onMouseLeave: (e: React.MouseEvent<HTMLDivElement>) => {
-        e.currentTarget.style.borderColor = t.border;
+        position: 'relative',
+        borderBottom: `1px solid ${t.border}`,
+        background: 'radial-gradient(var(--ib-border) 1px,transparent 1px)',
+        backgroundSize: '18px 18px',
       },
     },
+    h(TemplateFrame, { t, shape: tpl.shape }),
+  );
+  const body = h(
+    'div',
+    { style: { padding: '13px 15px' } },
     h(
       'div',
       {
         style: {
-          height: '186px',
-          overflow: 'hidden',
-          position: 'relative',
-          borderBottom: `1px solid ${t.border}`,
-          background: 'radial-gradient(var(--ib-border) 1px,transparent 1px)',
-          backgroundSize: '18px 18px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '8px',
         },
       },
-      h(TemplateFrame, { t, shape: tpl.shape }),
+      h('div', { style: { font: "600 14.5px 'Geist',sans-serif", color: t.text } }, text.name),
+      shipped
+        ? h(Badge, { t, tone: 'success', dot: true }, m.templates.ready)
+        : h(Badge, { t, tone: 'neutral' }, m.common.soon),
     ),
     h(
-      'div',
-      { style: { padding: '13px 15px' } },
-      h(
-        'div',
-        {
-          style: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-          },
-        },
-        h('div', { style: { font: "600 14.5px 'Geist',sans-serif", color: t.text } }, text.name),
-        shipped
-          ? h(Badge, { t, tone: 'success', dot: true }, m.templates.ready)
-          : h(Badge, { t, tone: 'neutral' }, m.common.soon),
-      ),
-      h(
-        'p',
-        {
-          style: {
-            margin: '5px 0 0',
-            color: t.faint,
-            fontSize: '12.5px',
-            lineHeight: 1.5,
-          },
-        },
-        text.description,
-      ),
-      h('div', { style: { marginTop: '11px' } }, h(Badge, { t, tone: 'neutral' }, tpl.cat)),
+      'p',
+      { style: { margin: '5px 0 0', color: t.faint, fontSize: '12.5px', lineHeight: 1.5 } },
+      text.description,
     ),
+    h('div', { style: { marginTop: '11px' } }, h(Badge, { t, tone: 'neutral' }, tpl.cat)),
   );
+
+  // Shipped templates link to their detail page; roadmap entries are inert.
+  return shipped
+    ? h(
+        Link,
+        {
+          key: tpl.key,
+          href: ROUTES.template(tpl.key),
+          style: cardStyle,
+          onMouseEnter,
+          onMouseLeave,
+        },
+        preview,
+        body,
+      )
+    : h('div', { key: tpl.key, style: cardStyle, onMouseEnter, onMouseLeave }, preview, body);
 }
