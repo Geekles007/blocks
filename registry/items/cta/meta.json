@@ -1,0 +1,40 @@
+{
+  "name": "cta",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A closing call-to-action band: a centred eyebrow, heading, subtitle and up to two CTAs on a solid accent panel — the last push before the footer. The panel fills with the primary token and inks with primary-foreground, so it re-themes with your brand. Content reveals on mount and collapses to a plain fade under prefers-reduced-motion; CTAs stack on mobile and sit inline from sm up.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The heading renders as an h2 that labels the section landmark via aria-labelledby, so it slots under a page h1 without breaking the heading order",
+      "CTAs render as real links when given an href, otherwise as buttons, so each is keyboard- and screen-reader-accessible",
+      "The decorative radial wash on the panel is aria-hidden and the CTA colours are chosen to pair with primary-foreground for contrast on the fill",
+      "The entrance animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a closing call-to-action section for a landing page",
+      "an accent CTA band with a headline and buttons",
+      "a conversion prompt built on ibirdui"
+    ],
+    "examples": [
+      "<Cta title=\"Ready to ship faster?\" primaryAction={{ label: 'Get started', href: '/docs' }} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/cta.tsx",
+      "path": "components/blocks/cta.tsx",
+      "type": "component"
+    }
+  ]
+}

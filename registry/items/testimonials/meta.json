@@ -1,0 +1,43 @@
+{
+  "name": "testimonials",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A testimonials section: an optional eyebrow, an h2 + subtitle, then a responsive grid of quote cards. Each card is a semantic figure — an optional star row, a blockquote and a figcaption with the author's avatar, name and role. Columns go 1 → 2 → 3. Content reveals in a staggered upward motion on mount and collapses to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The heading renders as an h2 that labels the section landmark via aria-labelledby, so it slots under a page h1 without breaking the heading order",
+      "Each testimonial is a figure/blockquote/figcaption, so assistive tech announces the quote together with its attribution",
+      "The author avatar is the ibirdui avatar primitive, exposed as a labelled image whether the photo loads or falls back to initials",
+      "The star rating is decorative (aria-hidden) but paired with a visually-hidden \"Rated N out of 5\" label, so it never relies on the icons alone",
+      "The entrance animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a testimonials / social-proof section for a landing page",
+      "a grid of customer quote cards with avatars and ratings",
+      "a reviews section built on ibirdui"
+    ],
+    "examples": [
+      "<Testimonials title=\"Loved by product teams\" testimonials={[{ quote: 'Shipped in a weekend.', author: { name: 'Ada Reyes', role: 'Head of Design' } }]} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/avatar.json",
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/testimonials.tsx",
+      "path": "components/blocks/testimonials.tsx",
+      "type": "component"
+    }
+  ]
+}

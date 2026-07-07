@@ -33,6 +33,8 @@ export default defineConfig({
       // blocks
       '@/components/blocks/hero': blockFile('hero/files/hero.tsx'),
       '@/components/blocks/features': blockFile('features/files/features.tsx'),
+      '@/components/blocks/testimonials': blockFile('testimonials/files/testimonials.tsx'),
+      '@/components/blocks/cta': blockFile('cta/files/cta.tsx'),
       '@/components/blocks/hero-terminal': blockFile('hero-terminal/files/hero-terminal.tsx'),
       '@/components/blocks/hero-fintech': blockFile('hero-fintech/files/hero-fintech.tsx'),
       '@/components/blocks/hero-agency': blockFile('hero-agency/files/hero-agency.tsx'),

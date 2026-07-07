@@ -4,6 +4,7 @@
 // synced into registry-preview — there are no design mockups here, so the
 // catalogue only ever shows blocks that actually exist. The demo copy is
 // bilingual: each block reads its content from a locale-keyed object.
+import { Cta } from '@/components/blocks/cta';
 import { Features } from '@/components/blocks/features';
 import { Hero } from '@/components/blocks/hero';
 import { HeroAgency } from '@/components/blocks/hero-agency';
@@ -13,6 +14,7 @@ import { Pricing } from '@/components/blocks/pricing';
 import { PricingCompare } from '@/components/blocks/pricing-compare';
 import { PricingSingle } from '@/components/blocks/pricing-single';
 import { PricingToggle } from '@/components/blocks/pricing-toggle';
+import { Testimonials } from '@/components/blocks/testimonials';
 import * as React from 'react';
 import { h } from '~/lib/h';
 import type { Locale } from '~/lib/i18n';
@@ -576,12 +578,109 @@ function FeaturesReal({ locale }: PreviewProps) {
   });
 }
 
+// ── Testimonials ─────────────────────────────────────────────────────────────
+const TESTIMONIALS = {
+  en: {
+    eyebrow: 'Social proof',
+    title: { lead: 'Loved by ', accent: 'product teams', tail: '.' },
+    subtitle: 'Teams of every size ship their marketing and app UI faster with ibirdui blocks.',
+    items: [
+      {
+        quote: '“We shipped our whole marketing site in a weekend. The blocks just drop in.”',
+        role: 'Head of Design, Northwind',
+        rating: 5,
+      },
+      {
+        quote: '“Accessibility is handled for us — keyboard, focus, reduced motion, all of it.”',
+        role: 'Staff Engineer, Lumen',
+        rating: 5,
+      },
+      {
+        quote: '“One command and I own the source. No runtime, no lock-in, no surprises.”',
+        role: 'Founder, Parcel',
+        rating: 5,
+      },
+    ],
+  },
+  fr: {
+    eyebrow: 'Preuve sociale',
+    title: { lead: 'Adoré par les ', accent: 'équipes produit', tail: '.' },
+    subtitle:
+      'Des équipes de toute taille livrent leur UI marketing et app plus vite avec ibirdui.',
+    items: [
+      {
+        quote: '« On a livré tout notre site en un week-end. Les blocks s’intègrent tout seuls. »',
+        role: 'Head of Design, Northwind',
+        rating: 5,
+      },
+      {
+        quote: '« L’accessibilité est gérée pour nous — clavier, focus, reduced-motion, tout. »',
+        role: 'Staff Engineer, Lumen',
+        rating: 5,
+      },
+      {
+        quote: '« Une commande et je possède la source. Pas de runtime, pas de lock-in. »',
+        role: 'Founder, Parcel',
+        rating: 5,
+      },
+    ],
+  },
+} satisfies Record<Locale, unknown>;
+
+function TestimonialsReal({ locale }: PreviewProps) {
+  const c = pick(locale, TESTIMONIALS);
+  const names = ['Ada Reyes', 'Tom Iverson', 'Lou Park'];
+  return h(Testimonials, {
+    eyebrow: c.eyebrow,
+    title: headline(c.title),
+    subtitle: c.subtitle,
+    columns: 3,
+    testimonials: c.items.map((it, i) => ({
+      id: String(i),
+      quote: it.quote,
+      rating: it.rating,
+      author: { name: names[i] ?? 'Anon', role: it.role },
+    })),
+  });
+}
+
+// ── CTA band ─────────────────────────────────────────────────────────────────
+const CTA = {
+  en: {
+    eyebrow: 'Start today',
+    title: 'Ready to ship faster?',
+    subtitle: 'Copy your first block in under a minute — accessible, animated, and yours to keep.',
+    primary: 'Get started',
+    secondary: 'Browse blocks',
+  },
+  fr: {
+    eyebrow: 'Commence aujourd’hui',
+    title: 'Prêt à livrer plus vite ?',
+    subtitle: 'Copie ton premier block en moins d’une minute — accessible, animé, et à toi.',
+    primary: 'Commencer',
+    secondary: 'Parcourir les blocks',
+  },
+} satisfies Record<Locale, unknown>;
+
+function CtaReal({ locale }: PreviewProps) {
+  const c = pick(locale, CTA);
+  return h(Cta, {
+    eyebrow: c.eyebrow,
+    title: c.title,
+    subtitle: c.subtitle,
+    primaryAction: { label: c.primary, href: '#', icon: ArrowIcon },
+    secondaryAction: { label: c.secondary, href: '#' },
+  });
+}
+
 const PREVIEWS: Record<string, (p: PreviewProps) => React.ReactElement> = {
   hero: HeroReal,
   'hero-terminal': HeroTerminalReal,
   'hero-fintech': HeroFintechReal,
   'hero-agency': HeroAgencyReal,
   features: FeaturesReal,
+  testimonials: TestimonialsReal,
+  cta: CtaReal,
   pricing: PricingReal,
   'pricing-toggle': PricingToggleReal,
   'pricing-single': PricingSingleReal,
