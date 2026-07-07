@@ -1,4 +1,4 @@
-import { Catalogue } from '~/components/views/catalogue';
+import { Catalogue } from '~/components/catalogue/catalogue-view';
 
 export const metadata = {
   title: 'Catalogue — ibirdui blocks',

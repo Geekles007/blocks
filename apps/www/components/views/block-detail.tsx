@@ -7,8 +7,8 @@ import { h } from '~/lib/h';
 import { addCommands } from '~/lib/install-command';
 import { ROUTES } from '~/lib/routes';
 import { useUI } from '~/lib/ui-context';
+import { renderPreview } from '../catalogue/demos';
 import { PreviewFrame } from '../preview-frame';
-import { renderPreview } from '../previews';
 import { Badge, Button, Icon, PrimPill, SectionLabel } from '../primitives';
 import { SpecGrid } from '../spec-grid';
 
