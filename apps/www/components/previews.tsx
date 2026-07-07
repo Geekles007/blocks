@@ -4,6 +4,7 @@
 // synced into registry-preview — there are no design mockups here, so the
 // catalogue only ever shows blocks that actually exist. The demo copy is
 // bilingual: each block reads its content from a locale-keyed object.
+import { Features } from '@/components/blocks/features';
 import { Hero } from '@/components/blocks/hero';
 import { HeroAgency } from '@/components/blocks/hero-agency';
 import { HeroFintech } from '@/components/blocks/hero-fintech';
@@ -507,11 +508,80 @@ function PricingCompareReal({ locale }: PreviewProps) {
   });
 }
 
+// ── Features ────────────────────────────────────────────────────────────────
+const BoltIcon = svg(h('path', { d: 'M13 2 3 14h7l-1 8 10-12h-7l1-8z' }));
+const ShieldIcon = svg(h('path', { d: 'M12 3l7 3v5c0 4.4-3 7.3-7 8-4-.7-7-3.6-7-8V6z' }));
+const SwatchIcon = svg(
+  h('circle', { cx: 12, cy: 12, r: 3 }),
+  h('path', {
+    d: 'M12 4v2M12 18v2M4 12h2M18 12h2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M6.3 17.7l1.4-1.4M16.3 7.7l1.4-1.4',
+  }),
+);
+const FEATURE_ICONS = [BoltIcon, ShieldIcon, SwatchIcon];
+
+const FEATURES = {
+  en: {
+    eyebrow: 'Why teams switch',
+    title: { lead: 'Everything you need to ', accent: 'ship', tail: '.' },
+    subtitle: 'Composed on the ibirdui primitives — accessible, themable and animated by default.',
+    items: [
+      {
+        title: 'Fast by default',
+        description: 'No runtime and no lock-in — copy the source, own it forever.',
+      },
+      {
+        title: 'Themable',
+        description: 'Every block reads your semantic tokens, in light or dark.',
+      },
+      {
+        title: 'Accessible',
+        description: 'AA-tested, keyboard-ready, and it respects reduced motion.',
+      },
+    ],
+  },
+  fr: {
+    eyebrow: 'Pourquoi elles changent',
+    title: { lead: 'Tout ce qu’il faut pour ', accent: 'livrer', tail: '.' },
+    subtitle: 'Composé sur les primitives ibirdui — accessible, thémable et animé par défaut.',
+    items: [
+      {
+        title: 'Rapide par défaut',
+        description: 'Pas de runtime ni de lock-in — copie la source, elle est à toi.',
+      },
+      {
+        title: 'Thémable',
+        description: 'Chaque block lit tes tokens sémantiques, en clair ou en sombre.',
+      },
+      {
+        title: 'Accessible',
+        description: 'Testé AA, prêt au clavier, et respecte le reduced-motion.',
+      },
+    ],
+  },
+} satisfies Record<Locale, unknown>;
+
+function FeaturesReal({ locale }: PreviewProps) {
+  const c = pick(locale, FEATURES);
+  return h(Features, {
+    eyebrow: c.eyebrow,
+    title: headline(c.title),
+    subtitle: c.subtitle,
+    columns: 3,
+    features: c.items.map((it, i) => ({
+      id: String(i),
+      icon: FEATURE_ICONS[i],
+      title: it.title,
+      description: it.description,
+    })),
+  });
+}
+
 const PREVIEWS: Record<string, (p: PreviewProps) => React.ReactElement> = {
   hero: HeroReal,
   'hero-terminal': HeroTerminalReal,
   'hero-fintech': HeroFintechReal,
   'hero-agency': HeroAgencyReal,
+  features: FeaturesReal,
   pricing: PricingReal,
   'pricing-toggle': PricingToggleReal,
   'pricing-single': PricingSingleReal,

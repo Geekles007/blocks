@@ -61,6 +61,15 @@ export const BLOCKS: Block[] = [
     variants: ['default'],
   },
   {
+    cat: 'Marketing',
+    key: 'features',
+    name: 'Features',
+    preview: 'features',
+    icon: 'grid',
+    prims: ['Card', 'Badge'],
+    variants: ['default'],
+  },
+  {
     cat: 'Pricing',
     key: 'pricing-toggle',
     name: 'Pricing Toggle',

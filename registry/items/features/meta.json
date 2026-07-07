@@ -1,0 +1,42 @@
+{
+  "name": "features",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A feature section: an optional eyebrow pill, an h2 heading and subtitle, then a responsive grid of feature cards — each a tinted icon tile, a title and a description. Columns go 1 → 2 → N (2/3/4) up the breakpoints. Content reveals in a staggered upward motion on mount, and the animation collapses to a plain fade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The heading renders as an h2 that labels the section landmark via aria-labelledby, so it slots under a page h1 without breaking the heading order",
+      "Each feature title is an h3, keeping a clean h2 → h3 outline within the section",
+      "The icon tiles are decorative (aria-hidden) and do not affect the contrast of the text beside them",
+      "Built on the ibirdui card and badge primitives, so each piece inherits the design system's a11y guarantees",
+      "The entrance animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a features grid section for a landing page",
+      "a benefits / \"why us\" section with icon cards",
+      "a responsive feature list built on ibirdui"
+    ],
+    "examples": [
+      "<Features title=\"Everything you need to ship\" features={[{ title: 'Fast', description: 'No runtime.' }]} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/features.tsx",
+      "path": "components/blocks/features.tsx",
+      "type": "component"
+    }
+  ]
+}
