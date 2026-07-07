@@ -8,8 +8,8 @@ import { addCommands } from '~/lib/install-command';
 import { ROUTES } from '~/lib/routes';
 import { getTemplate, isShipped, templateText } from '~/lib/templates-data';
 import { useUI } from '~/lib/ui-context';
+import { renderTemplatePreview } from '../catalogue/demos';
 import { PreviewFrame } from '../preview-frame';
-import { renderTemplatePreview } from '../previews';
 import { Badge, Icon } from '../primitives';
 
 const { useState } = React;
