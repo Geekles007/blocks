@@ -559,6 +559,41 @@ export function GettingStarted() {
       CodeBlock({ t, code: usage(fr) }),
     ),
 
+    // ── 5. Install a whole template ───────────────────────────────────────
+    Section(
+      t,
+      fr ? 'Étape 5' : 'Step 5',
+      fr ? 'Installer une page entière' : 'Install a whole page',
+      p(
+        t,
+        fr ? 'Les ' : 'A ',
+        h(
+          Link,
+          { href: ROUTES.templates, style: { color: t.accent, textDecoration: 'none' } },
+          strong(t, fr ? 'templates' : 'template'),
+        ),
+        fr
+          ? ' sont le cran au-dessus des blocks : une page complète déjà composée de plusieurs blocks. Un template se récupère exactement comme un block — la commande résout la page, chaque block qu’elle assemble et chaque primitive, en une fois :'
+          : ' is the tier above blocks: a complete page already composed of several blocks. You fetch one exactly like a block — the command resolves the page, every block it assembles and every primitive, in one go:',
+      ),
+      CommandRow({
+        t,
+        m,
+        reduced,
+        copy,
+        label: 'Terminal',
+        cmd: 'npx ibirdui add blocks.ibird.dev/r/saas-landing',
+      }),
+      h('div', { style: { height: '10px' } }),
+      p(
+        t,
+        code(t, 'saas-landing'),
+        fr
+          ? ' — hero, grille de features, preuve sociale et pricing — est le premier template livré. Les autres entrées de la galerie sont sur la roadmap : elles apparaissent en « bientôt » et ne s’installent pas tant que leur page n’est pas construite. L’étape 3 (thème & tokens) reste requise : un template a les mêmes classes sémantiques que les blocks qu’il compose.'
+          : ' — hero, feature grid, social proof and pricing — is the first shipped template. The other gallery entries are on the roadmap: they show as “coming soon” and don’t install until their page is built. Step 3 (theme & tokens) still applies: a template uses the same semantic classes as the blocks it composes.',
+      ),
+    ),
+
     // ── Next steps ────────────────────────────────────────────────────────
     h(
       'section',
@@ -584,6 +619,14 @@ export function GettingStarted() {
           fr
             ? 'Tous les blocks par catégorie : Marketing, Pricing, Morphing.'
             : 'All blocks by category: Marketing, Pricing, Morphing.',
+        ),
+        nextCard(
+          ROUTES.templates,
+          'layers',
+          fr ? 'Parcourir les templates' : 'Browse templates',
+          fr
+            ? 'Des pages entières composées de blocks — installables en une commande.'
+            : 'Whole pages composed of blocks — installable in one command.',
         ),
         nextCard(
           ROUTES.morphing,
