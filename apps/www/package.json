@@ -12,7 +12,8 @@
     "build": "next build",
     "start": "next start --port 3200",
     "pretypecheck": "node scripts/copy-blocks.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/check-catalogue.mjs"
   },
   "dependencies": {
     "framer-motion": "^11.15.0",
