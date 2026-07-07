@@ -64,6 +64,9 @@ export default defineConfig({
       '@/components/blocks/morph-message-conversation': blockFile(
         'morph-message-conversation/files/morph-message-conversation.tsx',
       ),
+      '@/components/blocks/morph-mini-player': blockFile(
+        'morph-mini-player/files/morph-mini-player.tsx',
+      ),
     },
   },
   esbuild: { jsx: 'automatic' },
