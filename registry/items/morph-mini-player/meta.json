@@ -1,0 +1,40 @@
+{
+  "name": "morph-mini-player",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A compact music player that morphs into a full player: the album art is a single persistent element that resizes from a 48px thumbnail into a full-width hero — a real shared-element move, not a crossfade — while the mini-bar text swaps out and the Card springs in around it. The title + artist, a labelled progressbar with elapsed/total times, prev / play-pause / next transport controls and a shuffle/repeat row stagger in on open and reverse-stagger out on close. Built on framer-motion via block-motion, so the whole morph collapses to a plain crossfade under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The collapsed mini bar is a single labelled toggle (\"Open player: … by …\" + aria-expanded); the full player carries a labelled minimize control, so both states are keyboard- and screen-reader-reachable",
+      "The track title renders as plain text (not a heading) so it never forces a heading level onto the host page; the transport buttons are grouped and individually labelled (Previous / Play-Pause / Next)",
+      "The scrubber is a role=progressbar with aria-valuenow + a valuetext (\"1:12 of 3:45\"); the album art, its note glyph and the play knob are decorative and aria-hidden",
+      "The play/pause control reflects state through its aria-label; the resize/stagger morph respects prefers-reduced-motion via MotionProvider, collapsing to a plain crossfade"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a compact music player that expands into a full now-playing screen",
+      "a shared-element morph from a mini player bar to a full player",
+      "an animated media player built on ibirdui"
+    ],
+    "examples": ["<MorphMiniPlayer />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/card.json",
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/separator.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/morph-mini-player.tsx",
+      "path": "components/blocks/morph-mini-player.tsx",
+      "type": "component"
+    }
+  ]
+}
