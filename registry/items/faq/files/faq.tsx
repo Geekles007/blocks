@@ -122,7 +122,7 @@ export function Faq({
                 <div
                   key={k}
                   className={cn(
-                    'overflow-hidden rounded-2xl border bg-card transition-colors',
+                    'overflow-hidden rounded-2xl border bg-card text-card-foreground transition-colors',
                     isOpen ? 'border-primary/30' : 'border-border',
                   )}
                 >
@@ -135,7 +135,7 @@ export function Faq({
                       onClick={() => toggle(k)}
                       className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
-                      <span className="font-medium text-[15px] text-foreground">
+                      <span className="font-semibold text-[15.5px] text-foreground sm:text-base">
                         {item.question}
                       </span>
                       <span
