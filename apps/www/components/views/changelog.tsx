@@ -38,6 +38,62 @@ interface Release {
 // Honest history, sourced from the git log + registry item versions. Newest first.
 const RELEASES: Release[] = [
   {
+    date: '2026-07-07',
+    tag: 'v0.5',
+    title: { en: 'Templates, morphing & i18n', fr: 'Templates, morphing & i18n' },
+    changes: [
+      {
+        kind: 'Ajout',
+        text: {
+          en: 'saas-landing template — a full landing page composed from blocks (navbar, hero, features, testimonials, pricing, FAQ, CTA, footer).',
+          fr: 'Template saas-landing — une landing page complète composée de blocks (navbar, hero, features, témoignages, pricing, FAQ, CTA, footer).',
+        },
+      },
+      {
+        kind: 'Ajout',
+        text: {
+          en: 'Five more Morphing blocks: FAB → Action Menu, KPI Widget → Dashboard, Calendar Day → Event, Message Bubble → Conversation, Mini Player → Full Player.',
+          fr: 'Cinq blocks Morphing de plus : FAB → Menu d’actions, Widget KPI → Dashboard, Jour de calendrier → Événement, Bulle de message → Conversation, Mini-lecteur → Lecteur complet.',
+        },
+      },
+      {
+        kind: 'Ajout',
+        text: {
+          en: 'English/French i18n across the whole site.',
+          fr: 'Internationalisation EN/FR sur tout le site.',
+        },
+      },
+      {
+        kind: 'Ajout',
+        text: {
+          en: 'One-command install for Morphing blocks, with an npm/pnpm/bun toggle.',
+          fr: 'Installation en une commande des blocks Morphing, avec bascule npm/pnpm/bun.',
+        },
+      },
+      {
+        kind: 'Amélioration',
+        text: {
+          en: 'Fullscreen and truly responsive block previews, with per-block specs.',
+          fr: 'Aperçus de blocks en plein écran et vraiment responsives, avec specs par block.',
+        },
+      },
+      {
+        kind: 'Amélioration',
+        text: {
+          en: 'The navbar mobile menu button now uses the ibirdui button styles, with themed hover and press states.',
+          fr: 'Le bouton du menu mobile de la navbar utilise désormais les styles du bouton ibirdui, avec états hover et press thémés.',
+        },
+      },
+      {
+        kind: 'Correctif',
+        text: {
+          en: 'morph-fab-menu action rows are transparent in dark mode.',
+          fr: 'Les lignes d’action de morph-fab-menu sont transparentes en mode sombre.',
+        },
+      },
+    ],
+  },
+  {
     date: '2026-07-04',
     tag: 'v0.4',
     title: { en: 'Morphing & onboarding', fr: 'Morphing & prise en main' },
