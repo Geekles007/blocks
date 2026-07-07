@@ -1,7 +1,6 @@
 'use client';
 
 import { Badge } from '@/components/badge';
-import { Separator } from '@/components/separator';
 import { MotionProvider, makeReveal, revealItem, springs } from '@/lib/block-motion';
 import { AnimatePresence, motion } from 'framer-motion';
 import * as React from 'react';
@@ -35,7 +34,7 @@ function Chevron({ open }: { open: boolean }) {
   return (
     <motion.svg
       viewBox="0 0 24 24"
-      className="h-5 w-5 flex-none text-muted-foreground"
+      className="h-4 w-4"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -113,15 +112,20 @@ export function Faq({
             ) : null}
           </div>
 
-          <motion.div variants={revealItem} className="mx-auto mt-10 max-w-2xl">
-            <Separator />
+          <motion.div variants={revealItem} className="mx-auto mt-10 flex max-w-2xl flex-col gap-3">
             {items.map((item, i) => {
               const k = keyOf(item, i);
               const isOpen = open.includes(k);
               const btnId = `${headingId}-q-${i}`;
               const panelId = `${headingId}-a-${i}`;
               return (
-                <React.Fragment key={k}>
+                <div
+                  key={k}
+                  className={cn(
+                    'overflow-hidden rounded-2xl border bg-card transition-colors',
+                    isOpen ? 'border-primary/30' : 'border-border',
+                  )}
+                >
                   <h3 className="m-0">
                     <button
                       type="button"
@@ -129,12 +133,20 @@ export function Faq({
                       aria-expanded={isOpen}
                       aria-controls={panelId}
                       onClick={() => toggle(k)}
-                      className="flex w-full items-center justify-between gap-4 py-5 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
-                      <span className="font-medium text-[15px] text-foreground sm:text-base">
+                      <span className="font-medium text-[15px] text-foreground">
                         {item.question}
                       </span>
-                      <Chevron open={isOpen} />
+                      <span
+                        aria-hidden="true"
+                        className={cn(
+                          'flex h-7 w-7 flex-none items-center justify-center rounded-full transition-colors',
+                          isOpen ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground',
+                        )}
+                      >
+                        <Chevron open={isOpen} />
+                      </span>
                     </button>
                   </h3>
                   <AnimatePresence initial={false}>
@@ -150,14 +162,13 @@ export function Faq({
                         transition={springs.smooth}
                         style={{ overflow: 'hidden' }}
                       >
-                        <div className="pb-5 pr-8 text-[14.5px] text-muted-foreground leading-relaxed">
+                        <div className="px-5 pb-5 text-[14.5px] text-muted-foreground leading-relaxed">
                           {item.answer}
                         </div>
                       </motion.div>
                     ) : null}
                   </AnimatePresence>
-                  <Separator />
-                </React.Fragment>
+                </div>
               );
             })}
           </motion.div>

@@ -562,25 +562,39 @@ function CtaSkeleton({ t }: { t: Tok }) {
   ]);
 }
 
-// FAQ: a centred header over a list of question rows with chevrons.
+// FAQ: a centred header over a stack of bordered question cards, the first open.
 function FaqSkeleton({ t }: { t: Tok }) {
-  const qRow = (w: CSS['width']) =>
-    row(0, [h('div', { style: { flex: 1 } }, bar(w, 8, { radius: 5 })), dot(t.faint, 8)], {
-      width: '100%',
-      alignItems: 'center',
-      padding: '9px 0',
-      borderTop: `1px solid ${t.border}`,
-    });
+  const qCard = (w: CSS['width'], accent = false) =>
+    frame(
+      t,
+      {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '12px 14px',
+        background: accent ? t.accentSoft2 : t.panel2,
+        borderColor: accent ? t.accentRing : t.borderStrong,
+      },
+      [
+        h('div', { style: { flex: 1 } }, bar(w, 8, { radius: 5 })),
+        h('div', {
+          style: {
+            width: 16,
+            height: 16,
+            borderRadius: 999,
+            background: accent ? t.accentSoft : 'transparent',
+            border: `1px solid ${accent ? t.accentRing : t.borderStrong}`,
+          },
+        }),
+      ],
+    );
   return wrap(320, [
     col(
       'center',
-      12,
+      11,
       [
         col('center', 7, [bar('56%', 12, { radius: 6 }), bar('44%', 7, { opacity: 0.6 })]),
-        col('flex-start', 0, [qRow('60%'), qRow('72%'), qRow('50%'), qRow('66%')], {
-          width: '100%',
-          borderBottom: `1px solid ${t.border}`,
-        }),
+        col('stretch', 8, [qCard('62%', true), qCard('74%'), qCard('52%')], { width: '100%' }),
       ],
       { alignItems: 'center' },
     ),

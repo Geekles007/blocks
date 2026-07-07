@@ -2,7 +2,7 @@
   "name": "faq",
   "type": "block",
   "version": "1.0.0",
-  "description": "An FAQ accordion: an optional eyebrow, an h2 + subtitle, then a list of Separator-divided question rows that expand to reveal their answer. Follows the WAI-ARIA accordion pattern (button-in-heading with aria-expanded/aria-controls, a labelled answer region). Single-open by default, or allowMultiple. The height/rotate motion collapses to an instant toggle under prefers-reduced-motion.",
+  "description": "An FAQ accordion: an optional eyebrow, an h2 + subtitle, then a stack of bordered question cards that expand to reveal their answer, the open card carrying an accent border and a tinted chevron. Follows the WAI-ARIA accordion pattern (button-in-heading with aria-expanded/aria-controls, a labelled answer region). Single-open by default, or allowMultiple. The height/rotate motion collapses to an instant toggle under prefers-reduced-motion.",
   "states": [],
   "a11y": {
     "level": "AA",
@@ -10,7 +10,7 @@
     "notes": [
       "The section heading is an h2 that labels the landmark via aria-labelledby; each question is a button inside an h3, so the accordion has a clean heading outline",
       "Each question button carries aria-expanded and aria-controls; the answer is a region labelled by its question button, mounted only while open",
-      "Built on the ibirdui badge and separator primitives, so each piece inherits the design system's a11y guarantees",
+      "The open state is not colour-only: the accent border pairs with the rotated chevron and the button's aria-expanded state",
       "The expand/rotate animation respects prefers-reduced-motion via MotionProvider"
     ]
   },
@@ -28,7 +28,6 @@
   "devDependencies": [],
   "registryDependencies": [
     "https://ui.ibird.dev/r/badge.json",
-    "https://ui.ibird.dev/r/separator.json",
     "https://ui.ibird.dev/r/block-motion.json"
   ],
   "files": [

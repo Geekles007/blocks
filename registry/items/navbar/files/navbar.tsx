@@ -99,7 +99,10 @@ export function Navbar({
   const mobileId = React.useId();
   const hasActions = Boolean(primaryAction || secondaryAction);
   const brandNode = brandHref ? (
-    <a href={brandHref} className="flex items-center outline-none focus-visible:opacity-80">
+    <a
+      href={brandHref}
+      className="flex items-center no-underline outline-none focus-visible:opacity-80"
+    >
       {brand}
     </a>
   ) : (
@@ -124,7 +127,7 @@ export function Navbar({
               <a
                 key={l.id ?? `link-${i}`}
                 href={l.href}
-                className="rounded-md px-3 py-2 font-medium text-[14px] text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+                className="rounded-md px-3 py-2 font-medium text-[14px] text-muted-foreground no-underline outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {l.label}
               </a>
@@ -183,7 +186,7 @@ export function Navbar({
                     key={l.id ?? `m-link-${i}`}
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="rounded-md px-3 py-2.5 font-medium text-[15px] text-foreground outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+                    className="rounded-md px-3 py-2.5 font-medium text-[15px] text-foreground no-underline outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     {l.label}
                   </a>

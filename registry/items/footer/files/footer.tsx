@@ -113,7 +113,7 @@ export function Footer({
                     <li key={l.href ?? `link-${j}`}>
                       <a
                         href={l.href}
-                        className="text-[14px] text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:underline"
+                        className="text-[14px] text-muted-foreground no-underline outline-none transition-colors hover:text-foreground focus-visible:underline"
                       >
                         {l.label}
                       </a>
@@ -140,7 +140,7 @@ export function Footer({
                     <a
                       key={l.href ?? `legal-${i}`}
                       href={l.href}
-                      className="text-[13px] text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:underline"
+                      className="text-[13px] text-muted-foreground no-underline outline-none transition-colors hover:text-foreground focus-visible:underline"
                     >
                       {l.label}
                     </a>

@@ -14,11 +14,31 @@ import { Badge, Icon } from '../primitives';
 
 const { useState } = React;
 
+type Breakpoint = 'desktop' | 'tablet' | 'mobile';
+const BP_WIDTH: Record<Breakpoint, string> = { desktop: '100%', tablet: '834px', mobile: '390px' };
+
 /** Detail page for one template: header, composed blocks, install, live preview. */
 export function TemplateDetail({ templateKey }: { templateKey: string }) {
-  const { t, m, reduced, theme, locale, copy } = useUI();
+  const { t, m, reduced, theme, locale, copy, toggleTheme } = useUI();
   const tpl = getTemplate(templateKey);
   const [pm, setPm] = useState(0);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [bp, setBp] = useState<Breakpoint>('desktop');
+
+  // Close the fullscreen overlay on Escape and lock body scroll while it's open.
+  React.useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFullscreen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [fullscreen, setFullscreen]);
 
   if (!tpl) return null; // the route already 404s on unknown keys
   const text = templateText(tpl, locale);
@@ -26,6 +46,34 @@ export function TemplateDetail({ templateKey }: { templateKey: string }) {
   const cmds =
     shipped && tpl.registryKey ? addCommands(`blocks.ibird.dev/r/${tpl.registryKey}`) : [];
   const cmd = cmds[pm]?.cmd ?? '';
+  const previewKey = tpl.registryKey ?? tpl.key;
+  const fsWidth = BP_WIDTH[bp];
+
+  // Small square icon button used across the fullscreen toolbar.
+  const iconBtn = (onClick: () => void, icon: string, title: string, active = false) =>
+    h(
+      'button',
+      {
+        type: 'button',
+        onClick,
+        title,
+        'aria-label': title,
+        style: {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '30px',
+          height: '30px',
+          borderRadius: '7px',
+          border: `1px solid ${active ? t.accentRing : t.border}`,
+          background: active ? t.accentSoft2 : t.bg2,
+          color: active ? t.accent : t.muted,
+          cursor: 'pointer',
+        },
+      },
+      h(Icon, { name: icon, size: 15 }),
+    );
+  const bpBtn = (b: Breakpoint, icon: string) => iconBtn(() => setBp(b), icon, b, bp === b);
 
   return h(
     'div',
@@ -277,14 +325,47 @@ export function TemplateDetail({ templateKey }: { templateKey: string }) {
         'div',
         {
           style: {
-            font: "600 11px 'Geist',sans-serif",
-            letterSpacing: '.05em',
-            textTransform: 'uppercase',
-            color: t.faint,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
             marginBottom: '10px',
           },
         },
-        m.templates.livePreview,
+        h(
+          'div',
+          {
+            style: {
+              font: "600 11px 'Geist',sans-serif",
+              letterSpacing: '.05em',
+              textTransform: 'uppercase',
+              color: t.faint,
+            },
+          },
+          m.templates.livePreview,
+        ),
+        h(
+          'button',
+          {
+            type: 'button',
+            onClick: () => setFullscreen(true),
+            title: m.blockDetail.fullscreen,
+            style: {
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 10px',
+              borderRadius: '8px',
+              border: `1px solid ${t.border}`,
+              background: t.panel2,
+              color: t.muted,
+              cursor: 'pointer',
+              font: "600 12px 'Geist',sans-serif",
+            },
+          },
+          h(Icon, { name: 'maximize', size: 14 }),
+          m.blockDetail.fullscreen,
+        ),
       ),
       h(
         'div',
@@ -298,10 +379,109 @@ export function TemplateDetail({ templateKey }: { templateKey: string }) {
         },
         h(
           PreviewFrame,
-          { key: tpl.key, theme, reduced, minHeight: 600 },
-          renderTemplatePreview(tpl.registryKey ?? tpl.key),
+          { key: previewKey, theme, reduced, minHeight: 600 },
+          renderTemplatePreview(previewKey),
         ),
       ),
     ),
+
+    // fullscreen overlay
+    fullscreen &&
+      h(
+        'div',
+        {
+          role: 'dialog',
+          'aria-modal': true,
+          'aria-label': m.blockDetail.fullscreenLabel(text.name),
+          onClick: () => setFullscreen(false),
+          style: {
+            position: 'fixed',
+            inset: 0,
+            zIndex: 90,
+            display: 'flex',
+            flexDirection: 'column',
+            background: t.bg,
+          },
+        },
+        // toolbar
+        h(
+          'div',
+          {
+            onClick: (e: React.MouseEvent) => e.stopPropagation(),
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              padding: '10px 16px',
+              borderBottom: `1px solid ${t.border}`,
+              background: t.panel,
+              flexWrap: 'wrap',
+            },
+          },
+          h(
+            'div',
+            { style: { display: 'flex', alignItems: 'center', gap: '10px' } },
+            h('span', { style: { font: "600 14px 'Geist',sans-serif", color: t.text } }, text.name),
+            h(Badge, { t, tone: 'neutral' }, tpl.cat),
+          ),
+          h(
+            'div',
+            { style: { display: 'flex', alignItems: 'center', gap: '6px' } },
+            h(
+              'div',
+              {
+                style: {
+                  display: 'flex',
+                  gap: '2px',
+                  background: t.bg2,
+                  borderRadius: '8px',
+                  padding: '2px',
+                },
+              },
+              bpBtn('desktop', 'monitor'),
+              bpBtn('tablet', 'tablet'),
+              bpBtn('mobile', 'phone'),
+            ),
+            h('span', {
+              style: { width: '1px', height: '20px', background: t.border, margin: '0 4px' },
+            }),
+            iconBtn(toggleTheme, theme === 'dark' ? 'sun' : 'moon', m.blockDetail.theme),
+            iconBtn(() => setFullscreen(false), 'close', m.blockDetail.exitFullscreen),
+          ),
+        ),
+        // stage
+        h(
+          'div',
+          {
+            onClick: (e: React.MouseEvent) => e.stopPropagation(),
+            style: {
+              flex: 1,
+              overflow: 'auto',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              padding: '40px 24px',
+              background: 'radial-gradient(var(--ib-border) 1px,transparent 1px)',
+              backgroundSize: '22px 22px',
+            },
+          },
+          h(
+            'div',
+            {
+              style: {
+                width: fsWidth,
+                maxWidth: '100%',
+                transition: reduced ? 'none' : 'width .5s cubic-bezier(.22,1,.36,1)',
+              },
+            },
+            h(
+              PreviewFrame,
+              { key: `fs-${previewKey}`, theme, reduced, minHeight: 600 },
+              renderTemplatePreview(previewKey),
+            ),
+          ),
+        ),
+      ),
   );
 }

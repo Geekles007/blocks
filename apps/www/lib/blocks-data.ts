@@ -93,7 +93,7 @@ export const BLOCKS: Block[] = [
     name: 'FAQ',
     preview: 'faq',
     icon: 'help',
-    prims: ['Badge', 'Separator'],
+    prims: ['Badge'],
     variants: ['default'],
   },
   {
