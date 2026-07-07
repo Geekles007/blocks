@@ -121,8 +121,40 @@ body {
   animation: ib-fade 0.26s ease both !important;
   transform: none !important;
 }
+/* Mobile hamburger trigger. Hidden until the inline nav collapses (≤920px).
+   Interactive states use accent-aware CSS vars set inline from the theme tokens,
+   so hover/press/focus read correctly on both light and dark. */
 .ib-menubtn {
   display: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s
+    ease, transform 0.12s ease;
+}
+.ib-menubtn:hover {
+  background: var(--mb-bg-hover) !important;
+  border-color: var(--mb-border-hover) !important;
+  color: var(--mb-fg-hover) !important;
+}
+.ib-menubtn:active {
+  background: var(--mb-bg-active) !important;
+  border-color: var(--mb-ring-color) !important;
+  color: var(--mb-accent) !important;
+  transform: scale(0.92);
+}
+.ib-menubtn:focus-visible {
+  outline: none;
+  border-color: var(--mb-ring-color) !important;
+  color: var(--mb-fg-hover) !important;
+  box-shadow: 0 0 0 3px var(--mb-ring) !important;
+}
+/* Open state: keep it lit so the trigger reads as active behind the sheet. */
+.ib-menubtn[aria-expanded="true"] {
+  background: var(--mb-bg-active) !important;
+  border-color: var(--mb-ring-color) !important;
+  color: var(--mb-accent) !important;
+}
+[data-reduced="1"] .ib-menubtn:active {
+  transform: none;
 }
 [data-reduced="1"] .ib-rise,
 [data-reduced="1"] .ib-pop {
