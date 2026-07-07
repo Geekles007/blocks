@@ -30,11 +30,11 @@ export interface FaqProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title
   allowMultiple?: boolean;
 }
 
-function Chevron({ open }: { open: boolean }) {
+function Chevron({ open, className }: { open: boolean; className?: string }) {
   return (
     <motion.svg
       viewBox="0 0 24 24"
-      className="h-4 w-4"
+      className={cn('h-4 w-4 flex-none transition-colors', className)}
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -112,20 +112,17 @@ export function Faq({
             ) : null}
           </div>
 
-          <motion.div variants={revealItem} className="mx-auto mt-10 flex max-w-2xl flex-col gap-3">
+          <motion.div
+            variants={revealItem}
+            className="mx-auto mt-10 max-w-2xl divide-y divide-border divide-solid overflow-hidden rounded-2xl border border-border border-solid bg-card text-card-foreground"
+          >
             {items.map((item, i) => {
               const k = keyOf(item, i);
               const isOpen = open.includes(k);
               const btnId = `${headingId}-q-${i}`;
               const panelId = `${headingId}-a-${i}`;
               return (
-                <div
-                  key={k}
-                  className={cn(
-                    'overflow-hidden rounded-2xl border bg-card text-card-foreground transition-colors',
-                    isOpen ? 'border-primary/30' : 'border-border',
-                  )}
-                >
+                <div key={k}>
                   <h3 className="m-0">
                     <button
                       type="button"
@@ -133,20 +130,19 @@ export function Faq({
                       aria-expanded={isOpen}
                       aria-controls={panelId}
                       onClick={() => toggle(k)}
-                      className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="group flex w-full items-center justify-between gap-4 px-6 py-5 text-left outline-none transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
                     >
-                      <span className="font-semibold text-[15.5px] text-foreground sm:text-base">
+                      <span className="font-medium text-[15px] text-foreground leading-snug sm:text-base">
                         {item.question}
                       </span>
-                      <span
-                        aria-hidden="true"
-                        className={cn(
-                          'flex h-7 w-7 flex-none items-center justify-center rounded-full transition-colors',
-                          isOpen ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground',
-                        )}
-                      >
-                        <Chevron open={isOpen} />
-                      </span>
+                      <Chevron
+                        open={isOpen}
+                        className={
+                          isOpen
+                            ? 'text-foreground'
+                            : 'text-muted-foreground group-hover:text-foreground'
+                        }
+                      />
                     </button>
                   </h3>
                   <AnimatePresence initial={false}>
@@ -162,7 +158,7 @@ export function Faq({
                         transition={springs.smooth}
                         style={{ overflow: 'hidden' }}
                       >
-                        <div className="px-5 pb-5 text-[14.5px] text-muted-foreground leading-relaxed">
+                        <div className="px-6 pb-5 text-[15px] text-muted-foreground leading-relaxed">
                           {item.answer}
                         </div>
                       </motion.div>
