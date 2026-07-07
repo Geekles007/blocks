@@ -169,6 +169,19 @@ export const fr: Messages = {
       `${nb} block${nb > 1 ? 's' : ''} · ${nv} variante${nv > 1 ? 's' : ''}`,
     variants: (n: number) => `${n} variante${n > 1 ? 's' : ''}`,
   },
+  templates: {
+    kicker: 'Collection · à venir',
+    titleLead: 'Des pages complètes, ',
+    titleAccent: 'à une commande.',
+    subtitle:
+      'Des pages complètes composées de blocks ibirdui — landing, pricing, dashboard, auth. Installe la page, ses blocks et leurs primitives en une seule commande ; tu gardes le code.',
+    all: 'Tous',
+    filter: 'Filtrer…',
+    empty: 'Aucun template',
+    ready: 'Prêt',
+    footerNote:
+      'Les premiers templates arrivent — chacun est assemblé uniquement à partir de blocks déjà livrés, donc rien ici n’est une maquette non installable.',
+  },
   morphing: {
     kicker: 'Collection · en cours',
     titleLead: 'Un objet qui ',
