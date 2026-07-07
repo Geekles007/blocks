@@ -30,29 +30,42 @@ export interface FaqProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title
   allowMultiple?: boolean;
 }
 
-function Chevron({ open }: { open: boolean }) {
+/** A hairline rule, drawn with a coloured 1px box so it renders without a CSS reset. */
+function Rule() {
+  return <div aria-hidden="true" className="h-px w-full bg-border" />;
+}
+
+/**
+ * A thin circle enclosing a plus that morphs into a minus when open — the vertical
+ * stroke rotates onto the horizontal one. Decorative; the button state is conveyed
+ * by `aria-expanded`.
+ */
+function ToggleIcon({ open }: { open: boolean }) {
   return (
-    <motion.svg
-      viewBox="0 0 24 24"
-      className="h-4 w-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+    <span
       aria-hidden="true"
-      initial={false}
-      animate={{ rotate: open ? 180 : 0 }}
-      transition={springs.smooth}
+      className={cn(
+        'relative flex h-7 w-7 flex-none items-center justify-center rounded-full border border-solid transition-colors',
+        open
+          ? 'border-foreground/30 text-foreground'
+          : 'border-border text-muted-foreground group-hover:border-foreground/40 group-hover:text-foreground',
+      )}
     >
-      <path d="M6 9l6 6 6-6" />
-    </motion.svg>
+      <span className="absolute h-px w-3 rounded-full bg-current" />
+      <motion.span
+        className="absolute h-3 w-px rounded-full bg-current"
+        initial={false}
+        animate={{ rotate: open ? 90 : 0 }}
+        transition={springs.smooth}
+      />
+    </span>
   );
 }
 
 /**
- * An FAQ accordion: an optional eyebrow, an h2 + subtitle, then a list of
- * Separator-divided question rows that expand to reveal their answer.
+ * An FAQ accordion styled as a clean, borderless list: an optional eyebrow, an
+ * h2 + subtitle, then hairline-divided question rows that expand to reveal their
+ * answer, each with a plus/minus toggle.
  *
  *   <Faq
  *     title="Frequently asked questions"
@@ -62,9 +75,10 @@ function Chevron({ open }: { open: boolean }) {
  * Follows the WAI-ARIA accordion pattern: each question is a `button` inside an
  * `h3`, carrying `aria-expanded` and `aria-controls`; the answer is a labelled
  * region that mounts on open. The section heading is an `h2` that labels the
- * landmark. Built on the ibirdui `badge` and `separator` primitives; the
- * height/rotate motion runs through `MotionProvider`, so it collapses to an
- * instant toggle under `prefers-reduced-motion`.
+ * landmark. Built on the ibirdui `badge` primitive; the height and plus→minus
+ * motion run through `MotionProvider`, so they collapse to an instant toggle
+ * under `prefers-reduced-motion`. Themed with semantic tokens, so it reads the
+ * same in light and dark.
  */
 export function Faq({
   eyebrow,
@@ -112,20 +126,15 @@ export function Faq({
             ) : null}
           </div>
 
-          <motion.div variants={revealItem} className="mx-auto mt-10 flex max-w-2xl flex-col gap-3">
+          <motion.div variants={revealItem} className="mx-auto mt-10 max-w-2xl">
+            <Rule />
             {items.map((item, i) => {
               const k = keyOf(item, i);
               const isOpen = open.includes(k);
               const btnId = `${headingId}-q-${i}`;
               const panelId = `${headingId}-a-${i}`;
               return (
-                <div
-                  key={k}
-                  className={cn(
-                    'overflow-hidden rounded-2xl border bg-card text-card-foreground transition-colors',
-                    isOpen ? 'border-primary/30' : 'border-border',
-                  )}
-                >
+                <div key={k}>
                   <h3 className="m-0">
                     <button
                       type="button"
@@ -133,20 +142,12 @@ export function Faq({
                       aria-expanded={isOpen}
                       aria-controls={panelId}
                       onClick={() => toggle(k)}
-                      className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="group flex w-full appearance-none items-center justify-between gap-4 rounded-lg border-0 bg-transparent py-5 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
-                      <span className="font-semibold text-[15.5px] text-foreground sm:text-base">
+                      <span className="pr-2 font-semibold text-[15px] text-foreground leading-snug sm:text-base">
                         {item.question}
                       </span>
-                      <span
-                        aria-hidden="true"
-                        className={cn(
-                          'flex h-7 w-7 flex-none items-center justify-center rounded-full transition-colors',
-                          isOpen ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground',
-                        )}
-                      >
-                        <Chevron open={isOpen} />
-                      </span>
+                      <ToggleIcon open={isOpen} />
                     </button>
                   </h3>
                   <AnimatePresence initial={false}>
@@ -162,12 +163,13 @@ export function Faq({
                         transition={springs.smooth}
                         style={{ overflow: 'hidden' }}
                       >
-                        <div className="px-5 pb-5 text-[14.5px] text-muted-foreground leading-relaxed">
+                        <div className="pr-10 pb-6 text-[15px] text-muted-foreground leading-relaxed">
                           {item.answer}
                         </div>
                       </motion.div>
                     ) : null}
                   </AnimatePresence>
+                  <Rule />
                 </div>
               );
             })}
