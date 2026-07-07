@@ -5,7 +5,9 @@
 // catalogue only ever shows blocks that actually exist. The demo copy is
 // bilingual: each block reads its content from a locale-keyed object.
 import { Cta } from '@/components/blocks/cta';
+import { Faq } from '@/components/blocks/faq';
 import { Features } from '@/components/blocks/features';
+import { Footer } from '@/components/blocks/footer';
 import { Hero } from '@/components/blocks/hero';
 import { HeroAgency } from '@/components/blocks/hero-agency';
 import { HeroFintech } from '@/components/blocks/hero-fintech';
@@ -19,6 +21,7 @@ import * as React from 'react';
 import { h } from '~/lib/h';
 import type { Locale } from '~/lib/i18n';
 import type { Tok } from '~/lib/tokens';
+import { BlocksLockup } from './logo';
 
 export interface PreviewProps {
   t: Tok;
@@ -673,6 +676,135 @@ function CtaReal({ locale }: PreviewProps) {
   });
 }
 
+// ── FAQ ──────────────────────────────────────────────────────────────────────
+const FAQ = {
+  en: {
+    eyebrow: 'Support',
+    title: 'Frequently asked questions',
+    subtitle: 'Everything you might want to know before you copy your first block.',
+    items: [
+      {
+        question: 'Do I own the code?',
+        answer:
+          'Yes. One command copies the block and every primitive it composes into your repo — you keep and edit the source, with no runtime dependency.',
+      },
+      {
+        question: 'Is it accessible out of the box?',
+        answer:
+          'Every block is AA-tested: real landmarks and headings, keyboard support, and prefers-reduced-motion respected.',
+      },
+      {
+        question: 'Can I use my own theme?',
+        answer:
+          'Blocks read semantic HSL tokens, so they wear your brand in light or dark by changing a few CSS variables — no block edits needed.',
+      },
+      {
+        question: 'How do updates work?',
+        answer:
+          'Blocks are versioned individually in the registry; re-run the add command to pull a newer version whenever you want.',
+      },
+    ],
+  },
+  fr: {
+    eyebrow: 'Support',
+    title: 'Questions fréquentes',
+    subtitle: 'Tout ce que tu peux vouloir savoir avant de copier ton premier block.',
+    items: [
+      {
+        question: 'Est-ce que je possède le code ?',
+        answer:
+          'Oui. Une commande copie le block et chaque primitive qu’il compose dans ton repo — tu gardes et édites la source, sans dépendance runtime.',
+      },
+      {
+        question: 'Est-ce accessible d’emblée ?',
+        answer:
+          'Chaque block est testé AA : landmarks et titres réels, support clavier, et prefers-reduced-motion respecté.',
+      },
+      {
+        question: 'Puis-je utiliser mon propre thème ?',
+        answer:
+          'Les blocks lisent des tokens HSL sémantiques : ils s’habillent de ta charte en clair ou sombre en changeant quelques variables CSS, sans toucher au block.',
+      },
+      {
+        question: 'Comment marchent les mises à jour ?',
+        answer:
+          'Les blocks sont versionnés individuellement dans le registre ; relance la commande add pour récupérer une version plus récente.',
+      },
+    ],
+  },
+} satisfies Record<Locale, unknown>;
+
+function FaqReal({ locale }: PreviewProps) {
+  const c = pick(locale, FAQ);
+  return h(Faq, {
+    eyebrow: c.eyebrow,
+    title: c.title,
+    subtitle: c.subtitle,
+    items: c.items.map((it, i) => ({ id: String(i), question: it.question, answer: it.answer })),
+  });
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+const socialSvg = (d: string) =>
+  h(
+    'svg',
+    { width: 17, height: 17, viewBox: '0 0 24 24', fill: 'currentColor', 'aria-hidden': true },
+    h('path', { d }),
+  );
+const GithubIcon = socialSvg(
+  'M12 2C6.48 2 2 6.58 2 12.2c0 4.5 2.87 8.32 6.84 9.67.5.1.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.56-1.14-4.56-5.05 0-1.12.39-2.03 1.03-2.74-.1-.26-.45-1.3.1-2.72 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.42.2 2.46.1 2.72.64.71 1.03 1.62 1.03 2.74 0 3.92-2.34 4.79-4.57 5.04.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.48A10.2 10.2 0 0 0 22 12.2C22 6.58 17.52 2 12 2z',
+);
+const XIcon = socialSvg(
+  'M18.9 2H22l-7.5 8.57L23 22h-6.8l-5.32-6.96L4.8 22H1.66l8.03-9.17L1 2h6.98l4.8 6.36L18.9 2zm-1.2 18h1.9L7.4 4H5.4l12.3 16z',
+);
+
+const FOOTER = {
+  en: {
+    description:
+      'Blocks you own, built on the ibirdui primitives. Copy one command, keep the code.',
+    columns: [
+      {
+        title: 'Product',
+        links: ['Catalogue', 'Morphing', 'Templates', 'Changelog'],
+      },
+      { title: 'Resources', links: ['Guide', 'Themes', 'block-motion'] },
+      { title: 'Company', links: ['About', 'Blog', 'Careers'] },
+    ],
+    copyright: '© 2025 ibirdui — MIT licensed',
+    legal: ['Privacy', 'Terms'],
+  },
+  fr: {
+    description:
+      'Des blocks que tu possèdes, sur les primitives ibirdui. Une commande, garde le code.',
+    columns: [
+      { title: 'Produit', links: ['Catalogue', 'Morphing', 'Templates', 'Changelog'] },
+      { title: 'Ressources', links: ['Guide', 'Thèmes', 'block-motion'] },
+      { title: 'Société', links: ['À propos', 'Blog', 'Carrières'] },
+    ],
+    copyright: '© 2025 ibirdui — licence MIT',
+    legal: ['Confidentialité', 'Conditions'],
+  },
+} satisfies Record<Locale, unknown>;
+
+function FooterReal({ t, locale }: PreviewProps) {
+  const c = pick(locale, FOOTER);
+  return h(Footer, {
+    brand: h(BlocksLockup, { t, size: 24 }),
+    description: c.description,
+    columns: c.columns.map((col, i) => ({
+      id: String(i),
+      title: col.title,
+      links: col.links.map((label) => ({ label, href: `#${label}` })),
+    })),
+    social: [
+      { label: 'GitHub', href: '#github', icon: GithubIcon },
+      { label: 'X', href: '#x', icon: XIcon },
+    ],
+    copyright: c.copyright,
+    legal: c.legal.map((label) => ({ label, href: `#${label}` })),
+  });
+}
+
 const PREVIEWS: Record<string, (p: PreviewProps) => React.ReactElement> = {
   hero: HeroReal,
   'hero-terminal': HeroTerminalReal,
@@ -681,6 +813,8 @@ const PREVIEWS: Record<string, (p: PreviewProps) => React.ReactElement> = {
   features: FeaturesReal,
   testimonials: TestimonialsReal,
   cta: CtaReal,
+  faq: FaqReal,
+  footer: FooterReal,
   pricing: PricingReal,
   'pricing-toggle': PricingToggleReal,
   'pricing-single': PricingSingleReal,

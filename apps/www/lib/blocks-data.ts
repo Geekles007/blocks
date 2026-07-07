@@ -17,7 +17,7 @@ export interface Block {
 
 // Only categories with at least one shipped block are listed. As real blocks
 // land (Application, Auth, …) add their category here and an entry to BLOCKS.
-export const CATS = ['Marketing', 'Pricing'];
+export const CATS = ['Marketing', 'Pricing', 'Navigation'];
 
 // Catalogue = blocks that actually exist in the registry. Marketing ships the
 // full hero family; Pricing lists only `pricing-toggle` for now. The Morphing
@@ -85,6 +85,24 @@ export const BLOCKS: Block[] = [
     preview: 'cta',
     icon: 'send',
     prims: ['Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Marketing',
+    key: 'faq',
+    name: 'FAQ',
+    preview: 'faq',
+    icon: 'help',
+    prims: ['Badge', 'Separator'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Navigation',
+    key: 'footer',
+    name: 'Footer',
+    preview: 'footer',
+    icon: 'layers',
+    prims: ['Separator'],
     variants: ['default'],
   },
   {
