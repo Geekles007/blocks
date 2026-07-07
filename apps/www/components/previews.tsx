@@ -12,6 +12,7 @@ import { Hero } from '@/components/blocks/hero';
 import { HeroAgency } from '@/components/blocks/hero-agency';
 import { HeroFintech } from '@/components/blocks/hero-fintech';
 import { HeroTerminal } from '@/components/blocks/hero-terminal';
+import { Navbar } from '@/components/blocks/navbar';
 import { Pricing } from '@/components/blocks/pricing';
 import { PricingCompare } from '@/components/blocks/pricing-compare';
 import { PricingSingle } from '@/components/blocks/pricing-single';
@@ -528,38 +529,46 @@ const FEATURES = {
   en: {
     eyebrow: 'Why teams switch',
     title: { lead: 'Everything you need to ', accent: 'ship', tail: '.' },
-    subtitle: 'Composed on the ibirdui primitives — accessible, themable and animated by default.',
+    subtitle:
+      'Real, composable sections built on the ibirdui primitives — install one, keep the source.',
     items: [
       {
-        title: 'Fast by default',
-        description: 'No runtime and no lock-in — copy the source, own it forever.',
+        title: 'One-command install',
+        description:
+          '“ibirdui add” copies the block and every primitive it composes straight into your repo.',
       },
       {
-        title: 'Themable',
-        description: 'Every block reads your semantic tokens, in light or dark.',
+        title: 'Accessible by default',
+        description:
+          'Real landmarks, keyboard support and reduced-motion — tested to WCAG AA on every block.',
       },
       {
-        title: 'Accessible',
-        description: 'AA-tested, keyboard-ready, and it respects reduced motion.',
+        title: 'Themed with your tokens',
+        description:
+          'Blocks read semantic HSL tokens, so they wear your brand in light or dark with zero edits.',
       },
     ],
   },
   fr: {
     eyebrow: 'Pourquoi elles changent',
     title: { lead: 'Tout ce qu’il faut pour ', accent: 'livrer', tail: '.' },
-    subtitle: 'Composé sur les primitives ibirdui — accessible, thémable et animé par défaut.',
+    subtitle:
+      'De vraies sections composables bâties sur les primitives ibirdui — installes-en une, garde la source.',
     items: [
       {
-        title: 'Rapide par défaut',
-        description: 'Pas de runtime ni de lock-in — copie la source, elle est à toi.',
+        title: 'Installation en une commande',
+        description:
+          '« ibirdui add » copie le block et chaque primitive qu’il compose direct dans ton repo.',
       },
       {
-        title: 'Thémable',
-        description: 'Chaque block lit tes tokens sémantiques, en clair ou en sombre.',
+        title: 'Accessible par défaut',
+        description:
+          'Landmarks réels, support clavier et reduced-motion — testés WCAG AA sur chaque block.',
       },
       {
-        title: 'Accessible',
-        description: 'Testé AA, prêt au clavier, et respecte le reduced-motion.',
+        title: 'Thémé avec tes tokens',
+        description:
+          'Les blocks lisent des tokens HSL sémantiques : ta charte en clair ou sombre, sans une seule édition.',
       },
     ],
   },
@@ -586,21 +595,24 @@ const TESTIMONIALS = {
   en: {
     eyebrow: 'Social proof',
     title: { lead: 'Loved by ', accent: 'product teams', tail: '.' },
-    subtitle: 'Teams of every size ship their marketing and app UI faster with ibirdui blocks.',
+    subtitle: 'Designers and engineers ship their marketing and app UI faster with ibirdui blocks.',
     items: [
       {
-        quote: '“We shipped our whole marketing site in a weekend. The blocks just drop in.”',
-        role: 'Head of Design, Northwind',
+        quote:
+          '“The hero, pricing and FAQ blocks dropped straight into our app — I had a launch page live before lunch, motion and all.”',
+        role: 'Design Engineer · Cadence',
         rating: 5,
       },
       {
-        quote: '“Accessibility is handled for us — keyboard, focus, reduced motion, all of it.”',
-        role: 'Staff Engineer, Lumen',
+        quote:
+          '“One command and the source is mine. No black-box components, no upgrade dread — I read it, tweak it, ship it.”',
+        role: 'Founder · Fathom',
         rating: 5,
       },
       {
-        quote: '“One command and I own the source. No runtime, no lock-in, no surprises.”',
-        role: 'Founder, Parcel',
+        quote:
+          '“Accessibility used to eat a whole sprint. With ibirdui the landmarks, focus and reduced-motion are already there.”',
+        role: 'Frontend Lead · Northwind',
         rating: 5,
       },
     ],
@@ -609,21 +621,24 @@ const TESTIMONIALS = {
     eyebrow: 'Preuve sociale',
     title: { lead: 'Adoré par les ', accent: 'équipes produit', tail: '.' },
     subtitle:
-      'Des équipes de toute taille livrent leur UI marketing et app plus vite avec ibirdui.',
+      'Designers et devs livrent leur UI marketing et app plus vite avec les blocks ibirdui.',
     items: [
       {
-        quote: '« On a livré tout notre site en un week-end. Les blocks s’intègrent tout seuls. »',
-        role: 'Head of Design, Northwind',
+        quote:
+          '« Les blocks hero, pricing et FAQ se sont posés direct dans notre app — page de lancement en ligne avant midi, animations comprises. »',
+        role: 'Design Engineer · Cadence',
         rating: 5,
       },
       {
-        quote: '« L’accessibilité est gérée pour nous — clavier, focus, reduced-motion, tout. »',
-        role: 'Staff Engineer, Lumen',
+        quote:
+          '« Une commande et la source est à moi. Pas de composant boîte noire, pas de stress de mise à jour — je lis, j’ajuste, je livre. »',
+        role: 'Founder · Fathom',
         rating: 5,
       },
       {
-        quote: '« Une commande et je possède la source. Pas de runtime, pas de lock-in. »',
-        role: 'Founder, Parcel',
+        quote:
+          '« L’accessibilité mangeait un sprint entier. Avec ibirdui, landmarks, focus et reduced-motion sont déjà là. »',
+        role: 'Frontend Lead · Northwind',
         rating: 5,
       },
     ],
@@ -632,7 +647,7 @@ const TESTIMONIALS = {
 
 function TestimonialsReal({ locale }: PreviewProps) {
   const c = pick(locale, TESTIMONIALS);
-  const names = ['Ada Reyes', 'Tom Iverson', 'Lou Park'];
+  const names = ['Mara Voss', 'Diego Herrera', 'Priya Nair'];
   return h(Testimonials, {
     eyebrow: c.eyebrow,
     title: headline(c.title),
@@ -805,6 +820,32 @@ function FooterReal({ t, locale }: PreviewProps) {
   });
 }
 
+// ── Navbar ───────────────────────────────────────────────────────────────────
+const NAVBAR = {
+  en: {
+    links: ['Catalogue', 'Morphing', 'Templates', 'Guide'],
+    signIn: 'Sign in',
+    cta: 'Get started',
+  },
+  fr: {
+    links: ['Catalogue', 'Morphing', 'Templates', 'Guide'],
+    signIn: 'Connexion',
+    cta: 'Commencer',
+  },
+} satisfies Record<Locale, unknown>;
+
+function NavbarReal({ t, locale }: PreviewProps) {
+  const c = pick(locale, NAVBAR);
+  return h(Navbar, {
+    brand: h(BlocksLockup, { t, size: 26 }),
+    brandHref: '#',
+    sticky: false,
+    links: c.links.map((label, i) => ({ id: String(i), label, href: `#${label}` })),
+    secondaryAction: { label: c.signIn, href: '#signin' },
+    primaryAction: { label: c.cta, href: '#start' },
+  });
+}
+
 const PREVIEWS: Record<string, (p: PreviewProps) => React.ReactElement> = {
   hero: HeroReal,
   'hero-terminal': HeroTerminalReal,
@@ -814,6 +855,7 @@ const PREVIEWS: Record<string, (p: PreviewProps) => React.ReactElement> = {
   testimonials: TestimonialsReal,
   cta: CtaReal,
   faq: FaqReal,
+  navbar: NavbarReal,
   footer: FooterReal,
   pricing: PricingReal,
   'pricing-toggle': PricingToggleReal,

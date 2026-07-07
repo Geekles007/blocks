@@ -1,0 +1,40 @@
+{
+  "name": "navbar",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A responsive site header: a brand lockup, a row of navigation links and up to two actions, collapsing to a hamburger-toggled panel on mobile. Sticky with a blurred backdrop by default. The mobile panel's height motion collapses to an instant toggle under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Renders a header with a labelled nav for the primary links; the mobile disclosure button carries aria-expanded and aria-controls, and its panel is a second labelled nav that mounts on open",
+      "The brand can be wrapped in a link; CTAs render as real links when given an href, otherwise as buttons, so each is keyboard- and screen-reader-accessible",
+      "The hamburger button has an accessible name that reflects the open/closed state",
+      "Built on the ibirdui button styles; the panel animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a site header / navigation bar for a landing page",
+      "a responsive navbar with a mobile hamburger menu",
+      "a sticky top navigation built on ibirdui"
+    ],
+    "examples": [
+      "<Navbar brand={<Logo />} links={[{ label: 'Catalogue', href: '/catalogue' }]} primaryAction={{ label: 'Get started', href: '/docs' }} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/button.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/navbar.tsx",
+      "path": "components/blocks/navbar.tsx",
+      "type": "component"
+    }
+  ]
+}

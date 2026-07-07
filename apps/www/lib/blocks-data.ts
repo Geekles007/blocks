@@ -98,6 +98,15 @@ export const BLOCKS: Block[] = [
   },
   {
     cat: 'Navigation',
+    key: 'navbar',
+    name: 'Navbar',
+    preview: 'navbar',
+    icon: 'command',
+    prims: ['Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Navigation',
     key: 'footer',
     name: 'Footer',
     preview: 'footer',
