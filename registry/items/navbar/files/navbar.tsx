@@ -150,7 +150,7 @@ export function Navbar({
             aria-controls={mobileId}
             aria-label={open ? 'Close menu' : 'Open menu'}
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-foreground outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+            className={buttonClasses({ variant: 'outline', size: 'icon', className: 'md:hidden' })}
           >
             <svg
               viewBox="0 0 24 24"
