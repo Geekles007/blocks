@@ -20,9 +20,9 @@ export interface Block {
 export const CATS = ['Marketing', 'Pricing', 'Navigation'];
 
 // Catalogue = blocks that actually exist in the registry. Marketing ships the
-// full hero family; Pricing lists only `pricing-toggle` for now. The Morphing
-// blocks are installable registry items too, but they live in their own
-// showcase (/morphing) and are intentionally NOT listed in the catalogue.
+// full hero family; Pricing ships the grid, toggle, single-offer and compare
+// variants. The Morphing blocks are installable registry items too, but they
+// live in their own showcase (/morphing) and are intentionally NOT listed here.
 export const BLOCKS: Block[] = [
   {
     cat: 'Marketing',
@@ -116,11 +116,38 @@ export const BLOCKS: Block[] = [
   },
   {
     cat: 'Pricing',
+    key: 'pricing',
+    name: 'Pricing Grid',
+    preview: 'pricing',
+    icon: 'card',
+    prims: ['Badge', 'Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Pricing',
     key: 'pricing-toggle',
     name: 'Pricing Toggle',
     preview: 'pricing-toggle',
     icon: 'gauge',
     prims: ['Switch', 'Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Pricing',
+    key: 'pricing-single',
+    name: 'Pricing Single',
+    preview: 'pricing-single',
+    icon: 'check',
+    prims: ['Badge', 'Button'],
+    variants: ['default'],
+  },
+  {
+    cat: 'Pricing',
+    key: 'pricing-compare',
+    name: 'Pricing Compare',
+    preview: 'pricing-compare',
+    icon: 'table',
+    prims: ['Button'],
     variants: ['default'],
   },
 ];
