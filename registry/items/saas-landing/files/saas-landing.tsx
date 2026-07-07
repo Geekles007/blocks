@@ -273,22 +273,40 @@ export function SaasLanding(props: React.HTMLAttributes<HTMLDivElement>) {
       />
 
       <main>
-        <Hero
-          className="px-6 py-20 sm:py-28"
-          eyebrow="New · block-motion v1"
-          title={
-            <>
-              Blocks that <span className="text-primary">move</span> just right.
-            </>
-          }
-          subtitle="Accessible, morph-animated sections you paste and own — built on the ibirdui primitives, orchestrated by one motion grammar."
-          primaryAction={{ label: 'Browse blocks', href: '#', icon: <ArrowIcon /> }}
-          secondaryAction={{ label: 'Copy the code', href: '#' }}
-          socialProof={{
-            people: [{ name: 'Ada Reyes' }, { name: 'Tom Iverson' }, { name: 'Lou Park' }],
-            caption: 'Trusted by 2,000+ product teams',
-          }}
-        />
+        {/* Hero, set in a pool of light: a soft accent glow behind the headline and
+            a grid that fades out at the edges, so the fold reads as one focal point. */}
+        <div className="relative isolate overflow-hidden">
+          <div aria-hidden="true" className="-z-10 pointer-events-none absolute inset-0">
+            <div
+              className="absolute inset-0 opacity-[0.4]"
+              style={{
+                backgroundImage:
+                  'linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px)',
+                backgroundSize: '56px 56px',
+                maskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)',
+                WebkitMaskImage:
+                  'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)',
+              }}
+            />
+            <div className="-translate-x-1/2 absolute top-[-16%] left-1/2 h-[420px] w-[min(880px,110%)] rounded-full bg-primary/20 blur-[130px]" />
+          </div>
+          <Hero
+            className="px-6 py-24 sm:py-32"
+            eyebrow="New · block-motion v1"
+            title={
+              <>
+                Blocks that <span className="text-primary">move</span> just right.
+              </>
+            }
+            subtitle="Accessible, morph-animated sections you paste and own — built on the ibirdui primitives, orchestrated by one motion grammar."
+            primaryAction={{ label: 'Browse blocks', href: '#', icon: <ArrowIcon /> }}
+            secondaryAction={{ label: 'Copy the code', href: '#' }}
+            socialProof={{
+              people: [{ name: 'Ada Reyes' }, { name: 'Tom Iverson' }, { name: 'Lou Park' }],
+              caption: 'Trusted by 2,000+ product teams',
+            }}
+          />
+        </div>
 
         <Features
           id="features"

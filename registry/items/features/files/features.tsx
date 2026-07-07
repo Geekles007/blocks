@@ -107,11 +107,11 @@ export function Features({
           >
             {features.map((f, i) => (
               <motion.div key={f.id ?? `feature-${i}`} variants={revealItem} className="h-full">
-                <Card className="h-full p-6">
+                <Card className="group h-full p-6 transition-[border-color,background-color] duration-200 ease-out hover:border-primary/40">
                   {f.icon ? (
                     <div
                       aria-hidden="true"
-                      className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary"
+                      className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-200 group-hover:bg-primary/15"
                     >
                       {f.icon}
                     </div>

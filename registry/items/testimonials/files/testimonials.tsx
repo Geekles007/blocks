@@ -141,7 +141,7 @@ export function Testimonials({
                 variants={revealItem}
                 className="h-full"
               >
-                <Card className="flex h-full flex-col p-6">
+                <Card className="flex h-full flex-col p-6 transition-[border-color] duration-200 ease-out hover:border-primary/40">
                   <figure className="flex h-full flex-col">
                     {typeof tm.rating === 'number' ? <Stars rating={tm.rating} /> : null}
                     <blockquote className="text-pretty text-[15px] text-foreground/90 leading-relaxed">
