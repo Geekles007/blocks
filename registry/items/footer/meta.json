@@ -1,0 +1,37 @@
+{
+  "name": "footer",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A multi-column site footer: a brand block with a blurb and optional social links, a set of labelled link columns, and a bottom bar with a copyright line and optional legal links. Renders a footer (contentinfo) landmark; the brand stacks above the columns on mobile and sits beside them from md up.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Renders a footer (contentinfo) landmark, and each link column is a nav labelled by its title so screen-reader users can jump between groups",
+      "Icon-only social links carry an accessible name via aria-label, and their glyphs are decorative (aria-hidden)",
+      "The bottom-bar legal links sit in their own labelled nav",
+      "Built on the ibirdui separator primitive for the bottom-bar rule"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a site footer with link columns and a bottom bar",
+      "a multi-column marketing footer with social links",
+      "a contentinfo footer built on ibirdui"
+    ],
+    "examples": [
+      "<Footer brand={<Logo />} columns={[{ title: 'Product', links: [{ label: 'Catalogue', href: '/' }] }]} copyright=\"© 2025 ibirdui\" />"
+    ]
+  },
+  "dependencies": ["react"],
+  "devDependencies": [],
+  "registryDependencies": ["https://ui.ibird.dev/r/separator.json"],
+  "files": [
+    {
+      "from": "files/footer.tsx",
+      "path": "components/blocks/footer.tsx",
+      "type": "component"
+    }
+  ]
+}

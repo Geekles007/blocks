@@ -1,0 +1,40 @@
+{
+  "name": "faq",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "An FAQ accordion: an optional eyebrow, an h2 + subtitle, then a stack of bordered question cards that expand to reveal their answer, the open card carrying an accent border and a tinted chevron. Follows the WAI-ARIA accordion pattern (button-in-heading with aria-expanded/aria-controls, a labelled answer region). Single-open by default, or allowMultiple. The height/rotate motion collapses to an instant toggle under prefers-reduced-motion.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "The section heading is an h2 that labels the landmark via aria-labelledby; each question is a button inside an h3, so the accordion has a clean heading outline",
+      "Each question button carries aria-expanded and aria-controls; the answer is a region labelled by its question button, mounted only while open",
+      "The open state is not colour-only: the accent border pairs with the rotated chevron and the button's aria-expanded state",
+      "The expand/rotate animation respects prefers-reduced-motion via MotionProvider"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "an FAQ / frequently-asked-questions accordion",
+      "an expandable question-and-answer section for a landing page",
+      "an accessible accordion built on ibirdui"
+    ],
+    "examples": [
+      "<Faq title=\"Frequently asked questions\" items={[{ question: 'Do I own the code?', answer: 'Yes.' }]} />"
+    ]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://ui.ibird.dev/r/badge.json",
+    "https://ui.ibird.dev/r/block-motion.json"
+  ],
+  "files": [
+    {
+      "from": "files/faq.tsx",
+      "path": "components/blocks/faq.tsx",
+      "type": "component"
+    }
+  ]
+}

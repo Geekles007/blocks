@@ -112,7 +112,7 @@ export function Hero({
           <motion.h1
             id={headingId}
             variants={revealItem}
-            className="text-balance font-semibold text-4xl text-foreground tracking-tight sm:text-6xl"
+            className="text-balance font-semibold text-4xl text-foreground leading-[1.05] tracking-[-0.03em] sm:text-6xl"
           >
             {title}
           </motion.h1>

@@ -4,6 +4,8 @@ export const ROUTES = {
   catalogue: '/catalogue',
   block: (key: string) => `/blocks/${key}`,
   morphing: '/morphing',
+  templates: '/templates',
+  template: (key: string) => `/templates/${key}`,
   gettingStarted: '/getting-started',
   blockMotion: '/block-motion',
   changelog: '/changelog',

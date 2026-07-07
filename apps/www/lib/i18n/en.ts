@@ -159,6 +159,26 @@ export const en = {
       `${nb} block${nb > 1 ? 's' : ''} · ${nv} variant${nv > 1 ? 's' : ''}`,
     variants: (n: number) => `${n} variant${n > 1 ? 's' : ''}`,
   },
+  templates: {
+    kicker: 'Collection · coming soon',
+    titleLead: 'Full pages, ',
+    titleAccent: 'one command away.',
+    subtitle:
+      'Complete pages composed from ibirdui blocks — landing, pricing, dashboard, auth. Install the page, its blocks and their primitives in a single command; you keep the source.',
+    all: 'All',
+    filter: 'Filter…',
+    empty: 'No templates',
+    ready: 'Ready',
+    footerNote:
+      'The first templates are on the way — each is assembled purely from shipped blocks, so nothing here is a mockup you can’t install.',
+    detailBack: 'All templates',
+    composedOf: 'Composed of',
+    livePreview: 'Live preview',
+    install: 'Install the template',
+    installBlurb:
+      'One command installs the page plus every block and primitive it composes — you own the source.',
+    soonHint: 'This template is on the roadmap — not installable yet.',
+  },
   morphing: {
     kicker: 'Collection · in progress',
     titleLead: 'One object that ',

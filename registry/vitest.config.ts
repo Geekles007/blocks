@@ -32,6 +32,13 @@ export default defineConfig({
       '@/lib/async-state': primitiveFile('lib/async-state.ts'),
       // blocks
       '@/components/blocks/hero': blockFile('hero/files/hero.tsx'),
+      '@/components/blocks/features': blockFile('features/files/features.tsx'),
+      '@/components/blocks/testimonials': blockFile('testimonials/files/testimonials.tsx'),
+      '@/components/blocks/cta': blockFile('cta/files/cta.tsx'),
+      '@/components/blocks/faq': blockFile('faq/files/faq.tsx'),
+      '@/components/blocks/footer': blockFile('footer/files/footer.tsx'),
+      '@/components/blocks/navbar': blockFile('navbar/files/navbar.tsx'),
+      '@/components/blocks/saas-landing': blockFile('saas-landing/files/saas-landing.tsx'),
       '@/components/blocks/hero-terminal': blockFile('hero-terminal/files/hero-terminal.tsx'),
       '@/components/blocks/hero-fintech': blockFile('hero-fintech/files/hero-fintech.tsx'),
       '@/components/blocks/hero-agency': blockFile('hero-agency/files/hero-agency.tsx'),

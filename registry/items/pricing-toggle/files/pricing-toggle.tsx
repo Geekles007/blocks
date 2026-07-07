@@ -39,6 +39,8 @@ export interface PricingToggleProps extends Omit<React.HTMLAttributes<HTMLElemen
   annualLabel?: React.ReactNode;
   /** Savings hint shown next to the annual label (e.g. "−20%"). */
   annualHint?: React.ReactNode;
+  /** Ribbon shown on the featured plan. Defaults to "Most popular"; pass null to hide. */
+  featuredLabel?: React.ReactNode;
   /** Start on the annual tab. */
   defaultAnnual?: boolean;
 }
@@ -59,6 +61,7 @@ export function PricingToggle({
   monthlyLabel = 'Monthly',
   annualLabel = 'Annual',
   annualHint,
+  featuredLabel = 'Most popular',
   defaultAnnual = false,
   className,
   ...rest
@@ -139,7 +142,12 @@ export function PricingToggle({
             className={cn('mt-14 grid grid-cols-1 items-stretch gap-6', cols)}
           >
             {plans.map((plan, i) => (
-              <PlanCard key={`${plan.name}-${i}`} plan={plan} annual={annual} />
+              <PlanCard
+                key={`${plan.name}-${i}`}
+                plan={plan}
+                annual={annual}
+                featuredLabel={featuredLabel}
+              />
             ))}
           </motion.div>
         </div>
@@ -148,56 +156,74 @@ export function PricingToggle({
   );
 }
 
-function PlanCard({ plan, annual }: { plan: PricingTogglePlan; annual: boolean }) {
+function PlanCard({
+  plan,
+  annual,
+  featuredLabel,
+}: {
+  plan: PricingTogglePlan;
+  annual: boolean;
+  featuredLabel?: React.ReactNode;
+}) {
   const nameId = React.useId();
   const price = annual ? plan.annualPrice : plan.monthlyPrice;
+  const showRibbon = plan.featured && featuredLabel != null;
   return (
-    <motion.div
-      variants={revealItem}
-      className={cn(
-        'relative flex h-full flex-col rounded-2xl border bg-card p-6 text-card-foreground sm:p-8',
-        plan.featured
-          ? 'border-primary shadow-lg shadow-primary/10 ring-1 ring-primary'
-          : 'border-border shadow-sm',
-      )}
-    >
-      <h3 id={nameId} className="font-semibold text-lg text-foreground">
-        {plan.name}
-      </h3>
-      {plan.description ? (
-        <p className="mt-1.5 text-muted-foreground text-sm leading-relaxed">{plan.description}</p>
-      ) : null}
+    // The animated wrapper carries the reveal (Framer writes an inline `transform`
+    // here), so the featured card's static `lg` lift lives on the inner element —
+    // otherwise the reveal's transform would override the class and the lift is lost.
+    <motion.div variants={revealItem} className="h-full">
+      <div
+        className={cn(
+          'relative flex h-full flex-col rounded-2xl border bg-card p-6 text-card-foreground sm:p-8',
+          plan.featured
+            ? 'border-primary shadow-primary/10 shadow-xl ring-1 ring-primary lg:-translate-y-2'
+            : 'border-border shadow-sm',
+        )}
+      >
+        {showRibbon ? (
+          <span className="-top-3 -translate-x-1/2 absolute left-1/2 whitespace-nowrap rounded-full bg-primary px-3 py-1 font-semibold text-[11px] text-primary-foreground uppercase tracking-wide shadow-sm">
+            {featuredLabel}
+          </span>
+        ) : null}
+        <h3 id={nameId} className="font-semibold text-lg text-foreground">
+          {plan.name}
+        </h3>
+        {plan.description ? (
+          <p className="mt-1.5 text-muted-foreground text-sm leading-relaxed">{plan.description}</p>
+        ) : null}
 
-      <div className="mt-6 flex items-baseline gap-1.5">
-        <motion.span
-          key={price}
-          initial={{ y: 8, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={springs.snappy}
-          className="font-semibold text-4xl text-foreground tabular-nums tracking-tight"
-        >
-          {price}
-        </motion.span>
-        <span className="text-muted-foreground text-sm">/ mo</span>
+        <div className="mt-6 flex items-baseline gap-1.5">
+          <motion.span
+            key={price}
+            initial={{ y: 8, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={springs.snappy}
+            className="font-semibold text-4xl text-foreground tabular-nums tracking-tight"
+          >
+            {price}
+          </motion.span>
+          <span className="text-muted-foreground text-sm">/ mo</span>
+        </div>
+        <p className="mt-1 text-muted-foreground text-xs">
+          {annual ? 'billed annually' : 'billed monthly'}
+        </p>
+
+        <Cta
+          action={plan.action}
+          variant={plan.featured ? 'default' : 'outline'}
+          describedBy={nameId}
+        />
+
+        <ul className="mt-8 flex flex-col gap-3 text-sm">
+          {plan.features.map((feature, i) => (
+            <li key={`${plan.name}-${i}`} className="flex items-start gap-3">
+              <CheckIcon />
+              <span className="text-muted-foreground leading-relaxed">{feature}</span>
+            </li>
+          ))}
+        </ul>
       </div>
-      <p className="mt-1 text-muted-foreground text-xs">
-        {annual ? 'billed annually' : 'billed monthly'}
-      </p>
-
-      <Cta
-        action={plan.action}
-        variant={plan.featured ? 'default' : 'outline'}
-        describedBy={nameId}
-      />
-
-      <ul className="mt-8 flex flex-col gap-3 text-sm">
-        {plan.features.map((feature, i) => (
-          <li key={`${plan.name}-${i}`} className="flex items-start gap-3">
-            <CheckIcon />
-            <span className="text-muted-foreground leading-relaxed">{feature}</span>
-          </li>
-        ))}
-      </ul>
     </motion.div>
   );
 }

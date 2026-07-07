@@ -1,0 +1,44 @@
+{
+  "name": "saas-landing",
+  "type": "block",
+  "version": "1.0.0",
+  "description": "A complete SaaS landing page composed entirely from ibirdui blocks: a sticky Navbar, a Hero, a Features grid, Testimonials, a Pricing toggle, an FAQ, a CTA band and a Footer. One command installs the page plus every block and primitive it composes. A single h1 (the hero) leads a clean heading outline, and the banner/contentinfo landmarks bracket the page.",
+  "states": [],
+  "a11y": {
+    "level": "AA",
+    "tested": true,
+    "notes": [
+      "Exactly one h1 (the hero); every other section is an h2, so the page has a clean, single-rooted heading outline",
+      "The Navbar renders the banner landmark and the Footer the contentinfo landmark, with the sections in between wrapped in main",
+      "Each composed block keeps its own tested a11y — labelled navs, the FAQ accordion pattern, figure/blockquote testimonials, and reduced-motion support throughout",
+      "The brand mark is decorative (aria-hidden) and inks with foreground + primary tokens, so it re-themes in light and dark"
+    ]
+  },
+  "manifest": {
+    "intents": [
+      "a complete SaaS / product landing page",
+      "a full marketing page assembled from ibirdui blocks",
+      "a ready-to-customise landing template built on ibirdui"
+    ],
+    "examples": ["<SaasLanding />"]
+  },
+  "dependencies": ["react", "framer-motion"],
+  "devDependencies": [],
+  "registryDependencies": [
+    "https://blocks.ibird.dev/r/navbar.json",
+    "https://blocks.ibird.dev/r/hero.json",
+    "https://blocks.ibird.dev/r/features.json",
+    "https://blocks.ibird.dev/r/testimonials.json",
+    "https://blocks.ibird.dev/r/pricing-toggle.json",
+    "https://blocks.ibird.dev/r/faq.json",
+    "https://blocks.ibird.dev/r/cta.json",
+    "https://blocks.ibird.dev/r/footer.json"
+  ],
+  "files": [
+    {
+      "from": "files/saas-landing.tsx",
+      "path": "components/blocks/saas-landing.tsx",
+      "type": "component"
+    }
+  ]
+}

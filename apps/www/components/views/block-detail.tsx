@@ -7,8 +7,8 @@ import { h } from '~/lib/h';
 import { addCommands } from '~/lib/install-command';
 import { ROUTES } from '~/lib/routes';
 import { useUI } from '~/lib/ui-context';
+import { renderPreview } from '../catalogue/demos';
 import { PreviewFrame } from '../preview-frame';
-import { renderPreview } from '../previews';
 import { Badge, Button, Icon, PrimPill, SectionLabel } from '../primitives';
 import { SpecGrid } from '../spec-grid';
 
@@ -328,14 +328,14 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
             'div',
             {
               style: {
-                border: `1px solid ${t.border}`,
-                borderTop: 'none',
+                borderRight: `1px solid ${t.border}`,
+                borderBottom: `1px solid ${t.border}`,
+                borderLeft: `1px solid ${t.border}`,
                 borderRadius: '0 0 11px 11px',
                 padding: '30px 20px',
                 display: 'flex',
                 justifyContent: 'center',
-                background: 'radial-gradient(var(--ib-border) 1px,transparent 1px)',
-                backgroundSize: '22px 22px',
+                background: `linear-gradient(180deg, ${t.panel}, ${t.bg2})`,
                 minHeight: '420px',
                 alignItems: 'center',
               },
@@ -364,8 +364,9 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
             'div',
             {
               style: {
-                border: `1px solid ${t.border}`,
-                borderTop: 'none',
+                borderRight: `1px solid ${t.border}`,
+                borderBottom: `1px solid ${t.border}`,
+                borderLeft: `1px solid ${t.border}`,
                 borderRadius: '0 0 11px 11px',
                 background: t.panel,
                 position: 'relative',
@@ -608,8 +609,7 @@ export function BlockDetail({ blockKey }: { blockKey: string }) {
               justifyContent: 'center',
               alignItems: 'flex-start',
               padding: '40px 24px',
-              background: 'radial-gradient(var(--ib-border) 1px,transparent 1px)',
-              backgroundSize: '22px 22px',
+              background: `linear-gradient(180deg, ${t.panel}, ${t.bg2})`,
             },
           },
           h(

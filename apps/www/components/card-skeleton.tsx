@@ -405,11 +405,301 @@ function PricingCompareSkeleton({ t }: { t: Tok }) {
   ]);
 }
 
+/* ---------------------------------------------- SaaS-landing block shapes */
+
+/** The ibirdui blocks 2×2 mark: three neutral tiles + one accent tile. */
+function brandMark(t: Tok, tile = 6) {
+  const sq = (c: string) =>
+    h('div', { style: { width: tile, height: tile, borderRadius: 2, background: c } });
+  return h(
+    'div',
+    { style: { display: 'grid', gridTemplateColumns: `${tile}px ${tile}px`, gap: 2 } },
+    sq(t.text),
+    sq(t.text),
+    sq(t.text),
+    sq(t.accent),
+  );
+}
+
+// Features: a centred header over a row of three icon-tile feature cards.
+function FeaturesSkeleton({ t }: { t: Tok }) {
+  const tile = () =>
+    h('div', {
+      style: {
+        width: 26,
+        height: 26,
+        borderRadius: 8,
+        background: t.accentSoft,
+        border: `1px solid ${t.accentRing}`,
+      },
+    });
+  const card = () =>
+    frame(
+      t,
+      { flex: 1, minWidth: 0, padding: 12, display: 'flex', flexDirection: 'column', gap: 9 },
+      [
+        tile(),
+        bar('70%', 9, { radius: 5 }),
+        col('flex-start', 5, [bar('92%', 6, { opacity: 0.6 }), bar('76%', 6, { opacity: 0.6 })]),
+      ],
+    );
+  return wrap(360, [
+    col(
+      'center',
+      14,
+      [
+        col('center', 8, [
+          eyebrow(t, 80),
+          bar('56%', 14, { radius: 7 }),
+          bar('42%', 7, { opacity: 0.6 }),
+        ]),
+        row(9, [card(), card(), card()], { width: '100%', alignItems: 'stretch' }),
+      ],
+      { alignItems: 'center' },
+    ),
+  ]);
+}
+
+// Testimonials: a centred header over a row of three quote cards.
+function TestimonialsSkeleton({ t }: { t: Tok }) {
+  const card = () =>
+    frame(
+      t,
+      { flex: 1, minWidth: 0, padding: 12, display: 'flex', flexDirection: 'column', gap: 9 },
+      [
+        row(3, [
+          dot(t.accent, 6),
+          dot(t.accent, 6),
+          dot(t.accent, 6),
+          dot(t.accent, 6),
+          dot(t.accent, 6),
+        ]),
+        col('flex-start', 5, [
+          bar('95%', 6, { opacity: 0.7 }),
+          bar('88%', 6, { opacity: 0.7 }),
+          bar('68%', 6, { opacity: 0.7 }),
+        ]),
+        row(
+          7,
+          [
+            dot(t.faint, 20),
+            col('flex-start', 4, [bar(46, 6, { opacity: 0.8 }), bar(60, 5, { opacity: 0.5 })]),
+          ],
+          {
+            alignItems: 'center',
+            marginTop: 2,
+          },
+        ),
+      ],
+    );
+  return wrap(360, [
+    col(
+      'center',
+      14,
+      [
+        col('center', 8, [
+          eyebrow(t, 70),
+          bar('54%', 14, { radius: 7 }),
+          bar('44%', 7, { opacity: 0.6 }),
+        ]),
+        row(9, [card(), card(), card()], { width: '100%', alignItems: 'stretch' }),
+      ],
+      { alignItems: 'center' },
+    ),
+  ]);
+}
+
+// CTA: a centred heading, subtitle and two buttons on an accent panel.
+function CtaSkeleton({ t }: { t: Tok }) {
+  return wrap(360, [
+    frame(
+      t,
+      {
+        width: '100%',
+        padding: '22px 18px',
+        display: 'flex',
+        justifyContent: 'center',
+        background: t.accentSoft,
+        borderColor: t.accentRing,
+      },
+      [
+        col(
+          'center',
+          10,
+          [
+            h('div', {
+              style: {
+                width: 64,
+                height: 15,
+                borderRadius: 999,
+                border: `1px solid ${t.accentRing}`,
+              },
+            }),
+            col('center', 7, [bar('68%', 13, { radius: 7 }), bar('48%', 13, { radius: 7 })]),
+            bar('58%', 7, { opacity: 0.6 }),
+            row(
+              8,
+              [
+                h('div', {
+                  style: { width: 96, height: 26, borderRadius: 999, background: t.panel },
+                }),
+                h('div', {
+                  style: {
+                    width: 72,
+                    height: 26,
+                    borderRadius: 999,
+                    border: `1px solid ${t.accentRing}`,
+                  },
+                }),
+              ],
+              { marginTop: 2 },
+            ),
+          ],
+          { alignItems: 'center', width: '100%' },
+        ),
+      ],
+    ),
+  ]);
+}
+
+// FAQ: a centred header over a stack of bordered question cards, the first open.
+function FaqSkeleton({ t }: { t: Tok }) {
+  const qCard = (w: CSS['width'], accent = false) =>
+    frame(
+      t,
+      {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '12px 14px',
+        background: accent ? t.accentSoft2 : t.panel2,
+        borderColor: accent ? t.accentRing : t.borderStrong,
+      },
+      [
+        h('div', { style: { flex: 1 } }, bar(w, 8, { radius: 5 })),
+        h('div', {
+          style: {
+            width: 16,
+            height: 16,
+            borderRadius: 999,
+            background: accent ? t.accentSoft : 'transparent',
+            border: `1px solid ${accent ? t.accentRing : t.borderStrong}`,
+          },
+        }),
+      ],
+    );
+  return wrap(320, [
+    col(
+      'center',
+      11,
+      [
+        col('center', 7, [bar('56%', 12, { radius: 6 }), bar('44%', 7, { opacity: 0.6 })]),
+        col('stretch', 8, [qCard('62%', true), qCard('74%'), qCard('52%')], { width: '100%' }),
+      ],
+      { alignItems: 'center' },
+    ),
+  ]);
+}
+
+// Footer: a brand block + link columns, a rule, then a bottom bar.
+function FooterSkeleton({ t }: { t: Tok }) {
+  const column = () =>
+    col(
+      'flex-start',
+      7,
+      [
+        bar(40, 6, { opacity: 0.8 }),
+        bar('82%', 5, { opacity: 0.5 }),
+        bar('64%', 5, { opacity: 0.5 }),
+        bar('72%', 5, { opacity: 0.5 }),
+      ],
+      { flex: 1, minWidth: 0 },
+    );
+  return wrap(360, [
+    col(
+      'stretch',
+      12,
+      [
+        row(
+          16,
+          [
+            col(
+              'flex-start',
+              8,
+              [
+                row(6, [brandMark(t), bar(56, 8, { radius: 4 })], { alignItems: 'center' }),
+                bar('92%', 5, { opacity: 0.5 }),
+                row(5, [dot(t.faint, 14), dot(t.faint, 14)], { marginTop: 2 }),
+              ],
+              { flex: 1.4, minWidth: 0 },
+            ),
+            row(12, [column(), column(), column()], { flex: 2, minWidth: 0 }),
+          ],
+          { width: '100%', alignItems: 'flex-start' },
+        ),
+        h('div', { style: { height: 1, width: '100%', background: t.border } }),
+        row(
+          8,
+          [
+            bar('40%', 6, { opacity: 0.5 }),
+            h('div', { style: { flex: 1 } }),
+            bar(30, 5, { opacity: 0.5 }),
+            bar(30, 5, { opacity: 0.5 }),
+          ],
+          {
+            width: '100%',
+            alignItems: 'center',
+          },
+        ),
+      ],
+      { alignItems: 'stretch' },
+    ),
+  ]);
+}
+
+// Navbar: a header bar — brand, nav links, and two actions.
+function NavbarSkeleton({ t }: { t: Tok }) {
+  return wrap(380, [
+    frame(
+      t,
+      {
+        width: '100%',
+        padding: '10px 14px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 14,
+        background: t.panel,
+      },
+      [
+        row(6, [brandMark(t), bar(52, 8, { radius: 4 })], { alignItems: 'center' }),
+        row(
+          10,
+          [
+            bar(40, 6, { opacity: 0.6 }),
+            bar(46, 6, { opacity: 0.6 }),
+            bar(52, 6, { opacity: 0.6 }),
+            bar(38, 6, { opacity: 0.6 }),
+          ],
+          { alignItems: 'center', marginLeft: 6 },
+        ),
+        h('div', { style: { flex: 1 } }),
+        row(8, [pill(t, 42, false, 22), pill(t, 66, true, 22)], { alignItems: 'center' }),
+      ],
+    ),
+  ]);
+}
+
 const SHAPES: Record<string, ({ t }: { t: Tok }) => React.ReactElement> = {
   hero: HeroSkeleton,
   'hero-terminal': TerminalSkeleton,
   'hero-fintech': FintechSkeleton,
   'hero-agency': AgencySkeleton,
+  features: FeaturesSkeleton,
+  testimonials: TestimonialsSkeleton,
+  cta: CtaSkeleton,
+  faq: FaqSkeleton,
+  navbar: NavbarSkeleton,
+  footer: FooterSkeleton,
   pricing: PricingSkeleton,
   'pricing-toggle': PricingToggleSkeleton,
   'pricing-single': PricingSingleSkeleton,

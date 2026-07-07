@@ -13,8 +13,7 @@ import { BlocksLockup } from './logo';
 import { Badge, Icon, Kbd } from './primitives';
 
 // Primary nav. `href` drives navigation; `soon` renders a disabled item with a
-// "Soon" badge (Templates is announced but not shipped yet). `id` keys the label
-// into the message dictionary (`m.nav[id]`).
+// "Soon" badge. `id` keys the label into the message dictionary (`m.nav[id]`).
 type NavId = 'catalogue' | 'morphing' | 'guide' | 'templates';
 interface NavItem {
   id: NavId;
@@ -26,8 +25,8 @@ interface NavItem {
 const NAV: NavItem[] = [
   { id: 'catalogue', href: ROUTES.catalogue, match: ['/blocks'] },
   { id: 'morphing', href: ROUTES.morphing },
+  { id: 'templates', href: ROUTES.templates },
   { id: 'guide', href: ROUTES.gettingStarted },
-  { id: 'templates', soon: true },
 ];
 
 // Normalise away the trailing slash that `trailingSlash: true` adds, then treat
@@ -494,6 +493,7 @@ function Footer() {
       col(m.footer.product, [
         [m.nav.catalogue, ROUTES.catalogue],
         [m.nav.morphing, ROUTES.morphing],
+        [m.nav.templates, ROUTES.templates],
         ['block-motion', ROUTES.blockMotion],
         ['Changelog', ROUTES.changelog],
       ]),
